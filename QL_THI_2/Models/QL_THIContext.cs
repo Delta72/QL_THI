@@ -21,6 +21,7 @@ namespace QL_THI_2.Models
         public virtual DbSet<HINH_THUC_THI> HINH_THUC_THIs { get; set; }
         public virtual DbSet<HOC_KY> HOC_Kies { get; set; }
         public virtual DbSet<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
+        public virtual DbSet<MA_HOC_PHAN> MA_HOC_PHANs { get; set; }
         public virtual DbSet<NHOM_THI> NHOM_THIs { get; set; }
         public virtual DbSet<TAI_KHOAN> TAI_KHOANs { get; set; }
         public virtual DbSet<THONG_BAO> THONG_BAOs { get; set; }
@@ -106,12 +107,19 @@ namespace QL_THI_2.Models
 
                 entity.HasIndex(e => e.ID_TK, "TAO_FK");
 
+                entity.HasIndex(e => e.ID_MHP, "THUOC_VE_FK");
+
                 entity.Property(e => e.ID_HP)
                     .HasMaxLength(36)
                     .IsUnicode(false)
                     .IsFixedLength(true);
 
                 entity.Property(e => e.HANNOP_HP).HasColumnType("datetime");
+
+                entity.Property(e => e.ID_MHP)
+                    .IsRequired()
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
 
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
@@ -122,19 +130,37 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.NAMHOCK_HP).HasColumnType("datetime");
 
-                entity.Property(e => e.TEN_HP).HasMaxLength(200);
-
                 entity.HasOne(d => d.ID_HKNavigation)
                     .WithMany(p => p.HOC_PHAN_THIs)
                     .HasForeignKey(d => d.ID_HK)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_HOC_PHAN_THUOC_HOC_KY");
 
+                entity.HasOne(d => d.ID_MHPNavigation)
+                    .WithMany(p => p.HOC_PHAN_THIs)
+                    .HasForeignKey(d => d.ID_MHP)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_HOC_PHAN_THUOC_VE_MA_HOC_P");
+
                 entity.HasOne(d => d.ID_TKNavigation)
                     .WithMany(p => p.HOC_PHAN_THIs)
                     .HasForeignKey(d => d.ID_TK)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_HOC_PHAN_TAO_TAI_KHOA");
+            });
+
+            modelBuilder.Entity<MA_HOC_PHAN>(entity =>
+            {
+                entity.HasKey(e => e.ID_MHP)
+                    .IsClustered(false);
+
+                entity.ToTable("MA_HOC_PHAN");
+
+                entity.Property(e => e.ID_MHP)
+                    .HasMaxLength(20)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.TEN_MHP).HasMaxLength(300);
             });
 
             modelBuilder.Entity<NHOM_THI>(entity =>
@@ -203,6 +229,10 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.ID_TK)
                     .HasMaxLength(24)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.ANHDAIDIEN_TK)
+                    .HasMaxLength(500)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMAIL_TK).HasMaxLength(500);

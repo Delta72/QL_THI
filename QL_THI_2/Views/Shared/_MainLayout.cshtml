@@ -43,6 +43,7 @@
     <link rel="stylesheet" href="/template/assets/vendor/css/core.css" class="template-customizer-core-css" />
     <link rel="stylesheet" href="/template/assets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="/template/assets/css/demo.css" />
+    <link href="~/css/Main.css" rel="stylesheet" />
 
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="/template/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
@@ -51,6 +52,7 @@
 
     <!-- Page CSS -->
     <!-- Helpers -->
+    <script src="~/js/jquery-3.3.1.min.js"></script>
     <script src="/template/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
@@ -92,12 +94,12 @@
                             <div data-i18n="Account Settings">Quản lý học phần</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="pages-account-settings-account.html" class="menu-link">
+                            <li class="menu-item" id="liThemHocPhan">
+                                <a href="@Url.Action("ThemHocPhan","HocPhan")" class="menu-link">
                                     <div data-i18n="Account">Thêm học phần</div>
                                 </a>
                             </li>
-                            <li class="menu-item active">
+                            <li class="menu-item active" id="liDanhSachHocPhan">
                                 <a href="pages-account-settings-notifications.html" class="menu-link">
                                     <div data-i18n="Notifications">Danh sách học phần</div>
                                 </a>
@@ -252,8 +254,10 @@
                 <div class="content-wrapper">
                     <!-- Content -->
                     <div class="container-xxl flex-grow-1 container-p-y">
-
-                        @RenderBody()
+                        <div class="row">
+                            @RenderBody()
+                        </div>
+                        
                     </div>
                         <!-- / Content -->
                         <!-- Footer -->
