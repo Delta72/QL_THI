@@ -16,8 +16,8 @@ namespace QL_THI_2.Models
         public short ID_HK { get; set; }
         public string ID_TK { get; set; }
         public string ID_MHP { get; set; }
-        public DateTime? NAMHOCB_HP { get; set; }
-        public DateTime? NAMHOCK_HP { get; set; }
+        public string NAMHOCB_HP { get; set; }
+        public string NAMHOCK_HP { get; set; }
         public DateTime? HANNOP_HP { get; set; }
         public short? SONHOM_HP { get; set; }
 

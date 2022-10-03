@@ -4,13 +4,14 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
+
 <div class="col-xxl">
     <div class="card mb-4">
         <div class="card-header d-flex align-items-center justify-content-between">
             <h5 class="mb-0">Thêm học phần mới</h5>
         </div>
         <div class="card-body">
-            <form>
+            <form id="formThemHocPhan">
                 <div class="row mb-3">
                     <label class="col-sm-2 col-form-label" for="basic-default-name">Mã học phần</label>
                     <div class="col-sm-10">
@@ -54,7 +55,7 @@
                     <div class="col-sm-2">
                         <input type="date"
                                class="form-control"
-                               id="textSN" />
+                               id="ngayNop" />
                     </div>
                 </div>
                 <!-- han nop -->
@@ -63,7 +64,8 @@
                 <div class="row mb-3">
                     <div class="card">
                         <h5 class="card-header">
-                            <button type="button" 
+                            <button type="button"
+                                    id="buttonThemNhom"
                                     class="btn btn-icon btn-primary"
                                     data-bs-toggle="modal"
                                     data-bs-target="#modalCenter"
@@ -77,12 +79,12 @@
                                 <thead>
                                     <tr>
                                         <th>Mã nhóm</th>
-                                        <th>Phụ trách</th>
+                                        <th>Mã GV</th>
+                                        <th></th>
                                         <th>Tùy chọn</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-border-bottom-0">
-                                    
                                 </tbody>
                             </table>
                         </div>
@@ -92,13 +94,20 @@
 
                 <div class="row justify-content-end">
                     <div class="col-sm-10">
-                        <button type="submit" 
+                        <button onclick="KiemTra()"
                                 class="btn btn-primary">
-                        Thêm học phần
+                            Thêm học phần
                         </button>
+
                     </div>
                 </div>
             </form>
+            <button id="buttonSubmit" 
+                    style="display: none"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalCenter2">
+
+            </button>
         </div>
     </div>
 </div>
@@ -133,7 +142,7 @@
                 </div>
                 <div class="row g-2">
                     <div class="col mb-0" id="tableTK">
-                        
+
                     </div>
                 </div>
             </div>
@@ -147,5 +156,29 @@
     </div>
 </div>
 <!-- them nhom modal -->
+<!-- xac nhan modal -->
+<div class="modal fade" id="modalCenter2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xác nhận thêm học phần này?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="ThemHocPhanMoi()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
 
 <script src="~/js/ThemHocPhan.js"></script>

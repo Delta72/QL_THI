@@ -126,9 +126,15 @@ namespace QL_THI_2.Models
                     .HasMaxLength(24)
                     .IsUnicode(false);
 
-                entity.Property(e => e.NAMHOCB_HP).HasColumnType("datetime");
+                entity.Property(e => e.NAMHOCB_HP)
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
-                entity.Property(e => e.NAMHOCK_HP).HasColumnType("datetime");
+                entity.Property(e => e.NAMHOCK_HP)
+                    .HasMaxLength(4)
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.HasOne(d => d.ID_HKNavigation)
                     .WithMany(p => p.HOC_PHAN_THIs)

@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +26,13 @@ namespace QL_THI_2
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
+            services.AddAuthentication(x =>
+            {
+                x.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            }).AddCookie(opt => {
+                opt.LoginPath = "/TaiKhoan/DangNhap";
+                opt.AccessDeniedPath = "/TaiKhoan/DangNhap";
+            }).AddCookie(IdentityConstants.ApplicationScheme);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -44,13 +53,14 @@ namespace QL_THI_2
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=TaiKhoan}/{action=DangNhap}/{id?}");
             });
         }
     }
