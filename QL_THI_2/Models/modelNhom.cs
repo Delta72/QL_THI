@@ -8,9 +8,9 @@ namespace QL_THI_2.Models
     public class modelNhom
     {
         public string id { get; set; }
-        public int stt { get; set; }
+        public string stt { get; set; }
         public modelHinhThuc hinhThuc { get; set; }
-        public string idTK { get; set; }
+        public modelTaiKhoan taiKhoan { get; set; }
         public DateTime ngayThi { get; set; }
         public int siSo { get; set; }
         public int thamDu { get; set; }

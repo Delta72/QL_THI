@@ -38,6 +38,7 @@ namespace QL_THI_2.Controllers
                 var claims = new[] {
                     new Claim(ClaimTypes.Name, T.HOTEN_TK),
                     new Claim(ClaimTypes.NameIdentifier, T.ID_TK),
+                    new Claim(ClaimTypes.UserData, T.ANHDAIDIEN_TK),
                     new Claim(ClaimTypes.Role, role)};
                 var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 HttpContext.SignInAsync(

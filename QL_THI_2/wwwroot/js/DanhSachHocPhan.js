@@ -64,6 +64,11 @@ function TimKiem() {
     }
 }
 
+// Danh sach nhom
+function DanhSachNhom(id) {
+    window.location.href = '/Nhom/DanhSachNhomHocPhan?id=' + id
+}
+
 //ready
 $(document).ready(function () {
     ChonHocKy()
