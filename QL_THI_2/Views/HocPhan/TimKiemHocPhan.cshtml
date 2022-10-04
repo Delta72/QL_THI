@@ -1,0 +1,87 @@
+﻿@model DanhSachHocPhan
+@{
+    ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="card-body">
+    <!-- hoc ky nam hoc -->
+    <div class="row mb-3">
+        <label class="col-sm-2 col-form-label" for="basic-default-company">Học kỳ</label>
+        <div class="col-sm-2">
+            <select id="selectHK" class="form-select color-dropdown">
+                <option value="all" selected disabled>-Học kỳ-</option>
+            </select>
+        </div>
+        <label class="col-sm-2 col-form-label" for="basic-default-company">Năm học</label>
+        <div class="col-sm-2">
+            <select id="selectHKB" class="form-select color-dropdown">
+                <option value="all" selected disabled>-Năm học-</option>
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <input type="text"
+                   class="form-control"
+                   readonly
+                   id="textHKK" />
+        </div>
+        <div class="col-sm-2" style="text-align: right">
+            <button onclick="TimKiem()"
+                    class="btn btn-primary">
+                <i class="bx bx-search"></i>
+            </button>
+        </div>
+    </div>
+    <!-- hoc ky nam hoc -->
+</div>
+
+<div class="" style="margin-bottom: 10px;">
+    <div class="card">
+        <h5 class="card-header"><u>@Model.hocKy_namHoc</u></h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Mã học phần</th>
+                        <th style="text-align: center;">Hạn nộp</th>
+                        <th style="text-align: center;">Số nhóm</th>
+                        <th style="text-align: center;">Đã nộp</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var i in Model.hocPhan)
+                    {
+                        <tr>
+                            <td style="width: 30vw"><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.maHocPhan.id - @i.maHocPhan.tenHocPhan</strong></td>
+                            <td style="text-align: center;">@i.hanNop</td>
+                            <td style="text-align: center;">
+                                @i.soNhom
+                            </td>
+                            <td style="text-align: center;">
+                                @if (i.soNhom == i.daNop)
+                                {
+                                    <span class="badge bg-label-primary me-1">@i.daNop/@i.soNhom</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-warning me-1">@i.daNop/@i.soNhom</span>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown" style="z-index: 1 !important">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow">
+                                        <i class="bx bx-detail"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/DanhSachHocPhan.js"></script>

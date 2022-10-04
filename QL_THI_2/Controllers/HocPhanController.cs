@@ -15,52 +15,11 @@ namespace QL_THI_2.Controllers
     {
         QL_THIContext db = new QL_THIContext();
 
-        [Authorize(Roles = "admin")]
-        public IActionResult DanhSachHocPhan()
+        public int SoNhomDaNop(string id)
         {
-            List<DanhSachHocPhan> D = new List<DanhSachHocPhan>();
-            var temp = db.HOC_PHAN_THIs
-                .Select(a => new { a.ID_HK, a.NAMHOCB_HP, a.NAMHOCK_HP })
-                .Distinct()
-                .ToList();
-            foreach(var item in temp)
-            {
-                DanhSachHocPhan d = new DanhSachHocPhan();
-                string hk = db.HOC_Kies.Where(a => a.ID_HK == item.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
-                string nh = item.NAMHOCB_HP.ToString() + " - " + item.NAMHOCK_HP.ToString();
-                d.hocKy_namHoc = hk + ", " + nh;
-
-                List<modelHocPhan> L = new List<modelHocPhan>();
-                foreach (var i in db.HOC_PHAN_THIs.Where(a => a.ID_HK == item.ID_HK && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
-                {
-                    modelHocPhan m = new modelHocPhan();
-                    m.id = i.ID_HP;
-                    m.soNhom = (int)i.SONHOM_HP;
-                    m.hocKy = db.HOC_Kies.Where(a => a.ID_HK == i.ID_HK).Select(a => a.TEN_HK).First();
-                    m.maHocPhan = new modelMaHocPhan()
-                    {
-                        id = i.ID_MHP,
-                        tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault()
-                    };
-                    m.namHocB = i.NAMHOCB_HP;
-                    m.namHocK = i.NAMHOCK_HP;
-                    m.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
-                    L.Add(m);
-                }
-                d.hocPhan = L;
-                D.Add(d);
-            }
-            return View(D);
-        }
-
-        public string StatusHocPhan(string id)
-        {
-            string status = "";
             HOC_PHAN_THI HP = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
-
-
-
-            return status;
+            int danop = db.NHOM_THIs.Where(a => a.ID_HP == id && a.DANOP_N == true).Count();
+            return danop;
         }
 
         [Authorize(Roles = "admin")]
@@ -146,7 +105,6 @@ namespace QL_THI_2.Controllers
             return Json(true);
         }
 
-
         public string TimIDHocPhan(string id)
         {
             if(db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault() == null)
@@ -154,6 +112,92 @@ namespace QL_THI_2.Controllers
                 return id;
             }
             return TimIDHocPhan(Guid.NewGuid().ToString());
+        }
+
+        public IActionResult LayNamHoc()
+        {
+            List<string> namHoc = new List<string>();
+            var temp = db.HOC_PHAN_THIs
+                .Select(a => a.NAMHOCB_HP)
+                .Distinct()
+                .ToList();
+            foreach(var i in temp)
+            {
+                namHoc.Add(i);
+            }
+            return Json(namHoc);
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult DanhSachHocPhan()
+        {
+            List<DanhSachHocPhan> D = new List<DanhSachHocPhan>();
+            var temp = db.HOC_PHAN_THIs
+                .Select(a => new { a.ID_HK, a.NAMHOCB_HP, a.NAMHOCK_HP })
+                .Distinct()
+                .ToList();
+            foreach (var item in temp)
+            {
+                DanhSachHocPhan d = new DanhSachHocPhan();
+                string hk = db.HOC_Kies.Where(a => a.ID_HK == item.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
+                string nh = item.NAMHOCB_HP.ToString() + " - " + item.NAMHOCK_HP.ToString();
+                d.hocKy_namHoc = hk + ", " + nh;
+
+                List<modelHocPhan> L = new List<modelHocPhan>();
+                foreach (var i in db.HOC_PHAN_THIs.Where(a => a.ID_HK == item.ID_HK && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
+                {
+                    modelHocPhan m = new modelHocPhan();
+                    m.id = i.ID_HP;
+                    m.soNhom = (int)i.SONHOM_HP;
+                    m.hocKy = db.HOC_Kies.Where(a => a.ID_HK == i.ID_HK).Select(a => a.TEN_HK).First();
+                    m.maHocPhan = new modelMaHocPhan()
+                    {
+                        id = i.ID_MHP,
+                        tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault()
+                    };
+                    m.namHocB = i.NAMHOCB_HP;
+                    m.namHocK = i.NAMHOCK_HP;
+                    m.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
+
+                    m.daNop = SoNhomDaNop(i.ID_HP);
+
+                    L.Add(m);
+                }
+                d.hocPhan = L;
+                D.Add(d);
+            }
+            return View(D);
+        }
+
+        public IActionResult TimKiemHocPhan(string hocKy, string namHoc)
+        {
+            int hk; int.TryParse(hocKy, out hk);
+            DanhSachHocPhan D = new DanhSachHocPhan();
+            string shk = db.HOC_Kies.Where(a => a.ID_HK == hk).Select(a => a.TEN_HK).FirstOrDefault();
+            D.hocKy_namHoc = shk + ", " + namHoc + " - " + (int.Parse(namHoc) + 1);
+
+            List<modelHocPhan> L = new List<modelHocPhan>();
+            foreach (var i in db.HOC_PHAN_THIs.Where(a => a.ID_HK == hk && a.NAMHOCB_HP == namHoc))
+            {
+                modelHocPhan m = new modelHocPhan();
+                m.id = i.ID_HP;
+                m.soNhom = (int)i.SONHOM_HP;
+                m.hocKy = db.HOC_Kies.Where(a => a.ID_HK == i.ID_HK).Select(a => a.TEN_HK).First();
+                m.maHocPhan = new modelMaHocPhan()
+                {
+                    id = i.ID_MHP,
+                    tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault()
+                };
+                m.namHocB = i.NAMHOCB_HP;
+                m.namHocK = i.NAMHOCK_HP;
+                m.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
+
+                m.daNop = SoNhomDaNop(i.ID_HP);
+
+                L.Add(m);
+            }
+            D.hocPhan = L;
+            return View(D);
         }
     }
 }

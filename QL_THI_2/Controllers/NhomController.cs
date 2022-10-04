@@ -44,5 +44,10 @@ namespace QL_THI_2.Controllers
                 return TimIDNhom(Guid.NewGuid().ToString());
             }
         }
+
+        public IActionResult DanhSachNhomHocPhan(string id)
+        {
+            return View();
+        }
     }
 }

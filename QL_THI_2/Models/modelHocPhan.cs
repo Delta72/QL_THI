@@ -14,6 +14,7 @@ namespace QL_THI_2.Models
         public string namHocK { get; set; }
         public int soNhom { get; set; }
         public string hanNop { get; set; }
+        public int daNop { get; set; }
         public modelMaHocPhan maHocPhan { get; set; }
     }
 
