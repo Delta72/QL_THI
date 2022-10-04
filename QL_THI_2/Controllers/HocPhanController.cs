@@ -26,7 +26,7 @@ namespace QL_THI_2.Controllers
             foreach(var item in temp)
             {
                 DanhSachHocPhan d = new DanhSachHocPhan();
-                string hk = item.ID_HK.ToString();
+                string hk = db.HOC_Kies.Where(a => a.ID_HK == item.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
                 string nh = item.NAMHOCB_HP.ToString() + " - " + item.NAMHOCK_HP.ToString();
                 d.hocKy_namHoc = hk + ", " + nh;
 
@@ -51,6 +51,16 @@ namespace QL_THI_2.Controllers
                 D.Add(d);
             }
             return View(D);
+        }
+
+        public string StatusHocPhan(string id)
+        {
+            string status = "";
+            HOC_PHAN_THI HP = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
+
+
+
+            return status;
         }
 
         [Authorize(Roles = "admin")]

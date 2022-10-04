@@ -239,6 +239,12 @@ function ThemHocPhanMoi() {
     })
 }
 
+// sua duong dan
+function ThemDuongDan() {
+    str = '<strong>Học phần</strong> / Thêm học phần mới'
+    document.getElementById('DuongDan').innerHTML = str;
+}
+
 //ready
 $(document).ready(function () {
     Active()
@@ -248,4 +254,5 @@ $(document).ready(function () {
     $("#formThemHocPhan").submit(function (e) {
         e.preventDefault();
     });
+    ThemDuongDan()
 })
