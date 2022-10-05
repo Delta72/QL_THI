@@ -51,7 +51,7 @@ namespace QL_THI_2.Controllers
             HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
             string hk = db.HOC_Kies.Where(a => a.ID_HK == H.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
-            string mon = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
+            string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             D.hocPhan = hk + ", " + nh + " > " + mon;
 
             D.danhSachNhom = new List<modelNhom>();
@@ -70,6 +70,31 @@ namespace QL_THI_2.Controllers
                 D.danhSachNhom.Add(n);
             }
             return View(D);
+        }
+
+        public IActionResult ChiTietNhom(string id)
+        {
+            modelNhom m = new modelNhom();
+
+            NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
+            m.id = N.ID_N;
+            m.stt = N.STT_N.ToString().PadLeft(2, '0');
+            m.hinhThuc = new modelHinhThuc();
+            m.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == N.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
+            m.taiKhoan = new modelTaiKhoan();
+            m.taiKhoan.id = N.ID_TK;
+            m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
+            m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
+            m.daNop = (bool)N.DANOP_N;
+            m.ngayThi = ((DateTime)N.NGAYTHI_N).ToString();
+            m.siSo = (int)N.TONGSO_N;
+            m.thamDu = (int)N.SOLUONGTHI_N;
+            m.zip = N.LINKZIP_N;
+            m.excel = N.LINKEXCEL_N;
+            m.soDe = (short)N.SODE_N;
+            m.soDapAn = (short)N.SODAPAN_N;
+
+            return View(m);
         }
     }
 }

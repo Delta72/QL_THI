@@ -11,7 +11,7 @@ namespace QL_THI_2.Models
         public string stt { get; set; }
         public modelHinhThuc hinhThuc { get; set; }
         public modelTaiKhoan taiKhoan { get; set; }
-        public DateTime ngayThi { get; set; }
+        public string ngayThi { get; set; }
         public int siSo { get; set; }
         public int thamDu { get; set; }
         public string zip { get; set; }

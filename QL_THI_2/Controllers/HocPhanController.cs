@@ -102,7 +102,7 @@ namespace QL_THI_2.Controllers
             dynamic j2 = JsonConvert.DeserializeObject(jsonNhom);
             NhomController.ThemNhomThi(j2, H.ID_HP);
 
-            return Json(true);
+            return Json(H.ID_HP);
         }
 
         public string TimIDHocPhan(string id)
