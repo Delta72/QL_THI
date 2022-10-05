@@ -45,6 +45,7 @@ namespace QL_THI_2.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult DanhSachNhomHocPhan(string id)
         {
             DanhSachNhom D = new DanhSachNhom();
@@ -72,6 +73,7 @@ namespace QL_THI_2.Controllers
             return View(D);
         }
 
+        [Authorize]
         public IActionResult ChiTietNhom(string id)
         {
             modelNhom m = new modelNhom();
@@ -86,13 +88,13 @@ namespace QL_THI_2.Controllers
             m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
             m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
             m.daNop = (bool)N.DANOP_N;
-            m.ngayThi = ((DateTime)N.NGAYTHI_N).ToString();
-            m.siSo = (int)N.TONGSO_N;
-            m.thamDu = (int)N.SOLUONGTHI_N;
-            m.zip = N.LINKZIP_N;
-            m.excel = N.LINKEXCEL_N;
-            m.soDe = (short)N.SODE_N;
-            m.soDapAn = (short)N.SODAPAN_N;
+            m.ngayThi = (N.NGAYTHI_N != null) ? ((DateTime)N.NGAYTHI_N).ToString() : "---";
+            m.siSo = (N.TONGSO_N != null) ? (N.TONGSO_N.ToString().PadLeft(2, '0')) : "---";
+            m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
+            m.zip = (N.LINKZIP_N != null) ? (N.LINKZIP_N) : null;
+            m.excel = (N.LINKEXCEL_N != null) ? (N.LINKEXCEL_N) : null;
+            m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : null;
+            m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : null;
 
             return View(m);
         }

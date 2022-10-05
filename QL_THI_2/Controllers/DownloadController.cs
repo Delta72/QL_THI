@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,13 +8,15 @@ using System.Threading.Tasks;
 
 namespace QL_THI_2.Controllers
 {
-    public class DownloadController : Controller
+    [Route("api/[controller]")]
+    [ApiController]
+    public class DownloadController : ControllerBase
     {
         public async Task<IActionResult> DownloadZip(string link)
         {
-            var path = link;
+            var path = Directory.GetCurrentDirectory() + link;
             var memory = new MemoryStream();
-            using(var stream = new FileStream(path, FileMode.Open))
+            using (var stream = new FileStream(path, FileMode.Open))
             {
                 await stream.CopyToAsync(memory);
             }

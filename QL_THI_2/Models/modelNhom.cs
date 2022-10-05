@@ -12,12 +12,12 @@ namespace QL_THI_2.Models
         public modelHinhThuc hinhThuc { get; set; }
         public modelTaiKhoan taiKhoan { get; set; }
         public string ngayThi { get; set; }
-        public int siSo { get; set; }
-        public int thamDu { get; set; }
+        public string siSo { get; set; }
+        public string thamDu { get; set; }
         public string zip { get; set; }
         public string excel { get; set; }
-        public short soDe { get; set; }
-        public short soDapAn { get; set; }
+        public string soDe { get; set; }
+        public string soDapAn { get; set; }
         public bool daNop { get; set; }
     }
 

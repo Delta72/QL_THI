@@ -20,12 +20,21 @@ function KiemTra() {
 function DangNhap() {
     var taiKhoan = $('#taiKhoan').val()
     var matKhau = $('#matKhau').val()
+
     $.ajax({
         url: '/TaiKhoan/TaskDangNhap',
         type: 'post',
+        cache: false,
         data: {
             taiKhoan: taiKhoan,
             matKhau: matKhau
+        },
+        beforeSend: function () {
+            var str = '<div class="spinner-border text-light" style="height: 15px;width: 15px"><span class="visually-hidden"></span></div>'
+            document.getElementById('buttonDangNhap').innerHTML = str;
+        },
+        complete: function () {
+
         },
         success: function (data) {
             if (data == 'error') {
