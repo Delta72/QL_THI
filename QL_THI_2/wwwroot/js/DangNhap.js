@@ -34,7 +34,7 @@ function DangNhap() {
             document.getElementById('buttonDangNhap').innerHTML = str;
         },
         complete: function () {
-
+            document.getElementById('buttonDangNhap').innerHTML = 'Đăng nhập';
         },
         success: function (data) {
             if (data == 'error') {

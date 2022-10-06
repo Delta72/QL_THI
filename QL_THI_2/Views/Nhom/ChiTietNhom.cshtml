@@ -1,17 +1,105 @@
-﻿@model modelNhom 
+﻿@model modelNhom
 @{
     ViewData["Title"] = "ChiTietNhom";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
-<div class="col-sm-2" style="text-align: center">
-    <button onclick="DownloadZip()" class="btn btn-primary" >
-        <i class="bx bx-search"></i>
-    </button>
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">@Model.duongDan</h5>
+        <div class="card-body">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Giáo viên giảng dạy:</label>
+                <div class="col-sm-4" style="display: flex">
+                    <!-- ma hoc phan -->
+                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
+                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@Model.taiKhoan.hoTen" style="text-align: center !important">
+                            <img src="@Model.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
+
+                        </div>
+                    </div>
+                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                        <strong style="margin-left: 10px;margin-right: 10px">-</strong>
+                        <strong style="margin-right: 10px">@Model.taiKhoan.id</strong>
+                        <strong style="margin-right: 10px">@Model.taiKhoan.hoTen</strong>
+                    </div>
+                    <!-- ma hoc phan -->
+                </div>
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Hình thức thi:</label>
+                <div class="col-sm-4" style="display: flex">
+                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                        <strong>@Model.hinhThuc.tenHinhThuc</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- hoc ky nam hoc -->
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="basic-default-company">Ngày thi:</label>
+                <div class="col-sm-3 col-form-label">
+                    <strong>@Model.ngayThi</strong>
+                </div>
+                <label class="col-sm-3 col-form-label" for="basic-default-company">Sĩ số:</label>
+                <div class="col-sm-3 col-form-label">
+                    <span class="badge bg-dark">@Model.thamDu / @Model.siSo</span>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="basic-default-company">Số đề:</label>
+                <div class="col-sm-3 col-form-label">
+                    <strong>@Model.soDe</strong>
+                </div>
+                <label class="col-sm-3 col-form-label" for="basic-default-company">Số đáp án:</label>
+                <div class="col-sm-3 col-form-label">
+                    <strong>@Model.soDapAn</strong>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="basic-default-company">File .Zip:</label>
+                <div class="col-sm-9 col-form-label">
+                    @if (Model.zip != null && Model.zip != "")
+                    {
+                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                    }
+                    else
+                    {
+                        <strong> --- </strong>
+                    }
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label class="col-sm-3 col-form-label" for="basic-default-company">File .Excel:</label>
+                <div class="col-sm-9 col-form-label">
+                    @if (Model.excel != null && Model.excel != "")
+                    {
+                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadExcel()">Tải xuống .Excel</button>
+                    }
+                    else
+                    {
+                        <strong> --- </strong>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">Bảng phân bố điểm của nhóm</h5>
+        <div class="card-body">
+            <canvas id="myChart" style="width:100%;"></canvas>
+        </div>
+    </div>
 </div>
 
 <script>
     function DownloadZip() {
-        window.location.href = '@Url.Action("DownloadZip","Download", new { link = Model.zip})'
+        window.location.href = '@Url.Action("Download","Download", new { link = Model.zip})'
+    }
+    function DownloadExcel() {
+        window.location.href = '@Url.Action("Download","Download", new { link = Model.excel})'
     }
 </script>
+<script src="~/js/ChiTietNhom.js"></script>

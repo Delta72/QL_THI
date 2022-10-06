@@ -93,8 +93,14 @@ namespace QL_THI_2.Controllers
             m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
             m.zip = (N.LINKZIP_N != null) ? (N.LINKZIP_N) : null;
             m.excel = (N.LINKEXCEL_N != null) ? (N.LINKEXCEL_N) : null;
-            m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : null;
-            m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : null;
+            m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : "---";
+            m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : "---";
+
+            HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).FirstOrDefault();
+            string hk = db.HOC_Kies.Where(a => a.ID_HK == H.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
+            string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
+            string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
+            m.duongDan = hk + ", " + nh + " > " + mon + " > " + "Nhóm " + m.stt;
 
             return View(m);
         }

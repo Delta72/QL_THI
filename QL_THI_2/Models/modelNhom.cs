@@ -7,6 +7,7 @@ namespace QL_THI_2.Models
 {
     public class modelNhom
     {
+        public string duongDan { get; set; }
         public string id { get; set; }
         public string stt { get; set; }
         public modelHinhThuc hinhThuc { get; set; }

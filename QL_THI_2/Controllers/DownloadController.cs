@@ -12,7 +12,7 @@ namespace QL_THI_2.Controllers
     [ApiController]
     public class DownloadController : ControllerBase
     {
-        public async Task<IActionResult> DownloadZip(string link)
+        public async Task<IActionResult> Download(string link)
         {
             var path = Directory.GetCurrentDirectory() + link;
             var memory = new MemoryStream();
