@@ -14,5 +14,7 @@ namespace QL_THI_2.Models
         public string email { get; set; }
         public string lanHDCuoi { get; set; }
         public string avatar { get; set; }
+        public bool isAdmin { get; set; }
+        public bool hoatDong { get; set; }
     }
 }

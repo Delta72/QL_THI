@@ -22,6 +22,7 @@ namespace QL_THI_2.Models
         public DateTime? LANHDCUOI_TK { get; set; }
         public bool? LAADMIN_TK { get; set; }
         public string ANHDAIDIEN_TK { get; set; }
+        public bool? HOATDONG_TK { get; set; }
 
         public virtual ICollection<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
         public virtual ICollection<NHOM_THI> NHOM_THIs { get; set; }

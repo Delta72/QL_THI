@@ -89,18 +89,18 @@
                         <span class="menu-header-text">Quản lý</span>
                     </li>
                     <!-- Học phần -->
-                    <li class="menu-item active open">
+                    <li class="menu-item active open" id="menu1">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-book"></i>
                             <div data-i18n="Account Settings">Quản lý học phần</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item" id="liThemHocPhan">
+                            <li class="menu-item" id="li1">
                                 <a href="@Url.Action("ThemHocPhan","HocPhan")" class="menu-link">
                                     <div data-i18n="Account">Thêm học phần</div>
                                 </a>
                             </li>
-                            <li class="menu-item active" id="liDanhSachHocPhan">
+                            <li class="menu-item active" id="li2">
                                 <a href="@Url.Action("DanhSachHocPhan","HocPhan")" class="menu-link">
                                     <div data-i18n="Notifications">Danh sách học phần</div>
                                 </a>
@@ -109,19 +109,19 @@
                     </li>
                     <!-- Học phần -->
                     <!-- Thông báo -->
-                    <li class="menu-item">
+                    <li class="menu-item" id="menu2">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-note"></i>
                             <div data-i18n="Account Settings">Quản lý thông báo</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
-                                <a href="pages-account-settings-account.html" class="menu-link">
+                            <li class="menu-item" id="li3">
+                                <a href="@Url.Action("ThemThongBao","ThongBao")" class="menu-link">
                                     <div data-i18n="Account">Thêm thông báo mới</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="pages-account-settings-notifications.html" class="menu-link">
+                            <li class="menu-item" id="li4">
+                                <a href="@Url.Action("DanhSachThongBao","ThongBao")" class="menu-link">
                                     <div data-i18n="Notifications">Danh sách thông báo</div>
                                 </a>
                             </li>
@@ -129,19 +129,19 @@
                     </li>
                     <!-- Thông báo -->
                     <!-- Tài khoản -->
-                    <li class="menu-item">
+                    <li class="menu-item" id="menu3">
                         <a href="javascript:void(0);" class="menu-link menu-toggle">
                             <i class="menu-icon tf-icons bx bx-group"></i>
                             <div data-i18n="Account Settings">Quản lý tài khoản</div>
                         </a>
                         <ul class="menu-sub">
-                            <li class="menu-item">
+                            <li class="menu-item" id="li5">
                                 <a href="pages-account-settings-account.html" class="menu-link">
                                     <div data-i18n="Account">Thêm tài khoản</div>
                                 </a>
                             </li>
-                            <li class="menu-item">
-                                <a href="pages-account-settings-notifications.html" class="menu-link">
+                            <li class="menu-item" id="li6">
+                                <a href="@Url.Action("DanhSachTaiKhoan","TaiKhoan")" class="menu-link">
                                     <div data-i18n="Notifications">Danh sách tài khoản</div>
                                 </a>
                             </li>
@@ -242,6 +242,7 @@
 
     <!-- Page JS -->
     <script src="/template/assets/js/dashboards-analytics.js"></script>
+    <script src="~/js/_Main.js"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

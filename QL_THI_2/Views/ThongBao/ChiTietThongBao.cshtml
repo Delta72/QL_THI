@@ -1,0 +1,43 @@
+﻿@model modelThongBao
+@{
+    ViewData["Title"] = "ChiTietThongBao";
+    Layout = null;
+}
+
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="tuaDeTB">
+            @Model.tuaDe
+        </h5>
+        <button type="button"
+                class="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"></button>
+    </div>
+    <div class="modal-body" style="justify-content: center">
+        <p id="noiDungTB" style="white-space: pre-line; text-align: justify">@Model.noiDung</p>
+    </div>
+
+    <div class="modal-footer" id="footerTB" style="display: flex">
+        <strong style="margin-right: 10px">@Model.taiKhoan.id</strong>
+        <strong style="margin-right: 10px">@Model.taiKhoan.hoTen</strong>
+    </div>
+    <div class="modal-footer" id="footerTB" style="display: flex;margin-top: -20px">
+
+        @if (User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value == "admin")
+        {
+
+            <button type="button"
+                    onclick="XoaThongBao('@Model.id')"
+                    class="btn btn-xs btn-danger"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalXacNhan">
+                Xóa
+            </button>
+        }
+    </div>
+</div>
+
+
+

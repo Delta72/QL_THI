@@ -1,0 +1,127 @@
+﻿
+@{
+    ViewData["Title"] = "ThemThongBao";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="col-xxl">
+    <div class="card mb-4">
+        <div class="card-header d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">Thêm thông báo mới</h5>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Tựa đề</label>
+                <div class="col-sm-10">
+                    <!-- ma hoc phan -->
+                    <div class="row gx-3 gy-2 align-items-center">
+                        <div class="col-md-12">
+                            <input type="text" class="form-control" id="txtTuaDe" placeholder="Tựa đề thông báo..." />
+                        </div>
+                    </div>
+                    <!-- ma hoc phan -->
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name">Nội dung</label>
+                <div class="col-sm-10">
+                    <!-- ma hoc phan -->
+                    <div class="row gx-3 gy-2 align-items-center">
+                        <div class="col-md-12">
+                            <textarea id="txtNoiDung"
+                                      class="form-control"
+                                      style="height: 300px; text-align: justify;"
+                                      placeholder="Nội dung của thông báo..."></textarea>
+                        </div>
+                    </div>
+                    <!-- ma hoc phan -->
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-2 col-form-label" for="basic-default-name"></label>
+                <div class="col-sm-10" style="text-align: right">
+                    <!-- ma hoc phan -->
+                    <div class="row gx-3 gy-2">
+                        <div class="col-md-12">
+                            <span class="badge bg-dark" id="dem">0 / 4000</span>
+                        </div>
+                    </div>
+                    <!-- ma hoc phan -->
+                </div>
+            </div>
+
+            <div class="row justify-content-end">
+                <div class="col-sm-10">
+                    <button onclick="KiemTra()"
+                            class="btn btn-primary">
+                        Thêm thông báo
+                    </button>
+
+                </div>
+            </div>
+            <button id="buttonSubmit"
+                    style="display: none"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalCenter2">
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- xac nhan modal -->
+<div class="modal fade" id="modalCenter2" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xác nhận thêm thông báo này?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="ThemThongBaoMoi()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
+
+<button id="buttonError"
+        style="display: none"
+        data-bs-toggle="modal"
+        data-bs-target="#modalError">
+</button>
+<!-- error modal -->
+<div class="modal fade" id="modalError" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Lỗi !</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h3>Tựa đề và nội dung không được vượt quá 4000 ký tự</h3>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- error modal -->
+
+<script src="~/js/ThemThongBao.js"></script>

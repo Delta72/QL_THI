@@ -1,9 +1,4 @@
 ﻿
-// active page
-function Active() {
-    document.getElementById('liThemHocPhan').classList.add("active")
-    document.getElementById('liDanhSachHocPhan').classList.remove("active")
-}
 
 // Lay danh sach hoc phan
 function LayDanhSachHocPhan() {
@@ -23,28 +18,10 @@ function LayDanhSachHocPhan() {
     })
 }
 
-// Lay danh sach hoc ky
-function LayDanhSachHocKy() {
-    $.ajax({
-        url: '/HocPhan/LayMaHocKy',
-        type: 'get',
-        success: function (data) {
-            // console.log(data)
-            for (var i in data) {
-                var select = document.getElementById('selectHK')
-                var opt = document.createElement('option');
-                opt.value = data[i].id;
-                opt.innerHTML = data[i].tenHocKy;
-                select.appendChild(opt);
-            }
-        }
-    })
-}
-
 // Chon nam hoc
 function ChonNamHoc() {
     var date = new Date().getFullYear()
-    for (i = date; i < (date + 10); i++) {
+    for (i = date; i < (date + 5); i++) {
         var select = document.getElementById('selectHKB')
         var opt = document.createElement('option');
         opt.value = i;
@@ -247,9 +224,8 @@ function ThemDuongDan() {
 
 //ready
 $(document).ready(function () {
-    Active()
+    Active(1, 1)
     LayDanhSachHocPhan()
-    LayDanhSachHocKy()
     ChonNamHoc()
     $("#formThemHocPhan").submit(function (e) {
         e.preventDefault();

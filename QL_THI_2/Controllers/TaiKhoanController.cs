@@ -87,5 +87,49 @@ namespace QL_THI_2.Controllers
             string img = T.ANHDAIDIEN_TK;
             return Json(img);
         }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult DanhSachTaiKhoan()
+        {
+            List<modelTaiKhoan> L = new List<modelTaiKhoan>();
+            foreach(var i in db.TAI_KHOANs.OrderBy(a => a.ID_TK))
+            {
+                modelTaiKhoan m = new modelTaiKhoan();
+                m.id = i.ID_TK;
+                m.hoTen = i.HOTEN_TK;
+                m.email = i.EMAIL_TK;
+                m.lanHDCuoi = ((DateTime)i.LANHDCUOI_TK).ToString("dd/MM/yyyy");
+                m.ngayTao = ((DateTime)i.NGAYTAO_TK).ToString("dd/MM/yyyy");
+                m.avatar = i.ANHDAIDIEN_TK;
+                m.isAdmin = (bool)i.LAADMIN_TK;
+                m.hoatDong = (bool)i.HOATDONG_TK;
+                L.Add(m);
+            }
+            return View(L);
+        }
+
+        [Authorize(Roles = "admin")]
+        public IActionResult KhoaTaiKhoan(string id)
+        {
+            TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).FirstOrDefault();
+            db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+            if (T.HOATDONG_TK == true)
+            {
+                T.HOATDONG_TK = false;
+            }
+            else
+            {
+                T.HOATDONG_TK = true;
+            }
+            db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            db.SaveChanges();
+
+            var data = new
+            {
+                id = T.ID_TK,
+                hd = T.HOATDONG_TK
+            };
+            return Json(data);
+        }
     }
 }

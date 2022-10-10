@@ -11,6 +11,9 @@
         <div class="col-sm-2">
             <select id="selectHK" class="form-select color-dropdown">
                 <option value="all" selected disabled>-Học kỳ-</option>
+                <option value="1">Học kỳ I</option>
+                <option value="2">Học kỳ II</option>
+                <option value="3">Học kỳ hè</option>
             </select>
         </div>
         <label class="col-sm-2 col-form-label" for="basic-default-company">Năm học</label>
@@ -70,7 +73,7 @@
                             </td>
                             <td>
                                 <div class="dropdown" style="z-index: 1 !important">
-                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" onclick="DanhSachNhom('@i.id')">
                                         <i class="bx bx-detail"></i>
                                     </button>
                                 </div>

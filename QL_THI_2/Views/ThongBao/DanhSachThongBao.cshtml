@@ -1,7 +1,112 @@
-﻿@model IEnumerable<modelThongBao>
+﻿@model DanhSachThongBao
 @{
     ViewData["Title"] = "DanhSachThongBao";
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
 
+<div class="" style="margin-bottom: 10px;">
+    <div class="card">
+        <h5 class="card-header"><u>Thông báo</u></h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Tựa đề</th>
+                        <th style="text-align: center;">Ngày</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var i in Model.DS)
+                    {
+                        <tr>
+                            <td style="width: 60vw">
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>@i.tuaDe</strong>
+                            </td>
+                            <td style="text-align: center;">@i.thoiGian</td>
+                            <td>
+                                <div class="dropdown" style="z-index: 1 !important">
+                                    <button type="button"
+                                            class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalScrollable"
+                                            onclick="HienNoiDung('@i.id')">
+                                        <i class="bx bx-detail"></i>
+                                    </button>
+                                </div>
+                                
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="card-header" style="text-align: center">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item prev">
+                        <a class="page-link" href="@Url.Action("DanhSachThongBao","ThongBao", new { p = 1})">
+                            <i class="tf-icon bx bx-chevrons-left"></i>
+                        </a>
+                    </li>
+                    @for (var i = 1; i <= Model.soTrang; i++)
+                    {
+                        if (i == Model.trangHienTai)
+                        {
+                            <li class="page-item active">
+                                <a class="page-link" href="@Url.Action("DanhSachThongBao","ThongBao", new { p = i})">@i</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item">
+                                <a class="page-link" href="@Url.Action("DanhSachThongBao","ThongBao", new { p = i})">@i</a>
+                            </li>
+                        }
+                    }
+                    <li class="page-item next">
+                        <a class="page-link" href="@Url.Action("DanhSachThongBao","ThongBao", new { p = Model.soTrang})">
+                            <i class="tf-icon bx bx-chevrons-right"></i>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalScrollable" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable" role="document" id="modalTB">
+
+    </div>
+</div>
+
+<!-- xac nhan modal -->
+<div class="modal fade" id="modalXacNhan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="idXoa" style="display: none" />
+                <h4>Xác nhận xóa thông báo này?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-danger" onclick="TaskXoaThongBao()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
+<script src="~/js/DanhSachThongBao.js"></script>

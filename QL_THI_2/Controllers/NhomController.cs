@@ -50,7 +50,7 @@ namespace QL_THI_2.Controllers
         {
             DanhSachNhom D = new DanhSachNhom();
             HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
-            string hk = db.HOC_Kies.Where(a => a.ID_HK == H.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
+            string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
             string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             D.hocPhan = hk + ", " + nh + " > " + mon;
@@ -89,15 +89,15 @@ namespace QL_THI_2.Controllers
             m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
             m.daNop = (bool)N.DANOP_N;
             m.ngayThi = (N.NGAYTHI_N != null) ? ((DateTime)N.NGAYTHI_N).ToString() : "---";
-            m.siSo = (N.TONGSO_N != null) ? (N.TONGSO_N.ToString().PadLeft(2, '0')) : "---";
+            m.siSo = (N.SISO_N != null) ? (N.SISO_N.ToString().PadLeft(2, '0')) : "---";
             m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
-            m.zip = (N.LINKZIP_N != null) ? (N.LINKZIP_N) : null;
-            m.excel = (N.LINKEXCEL_N != null) ? (N.LINKEXCEL_N) : null;
+            m.zip = (N.LINKZIPBAI_N != null) ? (N.LINKZIPBAI_N) : null;
+            m.excel = (N.LINKEXCELDIEM_N != null) ? (N.LINKEXCELDIEM_N) : null;
             m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : "---";
             m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : "---";
 
             HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).FirstOrDefault();
-            string hk = db.HOC_Kies.Where(a => a.ID_HK == H.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
+            string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
             string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             m.duongDan = hk + ", " + nh + " > " + mon + " > " + "Nhóm " + m.stt;

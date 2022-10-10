@@ -1,22 +1,5 @@
 ﻿
 
-// chon hoc ky
-function ChonHocKy() {
-    $.ajax({
-        url: '/HocPhan/LayMaHocKy',
-        type: 'get',
-        success: function (data) {
-            // console.log(data)
-            for (var i in data) {
-                var select = document.getElementById('selectHK')
-                var opt = document.createElement('option');
-                opt.value = data[i].id;
-                opt.innerHTML = data[i].tenHocKy;
-                select.appendChild(opt);
-            }
-        }
-    })
-}
 
 // Chon nam hoc
 function ChonNamHoc() {
@@ -71,7 +54,7 @@ function DanhSachNhom(id) {
 
 //ready
 $(document).ready(function () {
-    ChonHocKy()
+    Active(1, 2)
     ChonNamHoc()
     ThemDuongDan()
 })

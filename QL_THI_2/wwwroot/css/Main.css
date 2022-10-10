@@ -2,3 +2,7 @@
 .trGV:hover {
     cursor: pointer;
 }
+
+.hover th:hover {
+    cursor: pointer;
+}

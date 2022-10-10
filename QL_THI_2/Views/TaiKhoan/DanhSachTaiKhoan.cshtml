@@ -1,0 +1,121 @@
+﻿@model IEnumerable<modelTaiKhoan>
+@{
+    ViewData["Title"] = "DanhSachTaiKhoan";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="" style="margin-bottom: 10px;">
+    <div class="card">
+        <h5 class="card-header">Danh sách tài khoản</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover hover" id="DSTK">
+                <thead>
+                    <tr>
+                        <th onclick="sortTable(0, 'DSTK')">ID</th>
+                        <th></th>
+                        <th onclick="sortTable(3, 'DSTK')">Họ và tên</th>
+                        <th onclick="sortTable(3, 'DSTK')"></th>
+                        <th onclick="sortTable(4, 'DSTK')">Email</th>
+                        <th onclick="sortTable(5, 'DSTK')">Lần HĐ cuối</th>
+                        <th onclick="sortTable(6, 'DSTK')" style="text-align: center;">Quản trị</th>
+                        <th onclick="sortTable(7, 'DSTK')"></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var i in Model)
+                    {
+                        <tr>
+                            <td style=""><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.id</strong></td>
+                            <td style="text-align: center;">
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.hoTen" style="text-align: center !important">
+                                        <img src="@i.avatar" alt="Avatar" class="rounded-circle" />
+                                    </li>
+                                </ul>
+                            </td>
+                            @{
+                                var hoten = i.hoTen.Split(" ");
+                                var ho = "";
+                                for (int x = 0; x < hoten.Length - 1; x++)
+                                {
+                                    ho += hoten[x] + " ";
+                                }
+                                var ten = hoten[hoten.Length - 1];
+                            }
+                            <td>
+                                @ho
+                            </td>
+                            <td>
+                                @ten
+                            </td>
+                            <td>
+                                @i.email
+                            </td>
+                            <td>
+                                @i.lanHDCuoi
+                            </td>
+                            <td style="text-align: center;">
+                                @if (i.isAdmin == true)
+                                {
+                                    <strong>X</strong>
+                                }
+                            </td>
+                            <td>
+                                <div class="dropdown" style="z-index: 1 !important">
+                                    <p style="display: none">@i.hoatDong</p>
+                                    <button type="button"
+                                            class="btn p-0 dropdown-toggle hide-arrow"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#modalXacNhanKhoa"
+                                            id="buttonChiTietNhom"
+                                            onclick="HienXacNhan('@i.id', '@i.hoatDong', this)">
+                                        @if (i.hoatDong == true)
+                                        {
+                                            <i class="bx bx-lock-open-alt"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="bx bx-lock" style="color: red"></i>
+                                        }
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- xac nhan modal -->
+<div class="modal fade" id="modalXacNhanKhoa" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <input id="idKhoa" style="display: none" />
+                <input id="idRow" style="display: none" />
+                <h4 id="h4XN"></h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-danger" onclick="TaskKhoaTaiKhoan()" id="btnXN">
+
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
+
+<script src="~/js/DanhSachTaiKhoan.js"></script>

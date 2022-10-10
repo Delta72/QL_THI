@@ -19,7 +19,6 @@ namespace QL_THI_2.Models
 
         public virtual DbSet<CHI_TIET_BAI_THI> CHI_TIET_BAI_THIs { get; set; }
         public virtual DbSet<HINH_THUC_THI> HINH_THUC_THIs { get; set; }
-        public virtual DbSet<HOC_KY> HOC_Kies { get; set; }
         public virtual DbSet<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
         public virtual DbSet<MA_HOC_PHAN> MA_HOC_PHANs { get; set; }
         public virtual DbSet<NHOM_THI> NHOM_THIs { get; set; }
@@ -86,18 +85,6 @@ namespace QL_THI_2.Models
                 entity.Property(e => e.TEN_HT).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<HOC_KY>(entity =>
-            {
-                entity.HasKey(e => e.ID_HK)
-                    .IsClustered(false);
-
-                entity.ToTable("HOC_KY");
-
-                entity.Property(e => e.ID_HK).ValueGeneratedNever();
-
-                entity.Property(e => e.TEN_HK).HasMaxLength(20);
-            });
-
             modelBuilder.Entity<HOC_PHAN_THI>(entity =>
             {
                 entity.HasKey(e => e.ID_HP)
@@ -113,6 +100,8 @@ namespace QL_THI_2.Models
                     .HasMaxLength(36)
                     .IsUnicode(false)
                     .IsFixedLength(true);
+
+                entity.Property(e => e.DIEMTHANHPHAN_HP).HasMaxLength(2000);
 
                 entity.Property(e => e.HANNOP_HP).HasColumnType("datetime");
 
@@ -135,12 +124,6 @@ namespace QL_THI_2.Models
                     .HasMaxLength(4)
                     .IsUnicode(false)
                     .IsFixedLength(true);
-
-                entity.HasOne(d => d.ID_HKNavigation)
-                    .WithMany(p => p.HOC_PHAN_THIs)
-                    .HasForeignKey(d => d.ID_HK)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_HOC_PHAN_THUOC_HOC_KY");
 
                 entity.HasOne(d => d.ID_MHPNavigation)
                     .WithMany(p => p.HOC_PHAN_THIs)
@@ -197,11 +180,23 @@ namespace QL_THI_2.Models
                     .HasMaxLength(24)
                     .IsUnicode(false);
 
-                entity.Property(e => e.LINKEXCEL_N)
+                entity.Property(e => e.LINKELEARNING_N)
+                    .HasMaxLength(4000)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LINKEXCELDIEM_N)
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
-                entity.Property(e => e.LINKZIP_N)
+                entity.Property(e => e.LINKPDFDE_N)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LINKPDFDIEM_N)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.LINKZIPBAI_N)
                     .HasMaxLength(500)
                     .IsUnicode(false);
 
@@ -274,11 +269,7 @@ namespace QL_THI_2.Models
                     .HasMaxLength(24)
                     .IsUnicode(false);
 
-                entity.Property(e => e.NOIDUNG_TB).HasColumnType("text");
-
                 entity.Property(e => e.THOIGIAN_TB).HasColumnType("datetime");
-
-                entity.Property(e => e.TUADE_TB).HasMaxLength(500);
 
                 entity.HasOne(d => d.ID_TKNavigation)
                     .WithMany(p => p.THONG_BAOs)

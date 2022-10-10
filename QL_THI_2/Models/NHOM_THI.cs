@@ -18,13 +18,16 @@ namespace QL_THI_2.Models
         public string ID_TK { get; set; }
         public short? STT_N { get; set; }
         public DateTime? NGAYTHI_N { get; set; }
-        public int? TONGSO_N { get; set; }
+        public int? SISO_N { get; set; }
         public int? SOLUONGTHI_N { get; set; }
-        public string LINKZIP_N { get; set; }
-        public string LINKEXCEL_N { get; set; }
         public short? SODE_N { get; set; }
         public short? SODAPAN_N { get; set; }
         public bool? DANOP_N { get; set; }
+        public string LINKZIPBAI_N { get; set; }
+        public string LINKEXCELDIEM_N { get; set; }
+        public string LINKPDFDE_N { get; set; }
+        public string LINKPDFDIEM_N { get; set; }
+        public string LINKELEARNING_N { get; set; }
 
         public virtual HOC_PHAN_THI ID_HPNavigation { get; set; }
         public virtual HINH_THUC_THI ID_HTNavigation { get; set; }

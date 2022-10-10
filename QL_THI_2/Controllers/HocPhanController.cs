@@ -28,14 +28,6 @@ namespace QL_THI_2.Controllers
             return View();
         }
 
-        [HttpPost]
-        [ActionName("ThemHocPhan")]
-        [Authorize(Roles = "admin")]
-        public IActionResult ThemHocPhanMoi(modelHocPhan model)
-        {
-            return RedirectToAction("DanhSachHocPhan", "HocPhan");
-        }
-
         [HttpGet]
         [Authorize(Roles = "admin")]
         public IActionResult LayMaHocPhan()
@@ -54,22 +46,6 @@ namespace QL_THI_2.Controllers
             return Json(L);
         }
 
-        [HttpGet]
-        [Authorize(Roles = "admin")]
-        public IActionResult LayMaHocKy()
-        {
-            List<modelHocKy> L = new List<modelHocKy>();
-            foreach (var i in db.HOC_Kies.OrderBy(a => a.ID_HK))
-            {
-                modelHocKy m = new modelHocKy()
-                {
-                    id = i.ID_HK,
-                    tenHocKy = i.TEN_HK,
-                };
-                L.Add(m);
-            }
-            return Json(L);
-        }
 
         [Authorize(Roles = "admin")]
         public IActionResult TaskThemHocPhan(string jsonHP, string jsonNhom, string soNhom)
@@ -88,7 +64,7 @@ namespace QL_THI_2.Controllers
             HOC_PHAN_THI H = new HOC_PHAN_THI();
             string id = Guid.NewGuid().ToString();
             H.ID_HP = TimIDHocPhan(id);
-            H.ID_HK = maHocKy;
+            H.HOCKY_HP = maHocKy;
             H.ID_TK = User.FindFirstValue(ClaimTypes.NameIdentifier);
             H.ID_MHP = maHocPhan;
             H.NAMHOCB_HP = namHocB;
@@ -133,30 +109,30 @@ namespace QL_THI_2.Controllers
         {
             List<DanhSachHocPhan> D = new List<DanhSachHocPhan>();
             var temp = db.HOC_PHAN_THIs
-                .Select(a => new { a.ID_HK, a.NAMHOCB_HP, a.NAMHOCK_HP })
+                .Select(a => new { a.HOCKY_HP, a.NAMHOCB_HP, a.NAMHOCK_HP })
                 .Distinct()
                 .ToList();
             foreach (var item in temp)
             {
                 DanhSachHocPhan d = new DanhSachHocPhan();
-                string hk = db.HOC_Kies.Where(a => a.ID_HK == item.ID_HK).Select(a => a.TEN_HK).FirstOrDefault();
+                string hk = (item.HOCKY_HP == 1) ? "Học kỳ I" : (item.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
                 string nh = item.NAMHOCB_HP.ToString() + " - " + item.NAMHOCK_HP.ToString();
                 d.hocKy_namHoc = hk + ", " + nh;
 
                 List<modelHocPhan> L = new List<modelHocPhan>();
-                foreach (var i in db.HOC_PHAN_THIs.Where(a => a.ID_HK == item.ID_HK && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
+                foreach (var i in db.HOC_PHAN_THIs.Where(a => a.HOCKY_HP == item.HOCKY_HP && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
                 {
                     modelHocPhan m = new modelHocPhan();
                     m.id = i.ID_HP;
                     m.soNhom = (int)i.SONHOM_HP;
-                    m.hocKy = db.HOC_Kies.Where(a => a.ID_HK == i.ID_HK).Select(a => a.TEN_HK).First();
+                    m.hocKy = (i.HOCKY_HP == 1) ? "Học kỳ I" : (i.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
                     m.maHocPhan = new modelMaHocPhan()
                     {
                         id = i.ID_MHP,
                         tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault()
                     };
                     m.namHocB = i.NAMHOCB_HP;
-                    m.namHocK = i.NAMHOCK_HP;
+                    m.namHocK = i.NAMHOCB_HP;
                     m.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
 
                     m.daNop = SoNhomDaNop(i.ID_HP);
@@ -173,16 +149,16 @@ namespace QL_THI_2.Controllers
         {
             int hk; int.TryParse(hocKy, out hk);
             DanhSachHocPhan D = new DanhSachHocPhan();
-            string shk = db.HOC_Kies.Where(a => a.ID_HK == hk).Select(a => a.TEN_HK).FirstOrDefault();
+            string shk = (hk == 1) ? "Học kỳ I" : (hk == 2) ? "Học kỳ II" : "Học kỳ hè";
             D.hocKy_namHoc = shk + ", " + namHoc + " - " + (int.Parse(namHoc) + 1);
 
             List<modelHocPhan> L = new List<modelHocPhan>();
-            foreach (var i in db.HOC_PHAN_THIs.Where(a => a.ID_HK == hk && a.NAMHOCB_HP == namHoc))
+            foreach (var i in db.HOC_PHAN_THIs.Where(a => a.HOCKY_HP == hk && a.NAMHOCB_HP == namHoc))
             {
                 modelHocPhan m = new modelHocPhan();
                 m.id = i.ID_HP;
                 m.soNhom = (int)i.SONHOM_HP;
-                m.hocKy = db.HOC_Kies.Where(a => a.ID_HK == i.ID_HK).Select(a => a.TEN_HK).First();
+                m.hocKy = (i.HOCKY_HP == 1) ? "Học kỳ I" : (i.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
                 m.maHocPhan = new modelMaHocPhan()
                 {
                     id = i.ID_MHP,
