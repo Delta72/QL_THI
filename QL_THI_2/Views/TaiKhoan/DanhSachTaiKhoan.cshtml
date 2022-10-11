@@ -6,7 +6,27 @@
 
 <div class="" style="margin-bottom: 10px;">
     <div class="card">
-        <h5 class="card-header">Danh sách tài khoản</h5>
+        <h5 class="card-header">
+            <button type="button"
+                    id="buttonThemNhom"
+                    class="btn btn-icon btn-primary"
+                    data-bs-toggle="modal"
+                    data-bs-target="#modalThemTaiKhoan">
+                <span class="tf-icons bx bx-plus"></span>
+            </button>
+            Danh sách tài khoản
+            <span class="d-flex align-items-center" id="spanSearchTK">
+                <input type="text"
+                       id="SearchTK"
+                       class="form-control border-0 shadow-none"
+                       placeholder="Tìm kiếm..."
+                       aria-label="Search..." />
+                <i class="bx bx-search fs-4 lh-0"></i>
+            </span>
+        </h5>
+        <div class="card-header" style="display: flex; margin-top: -20px; text-align: center" id="divSearchTK">
+            
+        </div>
         <div class="table-responsive text-nowrap">
             <table class="table table-hover hover" id="DSTK">
                 <thead>
@@ -21,17 +41,19 @@
                         <th onclick="sortTable(7, 'DSTK')"></th>
                     </tr>
                 </thead>
-                <tbody class="table-border-bottom-0">
+                <tbody class="table-border-bottom-0" id="tableBody">
                     @foreach (var i in Model)
                     {
                         <tr>
-                            <td style=""><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.id</strong></td>
-                            <td style="text-align: center;">
-                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
-                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.hoTen" style="text-align: center !important">
-                                        <img src="@i.avatar" alt="Avatar" class="rounded-circle" />
-                                    </li>
-                                </ul>
+                            <td><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.id</strong></td>
+                            <td>
+                                <div style="text-align: center;">
+                                    <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
+                                        <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.hoTen" style="text-align: center !important">
+                                            <img src="@i.avatar" alt="Avatar" class="rounded-circle" />
+                                        </li>
+                                    </ul>
+                                </div>
                             </td>
                             @{
                                 var hoten = i.hoTen.Split(" ");
@@ -54,11 +76,13 @@
                             <td>
                                 @i.lanHDCuoi
                             </td>
-                            <td style="text-align: center;">
-                                @if (i.isAdmin == true)
-                                {
-                                    <strong>X</strong>
-                                }
+                            <td>
+                                <div style="text-align: center;">
+                                    @if (i.isAdmin == true)
+                                    {
+                                        <strong>X</strong>
+                                    }
+                                </div>
                             </td>
                             <td>
                                 <div class="dropdown" style="z-index: 1 !important">
@@ -110,12 +134,72 @@
                     Đóng
                 </button>
                 <button type="button" class="btn btn-danger" onclick="TaskKhoaTaiKhoan()" id="btnXN">
-
                 </button>
             </div>
         </div>
     </div>
 </div>
 <!-- xac nhan modal -->
+<!-- Them tai khoan -->
+<div class="modal fade" id="modalThemTaiKhoan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Thêm tài khoản mới</h5>
 
-<script src="~/js/DanhSachTaiKhoan.js"></script>
+                <button type="button"
+                        id="btnThem_dong"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-header" style="margin-top: -20px; margin-bottom: -20px">
+                <h7 class="modal-title" id="alert" style="color: red"></h7>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameSmall" class="form-label">ID</label>
+                        <input type="text" id="IDthem" class="form-control latin_letters inputThem" maxlength="24" placeholder="ID của tài khoản..." />
+                    </div>
+                </div>
+                <div class="row g-2" style="margin-bottom: 15px;">
+                    <div class="col mb-0">
+                        <label class="form-label" for="emailSmall">Mật khẩu</label>
+                        <input type="password" class="form-control latin_letters inputThem" maxlength="24" id="MKthem" placeholder="******" />
+                    </div>
+                    <div class="col mb-0">
+                        <label for="dobSmall" class="form-label">Xác nhận</label>
+                        <input id="XNMKthem" type="password" class="form-control latin_letters inputThem" placeholder="******" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameSmall" class="form-label">Họ tên</label>
+                        <input type="text" id="Namethem" class="form-control inputThem" placeholder="Họ và tên..." />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameSmall" class="form-label">Email</label>
+                        <input type="email" id="Emailthem" class="form-control inputThem" placeholder="Email..." />
+                    </div>
+                </div>
+            </div>
+            <div id="footerThem">
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                        Đóng
+                    </button>
+                    <button type="button" onclick="HienXacNhanThem()" class="btn btn-primary">
+                        Thêm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Them tai khoan -->
+
+    <script src="~/js/DanhSachTaiKhoan.js"></script>

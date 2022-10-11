@@ -50,35 +50,42 @@ namespace QL_THI_2.Controllers
         [Authorize(Roles = "admin")]
         public IActionResult TaskThemHocPhan(string jsonHP, string jsonNhom, string soNhom)
         {
-            // Them hoc phan
-            var str = jsonHP.Trim('[', ']');
-            dynamic j = JsonConvert.DeserializeObject(str);
-            string maHocPhan = j.maHocPhan;
-            short maHocKy = (short)j.maHocKy;
-            string namHocB = j.namHocB;
-            string namHocK = j.namHocK;
-            string hanNop = j.hanNop;
-            short so_nhom = 0; short.TryParse(soNhom, out so_nhom);
+            try
+            {
+                // Them hoc phan
+                var str = jsonHP.Trim('[', ']');
+                dynamic j = JsonConvert.DeserializeObject(str);
+                string maHocPhan = j.maHocPhan;
+                short maHocKy = (short)j.maHocKy;
+                string namHocB = j.namHocB;
+                string namHocK = j.namHocK;
+                string hanNop = j.hanNop;
+                short so_nhom = 0; short.TryParse(soNhom, out so_nhom);
 
-            // Luu hoc phan vao csdl
-            HOC_PHAN_THI H = new HOC_PHAN_THI();
-            string id = Guid.NewGuid().ToString();
-            H.ID_HP = TimIDHocPhan(id);
-            H.HOCKY_HP = maHocKy;
-            H.ID_TK = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            H.ID_MHP = maHocPhan;
-            H.NAMHOCB_HP = namHocB;
-            H.NAMHOCK_HP = namHocK;
-            H.HANNOP_HP = DateTime.Parse(hanNop);
-            H.SONHOM_HP = so_nhom;
-            db.HOC_PHAN_THIs.Add(H);
-            db.SaveChanges();
+                // Luu hoc phan vao csdl
+                HOC_PHAN_THI H = new HOC_PHAN_THI();
+                string id = Guid.NewGuid().ToString();
+                H.ID_HP = TimIDHocPhan(id);
+                H.HOCKY_HP = maHocKy;
+                H.ID_TK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                H.ID_MHP = maHocPhan;
+                H.NAMHOCB_HP = namHocB;
+                H.NAMHOCK_HP = namHocK;
+                H.HANNOP_HP = DateTime.Parse(hanNop);
+                H.SONHOM_HP = so_nhom;
+                db.HOC_PHAN_THIs.Add(H);
+                db.SaveChanges();
 
-            // Them nhom thi
-            dynamic j2 = JsonConvert.DeserializeObject(jsonNhom);
-            NhomController.ThemNhomThi(j2, H.ID_HP);
+                // Them nhom thi
+                dynamic j2 = JsonConvert.DeserializeObject(jsonNhom);
+                NhomController.ThemNhomThi(j2, H.ID_HP);
 
-            return Json(H.ID_HP);
+                return Json(H.ID_HP);
+            }
+            catch (Exception)
+            {
+                return Json("error");
+            }
         }
 
         public string TimIDHocPhan(string id)

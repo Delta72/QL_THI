@@ -211,7 +211,12 @@ function ThemHocPhanMoi() {
             soNhom: (rowLength - 1)
         },
         success: function (data) {
-            window.location.href = '/Nhom/DanhSachNhomHocPhan?id=' + data
+            if (data == "error") {
+                HienLoi()
+            }
+            else {
+                window.location.href = '/Nhom/DanhSachNhomHocPhan?id=' + data
+            }
         }
     })
 }

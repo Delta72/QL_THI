@@ -2,16 +2,28 @@
 function Active(menu, li) {
     for (var i = 1; i <= 3; i++) {
         var id = 'menu' + i;
-        document.getElementById(id).classList.remove("active")
-        document.getElementById(id).classList.remove("open")
+        var m1 = document.getElementById(id)
+        if (m1 != null) {
+            m1.classList.remove("active")
+            m1.classList.remove("open")
+        }
     }
-    document.getElementById('menu' + menu).classList.add("active")
-    document.getElementById('menu' + menu).classList.add("open")
-    for (var i = 1; i <= 6; i++) {
+    var m = document.getElementById('menu' + menu)
+    if (m != null) {
+        m.classList.add("active")
+        m.classList.add("open")
+    }
+    for (var i = 1; i <= 5; i++) {
         var id = 'li' + i;
-        document.getElementById(id).classList.remove("active")
+        var l1 = document.getElementById(id)
+        if (l1 != null) {
+            document.getElementById(id).classList.remove("active")
+        }
     }
-    document.getElementById('li' + li).classList.add("active")
+    var l = document.getElementById('li' + li)
+    if (l != null) {
+        l.classList.add("active")
+    }
 }
 
 // sort table
@@ -68,4 +80,9 @@ function sortTable(n, id) {
             }
         }
     }
+}
+
+// Hien loi
+function HienLoi() {
+    document.getElementById('buttonError').click()
 }

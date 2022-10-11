@@ -242,10 +242,7 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.LANHDCUOI_TK).HasColumnType("datetime");
 
-                entity.Property(e => e.MK_TK)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .IsFixedLength(true);
+                entity.Property(e => e.MK_TK).IsUnicode(false);
 
                 entity.Property(e => e.NGAYTAO_TK).HasColumnType("datetime");
             });
