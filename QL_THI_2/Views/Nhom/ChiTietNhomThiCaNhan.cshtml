@@ -1,0 +1,188 @@
+﻿@model modelNhom
+@{
+    ViewData["Title"] = "ChiTietNhomThiCaNhan";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">@Model.duongDan</h5>
+        <div class="card-body">
+            <div class="table-responsive text-nowrap">
+                <table class="table table-borderless">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Hình thức thi:</strong>
+                            </td>
+                            <td>
+                                <div id="hinhThuc">
+                                    @Model.hinhThuc.tenHinhThuc
+                                </div>
+                            </td>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Ngày thi:</strong>
+                            </td>
+                            <td>
+                                <div id="ngayThi">
+                                    @Model.ngayThi
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Sĩ số:</strong>
+                            </td>
+                            <td>
+                                <div id="siSo">
+                                    @Model.siSo
+                                </div>
+                            </td>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Dự thi:</strong>
+                            </td>
+                            <td>
+                                <div id="thamDu">
+                                    @Model.thamDu
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Số lượng đề:</strong>
+                            </td>
+                            <td>
+                                <div id="soDe">
+                                    @Model.soDe
+                                </div>
+                            </td>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Số đáp án:</strong>
+                            </td>
+                            <td>
+                                <div id="soDapAn">
+                                    @Model.soDapAn
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>File .zip bài thi:</strong>
+                            </td>
+                            <td>
+                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
+                                {
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                            <td colspan="2" rowspan="4" style="text-align: center;vertical-align: middle" class="align-content-center">
+                                <div id="DoThiDiem" class="align-content-center">
+                                    @if (Model.excelDiem != null && Model.excelDiem != "")
+                                    {
+                                        <canvas id="canvasDoThi" style="max-width: 350px"></canvas>
+                                    }
+                                    else
+                                    {
+                                        <h5>Chưa có thông tin chi tiết điểm</h5>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>File .pdf đề thi:</strong>
+                            </td>
+                            <td>
+                                @if (Model.pdfDe != null && Model.pdfDe != "")
+                                {
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>File .pdf điểm thi:</strong>
+                            </td>
+                            <td>
+                                @if (Model.pdfDiem != null && Model.pdfDiem != "")
+                                {
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>File .excel điểm thi:</strong>
+                            </td>
+                            <td>
+                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
+                                {
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                <strong>Đường dẫn Elearning (nếu có):</strong>
+                            </td>
+                            <td colspan="3">
+                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
+                                {
+                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                }
+                                else
+                                {
+                                    <span>---</span>
+                                }
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer">
+            <div class="row justify-content-end">
+                <div class="col-sm-4">
+                    <button onclick="KiemTra()"
+                            class="btn btn-primary">
+                        Thêm học phần
+                    </button>
+                    <button onclick="KiemTra()"
+                            class="btn btn-primary">
+                        Chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/js/ChiTietNhomCaNhan.js"></script>

@@ -13,11 +13,12 @@ namespace QL_THI_2.Controllers
     {
         QL_THIContext db = new QL_THIContext();
 
+        #region admin
         [Authorize]
         public IActionResult DanhSachThongBao(string p)
         {
             int page = (p == null) ? 1 : (int.Parse(p));
-            int soTB = 10;
+            int soTB = 20;
             int skip = (page-1)*soTB;
             DanhSachThongBao D = new DanhSachThongBao();
             D.DS = new List<modelThongBao>();
@@ -103,5 +104,101 @@ namespace QL_THI_2.Controllers
             db.SaveChanges();
             return Json(true);
         }
+
+        [Authorize]
+        [NoDirectAccess]
+        public IActionResult TimKiemThongBao(string str, string p)
+        {
+            int page = (p == null) ? 1 : (int.Parse(p));
+            int soTB = 20;
+            int skip = (page - 1) * soTB;
+            p = p.ToLower();
+            DanhSachThongBao D = new DanhSachThongBao();
+            D.DS = new List<modelThongBao>();
+
+            List<modelThongBao> L = new List<modelThongBao>();
+            if(str != "" && str != null && str != " ")
+            {
+                foreach (var i in db.THONG_BAOs
+                .Where(a => a.TUADE_TB.ToLower().Contains(str) || a.NOIDUNG_TB.ToLower().Contains(str))
+                .OrderByDescending(a => a.THOIGIAN_TB)
+                .Skip(skip).Take(soTB))
+                {
+                    modelThongBao m = new modelThongBao();
+                    m.id = i.ID_TB;
+                    m.taiKhoan = new modelTaiKhoan();
+                    m.taiKhoan.id = i.ID_TK;
+                    m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
+                    m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
+                    m.tuaDe = i.TUADE_TB;
+                    m.noiDung = i.NOIDUNG_TB;
+                    m.thoiGian = ((DateTime)i.THOIGIAN_TB).ToString("dd/MM/yyyy");
+                    L.Add(m);
+                }
+            }
+            else
+            {
+                foreach (var i in db.THONG_BAOs
+                .OrderByDescending(a => a.THOIGIAN_TB)
+                .Skip(skip).Take(soTB))
+                {
+                    modelThongBao m = new modelThongBao();
+                    m.id = i.ID_TB;
+                    m.taiKhoan = new modelTaiKhoan();
+                    m.taiKhoan.id = i.ID_TK;
+                    m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
+                    m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
+                    m.tuaDe = i.TUADE_TB;
+                    m.noiDung = i.NOIDUNG_TB;
+                    m.thoiGian = ((DateTime)i.THOIGIAN_TB).ToString("dd/MM/yyyy");
+                    L.Add(m);
+                }
+            }
+            D.DS = L;
+            D.str = str;
+
+            int trang = db.THONG_BAOs.Count();
+            D.soTrang = (trang % soTB == 0) ? (trang / soTB) : ((trang / soTB) + 1);
+            D.trangHienTai = page;
+
+            return View(D);
+        }
+        #endregion
+
+        #region user
+
+        [Authorize]
+        public IActionResult DanhSachThongBao_GV(string p)
+        {
+            int page = (p == null) ? 1 : (int.Parse(p));
+            int soTB = 20;
+            int skip = (page - 1) * soTB;
+            DanhSachThongBao D = new DanhSachThongBao();
+            D.DS = new List<modelThongBao>();
+
+            List<modelThongBao> L = new List<modelThongBao>();
+            foreach (var i in db.THONG_BAOs.OrderByDescending(a => a.THOIGIAN_TB).Skip(skip).Take(soTB))
+            {
+                modelThongBao m = new modelThongBao();
+                m.id = i.ID_TB;
+                m.taiKhoan = new modelTaiKhoan();
+                m.taiKhoan.id = i.ID_TK;
+                m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
+                m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
+                m.tuaDe = i.TUADE_TB;
+                m.noiDung = i.NOIDUNG_TB;
+                m.thoiGian = ((DateTime)i.THOIGIAN_TB).ToString("dd/MM/yyyy");
+                L.Add(m);
+            }
+            D.DS = L;
+
+            int trang = db.THONG_BAOs.Count();
+            D.soTrang = (trang % soTB == 0) ? (trang / soTB) : ((trang / soTB) + 1);
+            D.trangHienTai = page;
+
+            return View(D);
+        }
+
+        #endregion
     }
 }

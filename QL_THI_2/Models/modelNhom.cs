@@ -13,13 +13,17 @@ namespace QL_THI_2.Models
         public modelHinhThuc hinhThuc { get; set; }
         public modelTaiKhoan taiKhoan { get; set; }
         public string ngayThi { get; set; }
+        public string hanNop { get; set; }
         public string siSo { get; set; }
         public string thamDu { get; set; }
-        public string zip { get; set; }
-        public string excel { get; set; }
+        public string zipBaiThi { get; set; }
+        public string excelDiem { get; set; }
+        public string pdfDe { get; set; }
+        public string pdfDiem { get; set; }
         public string soDe { get; set; }
         public string soDapAn { get; set; }
         public bool daNop { get; set; }
+        public int slNop { get; set; }
     }
 
     public class DanhSachNhom

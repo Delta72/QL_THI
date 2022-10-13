@@ -37,6 +37,27 @@ function TaskXoaThongBao() {
     })
 }
 
+// Tim kiem tai khoan
+$('#SearchTB').on('change input copy paste', function () {
+    // console.log(this.value)
+    var str = this.value;
+    var p = 1
+    TimKiemTB(str, p)
+})
+function TimKiemTB(str, p) {
+    $.ajax({
+        url: '/ThongBao/TimKiemThongBao',
+        type: 'post',
+        data: {
+            str: str,
+            p: p
+        },
+        success: function (data) {
+            document.getElementById('tableBody').innerHTML = data
+        }
+    })
+}
+
 $(document).ready(function () {
     Active(2, 4)
     ThemDuongDan();

@@ -19,5 +19,6 @@ namespace QL_THI_2.Models
         public List<modelThongBao> DS { get; set; }
         public int soTrang { get; set; }
         public int trangHienTai { get; set; }
+        public string str { get; set; }
     }
 }

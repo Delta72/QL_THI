@@ -1,0 +1,58 @@
+﻿@model IEnumerable<DanhSachNhom>
+@{
+    ViewData["Title"] = "DanhSachNhomThiCaNhan";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+@foreach (var item in Model)
+{
+    <div class="" style="margin-bottom: 10px;">
+        <div class="card">
+            <h5 class="card-header">@item.hocPhan</h5>
+            <div class="table-responsive text-nowrap">
+                <table class="table table-hover table_clickable">
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th style="text-align: center;">Hạn nộp</th>
+                            <th style="text-align: center;">Đã nộp</th>
+                        </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                        @foreach (var i in item.danhSachNhom)
+                        {
+                            <tr onclick="ChiTietNhomThiCaNhan('@i.id')">
+                                <td style=""><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.stt</strong></td>
+                                
+                                <td style="text-align: center;">
+                                    @i.hanNop
+                                </td>
+                                <td style="text-align: center;">
+                                    @if (i.slNop == 5)
+                                    {
+                                        <span class="badge bg-success">1/1</span>
+                                    }
+                                    else if (i.slNop == 0)
+                                    {
+                                        <span class="badge bg-danger">0 / 4</span>
+                                    }
+                                    else if (i.slNop > 0 && i.slNop < 5)
+                                    {
+                                        <span class="badge bg-warning">@i.slNop/4</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success">4/4</span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/js/DanhSachNhomThiCaNhan.js"></script>

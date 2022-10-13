@@ -62,6 +62,7 @@ namespace QL_THI_2.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        [NoDirectAccess]
         public IActionResult TimKiemTaiKhoan(string str)
         {
             List<modelTaiKhoan> L = new List<modelTaiKhoan>();
@@ -188,6 +189,7 @@ namespace QL_THI_2.Controllers
         }
 
         [Authorize(Roles = "admin")]
+        [NoDirectAccess]
         public IActionResult TimKiemTaiKhoanDS(string str)
         {
             List<modelTaiKhoan> L = new List<modelTaiKhoan>();

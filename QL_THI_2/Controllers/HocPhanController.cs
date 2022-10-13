@@ -119,7 +119,7 @@ namespace QL_THI_2.Controllers
                 .Select(a => new { a.HOCKY_HP, a.NAMHOCB_HP, a.NAMHOCK_HP })
                 .Distinct()
                 .ToList();
-            foreach (var item in temp)
+            foreach (var item in temp.OrderByDescending(a => a.NAMHOCK_HP))
             {
                 DanhSachHocPhan d = new DanhSachHocPhan();
                 string hk = (item.HOCKY_HP == 1) ? "Học kỳ I" : (item.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";

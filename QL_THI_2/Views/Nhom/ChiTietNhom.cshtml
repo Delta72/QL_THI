@@ -57,7 +57,7 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" for="basic-default-company">File .Zip:</label>
                 <div class="col-sm-9 col-form-label">
-                    @if (Model.zip != null && Model.zip != "")
+                    @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
                     {
                         <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
                     }
@@ -70,7 +70,7 @@
             <div class="row mb-3">
                 <label class="col-sm-3 col-form-label" for="basic-default-company">File .Excel:</label>
                 <div class="col-sm-9 col-form-label">
-                    @if (Model.excel != null && Model.excel != "")
+                    @if (Model.excelDiem != null && Model.excelDiem != "")
                     {
                         <button type="button" class="btn btn-xs btn-primary" onclick="DownloadExcel()">Tải xuống .Excel</button>
                     }
@@ -96,10 +96,10 @@
 
 <script>
     function DownloadZip() {
-        window.location.href = '@Url.Action("Download","Download", new { link = Model.zip})'
+        window.location.href = '@Url.Action("Download","Download", new { link = Model.zipBaiThi})'
     }
     function DownloadExcel() {
-        window.location.href = '@Url.Action("Download","Download", new { link = Model.excel})'
+        window.location.href = '@Url.Action("Download","Download", new { link = Model.excelDiem})'
     }
 </script>
 <script src="~/js/ChiTietNhom.js"></script>

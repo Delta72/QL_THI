@@ -44,7 +44,7 @@ function DangNhap() {
                 window.location.href = '/HocPhan/DanhSachHocPhan'
             }
             else if (data == 'user') {
-                window.location.href = '/ThongBao/ThongBaoMoi'
+                window.location.href = '/ThongBao/DanhSachThongBao_GV'
             }
         }
     })

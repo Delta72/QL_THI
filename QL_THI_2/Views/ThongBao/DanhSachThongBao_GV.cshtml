@@ -1,9 +1,8 @@
 ﻿@model DanhSachThongBao
 @{
-    ViewData["Title"] = "DanhSachThongBao";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    ViewData["Title"] = "DanhSachThongBao_GV";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
-
 
 <div class="" style="margin-bottom: 10px;">
     <div class="card">
@@ -121,4 +120,11 @@
     </div>
 </div>
 <!-- xac nhan modal -->
+
 <script src="~/js/DanhSachThongBao.js"></script>
+
+<script>
+    $(document).ready(function () {
+        Active(1, 1)
+    })
+</script>
