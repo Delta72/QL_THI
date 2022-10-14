@@ -9,7 +9,7 @@
         <h5 class="card-header">@Model.duongDan</h5>
         <div class="card-body">
             <div class="table-responsive text-nowrap">
-                <table class="table table-borderless">
+                <table class="table table-borderless" id="tableNhomCaNhan">
                     <tbody>
                         <tr>
                             <td>
@@ -77,14 +77,16 @@
                                 <strong>File .zip bài thi:</strong>
                             </td>
                             <td>
-                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
-                                {
-                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                                }
-                                else
-                                {
-                                    <span>---</span>
-                                }
+                                <div id="zip">
+                                    @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
+                                    {
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                </div>
                             </td>
                             <td colspan="2" rowspan="4" style="text-align: center;vertical-align: middle" class="align-content-center">
                                 <div id="DoThiDiem" class="align-content-center">
@@ -105,14 +107,17 @@
                                 <strong>File .pdf đề thi:</strong>
                             </td>
                             <td>
-                                @if (Model.pdfDe != null && Model.pdfDe != "")
-                                {
-                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                                }
-                                else
-                                {
-                                    <span>---</span>
-                                }
+                                <div id="pdfDe">
+                                    @if (Model.pdfDe != null && Model.pdfDe != "")
+                                    {
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -121,14 +126,16 @@
                                 <strong>File .pdf điểm thi:</strong>
                             </td>
                             <td>
-                                @if (Model.pdfDiem != null && Model.pdfDiem != "")
-                                {
-                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                                }
-                                else
-                                {
-                                    <span>---</span>
-                                }
+                                <div id="pdfDiem">
+                                    @if (Model.pdfDiem != null && Model.pdfDiem != "")
+                                    {
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -137,14 +144,16 @@
                                 <strong>File .excel điểm thi:</strong>
                             </td>
                             <td>
-                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
-                                {
-                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                                }
-                                else
-                                {
-                                    <span>---</span>
-                                }
+                                <div id="excel">
+                                    @if (Model.excelDiem != null && Model.excelDiem != "")
+                                    {
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                </div>
                             </td>
                         </tr>
                         <tr>
@@ -153,14 +162,16 @@
                                 <strong>Đường dẫn Elearning (nếu có):</strong>
                             </td>
                             <td colspan="3">
-                                @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
-                                {
-                                    <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                                }
-                                else
-                                {
-                                    <span>---</span>
-                                }
+                                <div id="elearning">
+                                    @if (Model.elearning != null && Model.elearning != "")
+                                    {
+                                        <a href="@Model.elearning" target=_blank>@Model.elearning</a>
+                                    }
+                                    else
+                                    {
+                                        <span>---</span>
+                                    }
+                                </div>
                             </td>
                         </tr>
                     </tbody>
@@ -169,13 +180,8 @@
         </div>
         <div class="card-footer">
             <div class="row justify-content-end">
-                <div class="col-sm-4">
-                    <button onclick="KiemTra()"
-                            class="btn btn-primary">
-                        Thêm học phần
-                    </button>
-                    <button onclick="KiemTra()"
-                            class="btn btn-primary">
+                <div class="col-sm-4" id="divBtn">
+                    <button onclick="ChinhSua('@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value','@Model.id')" class="btn btn-primary">
                         Chỉnh sửa
                     </button>
                 </div>

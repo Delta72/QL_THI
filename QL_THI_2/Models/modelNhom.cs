@@ -20,6 +20,7 @@ namespace QL_THI_2.Models
         public string excelDiem { get; set; }
         public string pdfDe { get; set; }
         public string pdfDiem { get; set; }
+        public string elearning { get; set; }
         public string soDe { get; set; }
         public string soDapAn { get; set; }
         public bool daNop { get; set; }

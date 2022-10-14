@@ -31,3 +31,17 @@
     margin-left: auto;
     margin-right: auto;
 }
+
+#tableNhomCaNhan input{
+    max-width: 140px;
+    border: 0.1px solid gray;
+}
+
+#tableNhomCaNhan select {
+    max-width: 140px;
+    border: 0.1px solid gray;
+}
+
+#tableNhomCaNhan button {
+    width: 140px;
+}
