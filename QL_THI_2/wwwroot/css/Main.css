@@ -33,15 +33,33 @@
 }
 
 #tableNhomCaNhan input{
-    max-width: 140px;
     border: 0.1px solid gray;
 }
 
 #tableNhomCaNhan select {
-    max-width: 140px;
     border: 0.1px solid gray;
 }
 
 #tableNhomCaNhan button {
-    width: 140px;
+    width: 100%;
+}
+
+.align-items-left{
+    text-align: left;
+}
+
+#divBtn button{
+    margin-right: 20px;
+}
+
+.tpdiem i {
+    margin-left: 5px;
+}
+
+.tpdiem i:hover{
+    cursor: pointer;
+}
+
+#divThanhPhanDiem span{
+    margin-right: 10px;
 }

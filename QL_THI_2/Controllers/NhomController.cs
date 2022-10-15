@@ -193,7 +193,8 @@ namespace QL_THI_2.Controllers
             {
                 nhom = m,
                 hinhThuc = h,
-            };
+                TK = User.FindFirstValue(ClaimTypes.NameIdentifier),
+        };
             return Json(data);
         }
     }

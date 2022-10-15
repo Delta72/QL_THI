@@ -24,30 +24,19 @@
                         <tr>
                             <th onclick="sortTable(0, 'DSTB')">Tựa đề</th>
                             <th onclick="sortTable(1, 'DSTB')" style="text-align: center;">Ngày</th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
                         @foreach (var i in Model.DS)
                         {
-                            <tr>
+                            <tr data-bs-toggle="modal"
+                                 data-bs-target="#modalScrollable"
+                                 onclick="HienNoiDung('@i.id')">
                                 <td style="width: 60vw">
-                                    <i class="fab fa-angular fa-lg text-danger me-3"></i>
+                                    <i class="fa fa-bullhorn fa-lg text-primary me-3"></i>
                                     <strong>@i.tuaDe</strong>
                                 </td>
                                 <td style="text-align: center;">@i.thoiGian</td>
-                                <td>
-                                    <div class="dropdown" style="z-index: 1 !important">
-                                        <button type="button"
-                                                class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalScrollable"
-                                                onclick="HienNoiDung('@i.id')">
-                                            <i class="bx bx-detail"></i>
-                                        </button>
-                                    </div>
-
-                                </td>
                             </tr>
                         }
 
@@ -95,33 +84,8 @@
     </div>
 </div>
 
-<!-- xac nhan modal -->
-<div class="modal fade" id="modalXacNhan" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="modal"
-                        aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <input id="idXoa" style="display: none" />
-                <h4>Xác nhận xóa thông báo này?</h4>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
-                    Đóng
-                </button>
-                <button type="button" class="btn btn-danger" onclick="TaskXoaThongBao()">Xóa</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- xac nhan modal -->
 
-<script src="~/js/DanhSachThongBao.js"></script>
+<script src="~/js/DanhSachThongBao.js" asp-append-version="true"></script>
 
 <script>
     $(document).ready(function () {

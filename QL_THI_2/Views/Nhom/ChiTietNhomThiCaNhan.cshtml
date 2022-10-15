@@ -13,7 +13,6 @@
                     <tbody>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Hình thức thi:</strong>
                             </td>
                             <td>
@@ -22,7 +21,6 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Ngày thi:</strong>
                             </td>
                             <td>
@@ -33,7 +31,6 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Sĩ số:</strong>
                             </td>
                             <td>
@@ -42,7 +39,6 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Dự thi:</strong>
                             </td>
                             <td>
@@ -53,7 +49,6 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Số lượng đề:</strong>
                             </td>
                             <td>
@@ -62,7 +57,6 @@
                                 </div>
                             </td>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Số đáp án:</strong>
                             </td>
                             <td>
@@ -73,14 +67,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>File .zip bài thi:</strong>
                             </td>
                             <td>
                                 <div id="zip">
                                     @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.zipBaiThi')">Tải xuống .Zip</button>
                                     }
                                     else
                                     {
@@ -103,14 +96,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>File .pdf đề thi:</strong>
                             </td>
                             <td>
                                 <div id="pdfDe">
                                     @if (Model.pdfDe != null && Model.pdfDe != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDe')">Tải xuống .Zip</button>
                                     }
                                     else
                                     {
@@ -122,14 +114,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>File .pdf điểm thi:</strong>
                             </td>
                             <td>
                                 <div id="pdfDiem">
                                     @if (Model.pdfDiem != null && Model.pdfDiem != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDiem')">Tải xuống .Zip</button>
                                     }
                                     else
                                     {
@@ -140,14 +131,13 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
-                                <strong>File .excel điểm thi:</strong>
+                                <strong>File .xlsx điểm thi:</strong>
                             </td>
                             <td>
                                 <div id="excel">
                                     @if (Model.excelDiem != null && Model.excelDiem != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.excelDiem')">Tải xuống .xlsx</button>
                                     }
                                     else
                                     {
@@ -158,7 +148,6 @@
                         </tr>
                         <tr>
                             <td>
-                                <i class="fab fa-angular fa-lg text-danger me-3"></i>
                                 <strong>Đường dẫn Elearning (nếu có):</strong>
                             </td>
                             <td colspan="3">
@@ -190,5 +179,4 @@
     </div>
 </div>
 
-
-<script src="~/js/ChiTietNhomCaNhan.js"></script>
+<script src="~/js/ChiTietNhomCaNhan.js" asp-append-version="true"></script>

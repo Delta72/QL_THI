@@ -86,3 +86,8 @@ function sortTable(n, id) {
 function HienLoi() {
     document.getElementById('buttonError').click()
 }
+
+// Download
+function Download(link) {
+    window.location.href = '/api/Download?link=' + String(link).replace(/\\/g, "%5C");
+}

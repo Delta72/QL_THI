@@ -62,6 +62,24 @@
                     </div>
                 </div>
                 <!-- han nop -->
+                <div class="row mb-3">
+                    <label class="col-sm-2 col-form-label" for="basic-default-company">Điểm thành phần:</label>
+                    <div class="col-sm-4" style="display: flex">
+                        <input type="text" class="form-control" id="txtTP" style="margin-right: 20px" placeholder="Thành phần điểm..."/>
+                        <button type="button"
+                                class="btn btn-icon btn-primary"
+                                onclick="ThemThanhPhan()">
+                            <span class="tf-icons bx bx-plus"></span>
+                        </button>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <p id="strTP" style="display: none"></p>
+                    <label class="col-sm-2 col-form-label" for="basic-default-company"></label>
+                    <div class="col-sm-10" id="divThanhPhanDiem">
+
+                    </div>
+                </div>
                 <!-- so nhom -->
                 <!-- so nhom -->
                 <div class="row mb-3">
@@ -184,4 +202,4 @@
 </div>
 <!-- xac nhan modal -->
 
-<script src="~/js/ThemHocPhan.js"></script>
+<script src="~/js/ThemHocPhan.js" asp-append-version="true"></script>

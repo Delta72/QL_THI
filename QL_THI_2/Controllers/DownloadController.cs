@@ -14,7 +14,7 @@ namespace QL_THI_2.Controllers
     {
         public async Task<IActionResult> Download(string link)
         {
-            var path = Directory.GetCurrentDirectory() + link;
+            var path = Directory.GetCurrentDirectory() + "\\wwwroot" + link;
             var memory = new MemoryStream();
             using (var stream = new FileStream(path, FileMode.Open))
             {

@@ -1,5 +1,31 @@
 ﻿
 
+// Them thanh phan
+function ThemThanhPhan() {
+    var str = document.getElementById('txtTP').value;
+    if (str != "") {
+        var id = document.getElementById('divThanhPhanDiem').children.length + 1;
+        var s = '<span class="badge bg-primary tpdiem" id="span' + id + '">' + str + ' |<i class="fa fa-times" onclick="Xoa(' + id + ')"></i></span>'
+        document.getElementById('divThanhPhanDiem').innerHTML += s;
+        document.getElementById('txtTP').value = ""
+        CapNhatTP()
+    }
+}
+
+// cap nhat thanh phan
+function CapNhatTP() {
+    var str = ''
+    var c = document.getElementById('divThanhPhanDiem').children.length
+    document.getElementById('strTP').innerText = document.getElementById('divThanhPhanDiem').innerText
+}
+
+// Xoa
+function Xoa(i) {
+    var span = document.getElementById('span' + i)
+    span.remove()
+    CapNhatTP()
+}
+
 // Lay danh sach hoc phan
 function LayDanhSachHocPhan() {
     $.ajax({
