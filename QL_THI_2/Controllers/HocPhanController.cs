@@ -63,8 +63,7 @@ namespace QL_THI_2.Controllers
                 string diemTP = j.diemTP;
                 short so_nhom = 0; short.TryParse(soNhom, out so_nhom);
 
-                if(db.HOC_PHAN_THIs
-                    .Where(a => a.ID_MHP == maHocPhan && a.NAMHOCB_HP == namHocB && a.HOCKY_HP == maHocKy) != null)
+                if(db.HOC_PHAN_THIs.Where(a => a.ID_MHP == maHocPhan && a.NAMHOCB_HP == namHocB && a.HOCKY_HP == maHocKy).FirstOrDefault() != null)
                 {
                     return Json("exists");
                 }

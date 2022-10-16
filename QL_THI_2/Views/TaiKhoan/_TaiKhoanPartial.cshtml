@@ -19,7 +19,7 @@
                             </div>
                             <div class="flex-grow-1">
                                 <span class="fw-semibold d-block">@User.FindFirst(System.Security.Claims.ClaimTypes.Name).Value</span>
-                                <small class="text-muted">@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value</small>
+                                <small class="text-muted">@User.FindFirst(System.Security.Claims.ClaimTypes.Authentication).Value</small>
                             </div>
                         </div>
                     </a>

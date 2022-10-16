@@ -172,12 +172,10 @@ function Luu(id) {
         contentType: false,
         data: frm,
         success: function (data) {
-
+            $('#modalDong').click()
+            HuyBo(id)
         }
     })
-
-    $('#modalDong').click()
-    HuyBo(id)
 }
 
 

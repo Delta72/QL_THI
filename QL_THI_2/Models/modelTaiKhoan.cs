@@ -8,6 +8,7 @@ namespace QL_THI_2.Models
     public class modelTaiKhoan
     {
         public string id { get; set; }
+        public string dn { get; set; }
         public string matKhau { get; set; }
         public string hoTen { get; set; }
         public string ngayTao { get; set; }

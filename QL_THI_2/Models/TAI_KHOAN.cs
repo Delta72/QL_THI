@@ -15,14 +15,15 @@ namespace QL_THI_2.Models
         }
 
         public string ID_TK { get; set; }
+        public string DN_TK { get; set; }
         public string MK_TK { get; set; }
         public string HOTEN_TK { get; set; }
         public DateTime? NGAYTAO_TK { get; set; }
         public string EMAIL_TK { get; set; }
         public DateTime? LANHDCUOI_TK { get; set; }
-        public bool? LAADMIN_TK { get; set; }
         public string ANHDAIDIEN_TK { get; set; }
         public bool? HOATDONG_TK { get; set; }
+        public bool? LAADMIN_TK { get; set; }
 
         public virtual ICollection<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
         public virtual ICollection<NHOM_THI> NHOM_THIs { get; set; }

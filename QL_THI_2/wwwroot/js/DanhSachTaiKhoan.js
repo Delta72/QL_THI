@@ -180,7 +180,7 @@ function HienTaiKhoanVuaThem(data) {
     var cell6 = row.insertCell(6);
     var cell7 = row.insertCell(7);
 
-    cell0.innerHTML = '<i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>' + data.id + '</strong>'
+    cell0.innerHTML = '<span class="badge rounded-pill bg-success" style="margin-right: 10px">Mới</span><strong>' + data.id + '</strong>'
 
     var str1 = '<div style="text-align: center;">'
     str1 += '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">'

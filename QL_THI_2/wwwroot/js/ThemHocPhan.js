@@ -69,8 +69,8 @@ $('#textGV').on('change input copy paste', function () {
                 str += '<thead></thead>'
                 str += '<tbody class="table-border-bottom-0">'
                 for (var i in data) {
-                    str += '<tr onclick="ChonGV(\'' + data[i].id +'\',\'' + data[i].hoTen + '\')" class="trGV">'
-                    str += '<td><small>' + data[i].id + " - " + data[i].hoTen + '</small></td>'
+                    str += '<tr onclick="ChonGV(\'' + data[i].id + '\',\'' + data[i].dn +'\',\'' + data[i].hoTen + '\')" class="trGV">'
+                    str += '<td><small>' + data[i].dn + " - " + data[i].hoTen + '</small></td>'
                     str += '<td><ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">'
                     str += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title = "' + data[i].hoTen + '" >'
                     str += '<img src="' + data[i].avatar + '" alt="Avatar" class="rounded-circle" /></li></ul></td>'
@@ -86,41 +86,7 @@ $('#textGV').on('change input copy paste', function () {
     }
 })
 
-// chon gv
-function ChonGV(id, hoten) {
-    document.getElementById('textMGV').value = id
-    document.getElementById('textTGV').value = hoten
-    document.getElementById('textGV').value = id + ' - ' + hoten
-}
-function ThemGV() {
-    var id = document.getElementById('textMGV').value
-    if (id != null && id != "") {
-        var hoten = document.getElementById('textTGV').value
-        var img = GetUserAvatar(id);
 
-        var table = document.getElementById("tableThemNhom");
-        var count = table.rows.length;
-        var row = table.insertRow(count);
-
-        var cell1 = row.insertCell(0);
-        var cell2 = row.insertCell(1);
-        var cell3 = row.insertCell(2);
-        var cell4 = row.insertCell(3);
-
-        cell1.innerHTML = (count).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        cell2.innerHTML = id
-        str = ''
-        str += '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">'
-        str += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' + id + ' - ' + hoten + '">'
-        str += '<img src="' + img + '" alt="Avatar" class="rounded-circle" /></li><li>' + hoten + '</li></ul>'
-        cell3.innerHTML = str
-        cell4.innerHTML = '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" onclick="XoaNhom(' + count + ')"><i class="bx bx-trash"></i></button></div>'
-
-        document.getElementById('modalDong').click();
-        document.getElementById('buttonThemNhom').classList.remove('btn-danger')
-        document.getElementById('buttonThemNhom').classList.add('btn-primary')
-    }
-}
 
 // Xoa nhom
 function XoaNhom(c) {
@@ -195,6 +161,46 @@ function KiemTra() {
     }
 }
 
+// chon gv
+function ChonGV(id, dn, hoten) {
+    document.getElementById('textMGV').value = id
+    document.getElementById('textTGV').value = hoten
+    document.getElementById('textDN').value = dn
+    document.getElementById('textGV').value = dn + ' - ' + hoten
+}
+function ThemGV() {
+    var id = document.getElementById('textMGV').value
+    var dn = document.getElementById('textDN').value
+    if (id != null && id != "") {
+        var hoten = document.getElementById('textTGV').value
+        var img = GetUserAvatar(id);
+
+        var table = document.getElementById("tableThemNhom");
+        var count = table.rows.length;
+        var row = table.insertRow(count);
+
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+
+        cell1.innerHTML = (count).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        cell2.innerHTML = '<p style="display: none">' + id + '</p>'
+        cell3.innerHTML = dn
+        str = ''
+        str += '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">'
+        str += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' + dn + ' - ' + hoten + '">'
+        str += '<img src="' + img + '" alt="Avatar" class="rounded-circle" /></li><li style="margin-left: 10px">' + hoten + '</li></ul>'
+        cell4.innerHTML = str
+        cell5.innerHTML = '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" onclick="XoaNhom(' + count + ')"><i class="bx bx-trash"></i></button></div>'
+
+        document.getElementById('modalDong').click()
+        document.getElementById('buttonThemNhom').classList.remove('btn-danger')
+        document.getElementById('buttonThemNhom').classList.add('btn-primary')
+    }
+}
+
 // Them hoc phan moi
 function ThemHocPhanMoi() {
     var maHP = $('#selectMHP').val();
@@ -223,7 +229,7 @@ function ThemHocPhanMoi() {
         var oCells = table.rows.item(i).cells;
         var cellLength = oCells.length;
         var id = []
-        for (var j = 0; j < cellLength - 2; j++) {
+        for (var j = 0; j < cellLength - 3; j++) {
             var cellVal = oCells.item(j).innerHTML;
             // console.log(cellVal);
             id[j] = cellVal;

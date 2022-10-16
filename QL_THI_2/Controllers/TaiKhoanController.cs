@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using System.IO;
 
 namespace QL_THI_2.Controllers
 {
@@ -25,8 +26,12 @@ namespace QL_THI_2.Controllers
         [AllowAnonymous]
         public IActionResult TaskDangNhap(string taiKhoan, string matKhau)
         {
-            TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == taiKhoan && a.MK_TK == matKhau).FirstOrDefault();
+            TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.DN_TK == taiKhoan).FirstOrDefault();
             if(T == null)
+            {
+                return Json("error");
+            }
+            else if(Rijindael.Decrypt(T.MK_TK, T.ID_TK.Replace("-", "")) != matKhau)
             {
                 return Json("error");
             }
@@ -37,6 +42,7 @@ namespace QL_THI_2.Controllers
                 if (T.LAADMIN_TK == false) role = "user";
                 var claims = new[] {
                     new Claim(ClaimTypes.Name, T.HOTEN_TK),
+                    new Claim(ClaimTypes.Authentication, T.DN_TK),
                     new Claim(ClaimTypes.NameIdentifier, T.ID_TK),
                     new Claim(ClaimTypes.UserData, T.ANHDAIDIEN_TK),
                     new Claim(ClaimTypes.Role, role)};
@@ -73,6 +79,7 @@ namespace QL_THI_2.Controllers
                 {
                     modelTaiKhoan m = new modelTaiKhoan();
                     m.id = i.ID_TK;
+                    m.dn = i.DN_TK;
                     m.hoTen = i.HOTEN_TK;
                     m.avatar = i.ANHDAIDIEN_TK;
                     L.Add(m);
@@ -93,10 +100,11 @@ namespace QL_THI_2.Controllers
         public IActionResult DanhSachTaiKhoan()
         {
             List<modelTaiKhoan> L = new List<modelTaiKhoan>();
-            foreach(var i in db.TAI_KHOANs.OrderBy(a => a.ID_TK))
+            foreach(var i in db.TAI_KHOANs.OrderBy(a => a.DN_TK))
             {
                 modelTaiKhoan m = new modelTaiKhoan();
                 m.id = i.ID_TK;
+                m.dn = i.DN_TK;
                 m.hoTen = i.HOTEN_TK;
                 m.email = i.EMAIL_TK;
                 m.lanHDCuoi = ((DateTime)i.LANHDCUOI_TK).ToString("dd/MM/yyyy");
@@ -156,13 +164,24 @@ namespace QL_THI_2.Controllers
             return Json(data);
         }
 
+        [NoDirectAccess]
+        public string TimIDTK(string id)
+        {
+            if(db.TAI_KHOANs.Where(a => a.ID_TK == id).FirstOrDefault() == null)
+            {
+                return id;
+            }
+            return TimIDTK(Guid.NewGuid().ToString());
+        }
+
         [Authorize(Roles = "admin")]
         public IActionResult TaskThemTaiKhoan(string id, string mk, string hoTen, string email)
         {
             TAI_KHOAN TK = new TAI_KHOAN();
 
-            TK.ID_TK = id;
-            TK.MK_TK = Rijindael.Encrypt(mk, id);
+            TK.DN_TK = id;
+            TK.ID_TK = TimIDTK(Guid.NewGuid().ToString());
+            TK.MK_TK = Rijindael.Encrypt(mk, TK.ID_TK.Replace("-",""));
             TK.HOTEN_TK = hoTen;
             TK.EMAIL_TK = email;
             TK.NGAYTAO_TK = DateTime.Now;
@@ -173,6 +192,8 @@ namespace QL_THI_2.Controllers
 
             db.TAI_KHOANs.Add(TK);
             db.SaveChanges();
+
+            TaoThuMuc(TK.ID_TK);
 
             modelTaiKhoan m = new modelTaiKhoan()
             {
@@ -186,6 +207,17 @@ namespace QL_THI_2.Controllers
             };
 
             return Json(m);
+        }
+
+        [NoDirectAccess]
+        public void TaoThuMuc(string id)
+        {
+            var p = @"wwwroot\user\" + id;
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), p);
+            if (!Directory.Exists(filePath))
+            {
+                Directory.CreateDirectory(filePath);
+            }
         }
 
         [Authorize(Roles = "admin")]

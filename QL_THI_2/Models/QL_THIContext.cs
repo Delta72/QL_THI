@@ -112,7 +112,7 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
-                    .HasMaxLength(24)
+                    .HasMaxLength(36)
                     .IsUnicode(false);
 
                 entity.Property(e => e.NAMHOCB_HP)
@@ -177,7 +177,7 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
-                    .HasMaxLength(24)
+                    .HasMaxLength(36)
                     .IsUnicode(false);
 
                 entity.Property(e => e.LINKELEARNING_N)
@@ -229,11 +229,15 @@ namespace QL_THI_2.Models
                 entity.ToTable("TAI_KHOAN");
 
                 entity.Property(e => e.ID_TK)
-                    .HasMaxLength(24)
+                    .HasMaxLength(36)
                     .IsUnicode(false);
 
                 entity.Property(e => e.ANHDAIDIEN_TK)
                     .HasMaxLength(500)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.DN_TK)
+                    .HasMaxLength(24)
                     .IsUnicode(false);
 
                 entity.Property(e => e.EMAIL_TK).HasMaxLength(500);
@@ -263,7 +267,7 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
-                    .HasMaxLength(24)
+                    .HasMaxLength(36)
                     .IsUnicode(false);
 
                 entity.Property(e => e.THOIGIAN_TB).HasColumnType("datetime");
