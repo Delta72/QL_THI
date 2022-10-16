@@ -30,7 +30,7 @@
                                 <td style="text-align: center;">
                                     @if (i.slNop == 5)
                                     {
-                                        <span class="badge bg-success">1/1</span>
+                                        <span class="badge bg-success">1 / 1</span>
                                     }
                                     else if (i.slNop == 0)
                                     {
@@ -38,11 +38,11 @@
                                     }
                                     else if (i.slNop > 0 && i.slNop < 5)
                                     {
-                                        <span class="badge bg-warning">@i.slNop/4</span>
+                                        <span class="badge bg-warning">@i.slNop / 4</span>
                                     }
                                     else
                                     {
-                                        <span class="badge bg-success">4/4</span>
+                                        <span class="badge bg-success">4 / 4</span>
                                     }
                                 </td>
                             </tr>
@@ -54,5 +54,8 @@
         </div>
     </div>
 }
-
-<script src="~/js/DanhSachNhomThiCaNhan.js"></script>
+<script asp-append-version="true">
+    str = '<strong>Nhóm</strong> / Danh sách nhóm cá nhân ';
+    document.getElementById('DuongDan').innerHTML = str;
+</script>
+<script src="~/js/DanhSachNhomThiCaNhan.js" asp-append-version="true"></script>

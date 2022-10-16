@@ -60,27 +60,37 @@ namespace QL_THI_2.Controllers
                 string namHocB = j.namHocB;
                 string namHocK = j.namHocK;
                 string hanNop = j.hanNop;
+                string diemTP = j.diemTP;
                 short so_nhom = 0; short.TryParse(soNhom, out so_nhom);
 
-                // Luu hoc phan vao csdl
-                HOC_PHAN_THI H = new HOC_PHAN_THI();
-                string id = Guid.NewGuid().ToString();
-                H.ID_HP = TimIDHocPhan(id);
-                H.HOCKY_HP = maHocKy;
-                H.ID_TK = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                H.ID_MHP = maHocPhan;
-                H.NAMHOCB_HP = namHocB;
-                H.NAMHOCK_HP = namHocK;
-                H.HANNOP_HP = DateTime.Parse(hanNop);
-                H.SONHOM_HP = so_nhom;
-                db.HOC_PHAN_THIs.Add(H);
-                db.SaveChanges();
+                if(db.HOC_PHAN_THIs
+                    .Where(a => a.ID_MHP == maHocPhan && a.NAMHOCB_HP == namHocB && a.HOCKY_HP == maHocKy) != null)
+                {
+                    return Json("exists");
+                }
+                else
+                {
+                    // Luu hoc phan vao csdl
+                    HOC_PHAN_THI H = new HOC_PHAN_THI();
+                    string id = Guid.NewGuid().ToString();
+                    H.ID_HP = TimIDHocPhan(id);
+                    H.HOCKY_HP = maHocKy;
+                    H.ID_TK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    H.ID_MHP = maHocPhan;
+                    H.NAMHOCB_HP = namHocB;
+                    H.NAMHOCK_HP = namHocK;
+                    H.HANNOP_HP = DateTime.Parse(hanNop);
+                    H.SONHOM_HP = so_nhom;
+                    H.DIEMTHANHPHAN_HP = diemTP;
+                    db.HOC_PHAN_THIs.Add(H);
+                    db.SaveChanges();
 
-                // Them nhom thi
-                dynamic j2 = JsonConvert.DeserializeObject(jsonNhom);
-                NhomController.ThemNhomThi(j2, H.ID_HP);
+                    // Them nhom thi
+                    dynamic j2 = JsonConvert.DeserializeObject(jsonNhom);
+                    NhomController.ThemNhomThi(j2, H.ID_HP);
 
-                return Json(H.ID_HP);
+                    return Json(H.ID_HP);
+                }
             }
             catch (Exception)
             {

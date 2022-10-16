@@ -44,15 +44,14 @@ function ChinhSua(u, id) {
         }
     })
 }
-
 function HienChinhSua(data) {
-    var hthuc = '<select class="form-control form-select" id="ipHThuc">'
+    var hthuc = '<select class="form-control form-select" id="selectHinhThuc">'
     for (var i in data.hinhThuc) {
         if (data.nhom.hinhThuc.tenHinhThuc == data.hinhThuc[i]) {
-            hthuc += '<option value="' + i + '" selected>' + data.hinhThuc[i] + '</option>'
+            hthuc += '<option value="' + (parseInt(i)+1) + '" selected>' + data.hinhThuc[i] + '</option>'
         }
         else {
-            hthuc += '<option value="' + i + '">' + data.hinhThuc[i] + '</option>'
+            hthuc += '<option value="' + (parseInt(i)+1) + '">' + data.hinhThuc[i] + '</option>'
         }
     }
     hthuc += '</select>'
@@ -60,19 +59,19 @@ function HienChinhSua(data) {
 
     var [d, m, y] = data.nhom.ngayThi.split('/')
     var date = y + '-' + m + '-' + d
-    var nThi = '<input type="date" class="form-control" id="ipNThi" value="' + date + '">'
+    var nThi = '<input type="date" class="form-control" id="textNgayThi" value="' + date + '">'
     document.getElementById('ngayThi').innerHTML = nThi;
 
-    var siSo = '<input type="number" min="0" class="form-control" id="ipSSo">'
+    var siSo = '<input type="number" min="0" class="form-control" id="textSiSo">'
     document.getElementById('siSo').innerHTML = siSo;
 
-    var tDu = '<input type="number" min="0" class="form-control" id="ipTDu">'
+    var tDu = '<input type="number" min="0" class="form-control" id="textThamDu">'
     document.getElementById('thamDu').innerHTML = tDu;
 
-    var slDe = '<input type="number" min="0" class="form-control" id="ipSLDe">'
+    var slDe = '<input type="number" min="0" class="form-control" id="textSoDe">'
     document.getElementById('soDe').innerHTML = slDe;
 
-    var slDA = '<input type="number" min="0" class="form-control" id="ipSLDA">'
+    var slDA = '<input type="number" min="0" class="form-control" id="textSoDA">'
     document.getElementById('soDapAn').innerHTML = slDA;
 
     var q = 0, w = 0, e = 0, r = 0;
@@ -84,7 +83,7 @@ function HienChinhSua(data) {
         q = 1;
         zip += '<button type="button" class="btn btn-xs btn-warning" onclick="TaiLenZip()">Tải file khác</button>'
     }
-    zip += '<input type="file" id="zipFile" style="display: none" accept=".zip">'
+    zip += '<input type="file" id="fileZip" style="display: none" accept=".zip">'
     document.getElementById('zip').innerHTML = zip
 
     var pdfDe = ''
@@ -95,7 +94,7 @@ function HienChinhSua(data) {
         w = 1
         pdfDe += '<button type="button" class="btn btn-xs btn-warning" onclick="TaiLenPDFDe()">Tải file khác</button>'
     }
-    pdfDe += '<input type="file" id="pdfDeFile" style="display: none" accept=".pdf">'
+    pdfDe += '<input type="file" id="filePDFDe" style="display: none" accept=".pdf">'
     document.getElementById('pdfDe').innerHTML = pdfDe
 
     var pdfDiem = ''
@@ -106,7 +105,7 @@ function HienChinhSua(data) {
         e = 1
         pdfDiem += '<button type="button" class="btn btn-xs btn-warning" onclick="TaiLenPDFDiem()">Tải file khác</button>'
     }
-    pdfDiem += '<input type="file" id="pdfDiemFile" style="display: none" accept=".pdf">'
+    pdfDiem += '<input type="file" id="filePDFDiem" style="display: none" accept=".pdf">'
     document.getElementById('pdfDiem').innerHTML = pdfDiem
 
     var excel = ''
@@ -117,10 +116,10 @@ function HienChinhSua(data) {
         r = 1
         excel += '<button type="button" class="btn btn-xs btn-warning" onclick="TaiLenExcel()">Tải file khác</button>'
     }
-    excel += '<input type="file" id="excelFile" style="display: none" accept=".xlsx">'
+    excel += '<input type="file" id="fileExcel" style="display: none" accept=".xlsx,.csv">'
     document.getElementById('excel').innerHTML = excel
 
-    var elearning = '<input type="text" class="form-control" id="ipElearning" value="'
+    var elearning = '<input type="text" class="form-control" id="textElearning" value="'
     if (data.nhom.elearning != null && data.nhom.elearning != "") {
         elearning += data.nhom.elearning
     }
@@ -130,13 +129,57 @@ function HienChinhSua(data) {
     HienThongTin(q, w, e, r)
 
     var btn = '<button onclick="HuyBo(\'' + data.nhom.id + '\')" class="btn btn-secondary">Hủy bỏ</button>'
-    btn += '<button onclick="" class="btn btn-success">Lưu</button > '
+    btn += '<button data-bs-toggle="modal" data-bs-target="#modalXacNhan" class="btn btn-success">Lưu</button > '
     document.getElementById('divBtn').innerHTML = btn;
 }
-function TaiLenZip() { $('#zipFile').click(); }
-function TaiLenPDFDe() { $('#pdfDeFile').click(); }
-function TaiLenPDFDiem() { $('#pdfDiemFile').click(); }
-function TaiLenExcel() { $('#excelFile').click(); }
+function TaiLenZip() { $('#fileZip').click(); }
+function TaiLenPDFDe() { $('#filePDFDe').click(); }
+function TaiLenPDFDiem() { $('#filePDFDiem').click(); }
+function TaiLenExcel() { $('#fileExcel').click(); }
+
+// Luu
+function Luu(id) {
+    var ngayThi = document.getElementById('textNgayThi').value;
+    var hinhThuc = document.getElementById('selectHinhThuc').value;
+    var siSo = document.getElementById('textSiSo').value;
+    var thamDu = document.getElementById('textThamDu').value;
+    var soDe = document.getElementById('textSoDe').value;
+    var soDapAn = document.getElementById('textSoDA').value;
+
+    var zip = document.getElementById('fileZip').files;
+    var pdfDe = document.getElementById('filePDFDe').files;
+    var pdfDiem = document.getElementById('filePDFDiem').files;
+    var excel = document.getElementById('fileExcel').files;
+    var elearning = document.getElementById('textElearning').value;
+
+    var frm = new FormData();
+    frm.append('ngayThi', ngayThi)
+    frm.append('hinhThuc.id', hinhThuc)
+    frm.append('siSo', siSo)
+    frm.append('thamDu', thamDu)
+    frm.append('soDe', soDe)
+    frm.append('soDapAn', soDapAn)
+    if (zip.length > 0) {
+        frm.append('fileZip', zip[0])
+    }
+
+    $.ajax({
+        url: '/Nhom/LuuThongTinNhom',
+        type: 'post',
+        async: true,
+        dataType: 'json',
+        processData: false,
+        contentType: false,
+        data: frm,
+        success: function (data) {
+
+        }
+    })
+
+    $('#modalDong').click()
+    HuyBo(id)
+}
+
 
 // huy bo
 function HuyBo(id) {
@@ -199,4 +242,6 @@ $(document).ready(function () {
     if (document.getElementById('canvasDoThi') != null) {
         VeDoThi()
     }
+
+    
 })

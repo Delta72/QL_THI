@@ -11,18 +11,19 @@
             <table class="table table-hover">
                 <thead>
                     <tr>
+                        <th style="width: 20px"></th>
                         <th>STT</th>
                         <th style="text-align: center;">Phụ trách</th>
                         <th style="text-align: center;">Hình thức thi</th>
                         <th style="text-align: center;">Trạng thái</th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
                     @foreach (var i in Model.danhSachNhom)
                     {
-                    <tr>
-                        <td style=""><i class="fab fa-angular fa-lg text-danger me-3"></i> <strong>@i.stt</strong></td>
+                    <tr onclick="ChiTietNhom('@i.id')" class="cursor-pointer">
+                        <td style="width: 20px"><i class="fa fa-book fa-lg text-primary me-3"></i></td>
+                        <td style=""> <strong>@i.stt</strong></td>
                         <td style="text-align: center;">
                             <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
                                 <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.taiKhoan.hoTen" style="text-align: center !important">
@@ -43,16 +44,6 @@
                                 <span class="badge bg-label-warning me-1">Chưa nộp</span>
                             }
                         </td>
-                        <td>
-                            <div class="dropdown" style="z-index: 1 !important">
-                                <button type="button" 
-                                        class="btn p-0 dropdown-toggle hide-arrow" 
-                                        id="buttonChiTietNhom" 
-                                        onclick="ChiTietNhom('@i.id')">
-                                    <i class="bx bx-detail"></i>
-                                </button>
-                            </div>
-                        </td>
                     </tr>
                     }
 
@@ -62,4 +53,4 @@
     </div>
 </div>
 
-<script src="~/js/DanhSachNhomHocPhan.js"></script>
+<script src="~/js/DanhSachNhomHocPhan.js" asp-append-version="true"></script>

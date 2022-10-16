@@ -8,22 +8,13 @@ function ThemThanhPhan() {
         var s = '<span class="badge bg-primary tpdiem" id="span' + id + '">' + str + ' |<i class="fa fa-times" onclick="Xoa(' + id + ')"></i></span>'
         document.getElementById('divThanhPhanDiem').innerHTML += s;
         document.getElementById('txtTP').value = ""
-        CapNhatTP()
     }
-}
-
-// cap nhat thanh phan
-function CapNhatTP() {
-    var str = ''
-    var c = document.getElementById('divThanhPhanDiem').children.length
-    document.getElementById('strTP').innerText = document.getElementById('divThanhPhanDiem').innerText
 }
 
 // Xoa
 function Xoa(i) {
     var span = document.getElementById('span' + i)
     span.remove()
-    CapNhatTP()
 }
 
 // Lay danh sach hoc phan
@@ -174,6 +165,7 @@ function KiemTra() {
     var hocKy = $('#selectHK').val();
     var namHocB = $('#selectHKB').val();
     var hanNop = $('#ngayNop').val();
+    var diemTP = document.getElementById('divThanhPhanDiem').innerText;
 
     var table = document.getElementById("tableThemNhom")
     var rowLength = table.rows.length;
@@ -189,6 +181,9 @@ function KiemTra() {
     }
     else if (hanNop == null || hanNop == '') {
         $('#ngayNop').focus()
+    }
+    else if (diemTP.length == 0) {
+        $('#txtTP').focus()
     }
     else if (rowLength < 2) {
         $('#buttonThemNhom').focus()
@@ -207,6 +202,7 @@ function ThemHocPhanMoi() {
     var namHocB = $('#selectHKB').val();
     var namHocK = $('#textHKK').val();
     var hanNop = $('#ngayNop').val();
+    var diemTP = document.getElementById('divThanhPhanDiem').innerText;
 
     var table = document.getElementById("tableThemNhom")
     var rowLength = table.rows.length;
@@ -214,7 +210,14 @@ function ThemHocPhanMoi() {
     var arrayNhom = []
     var arrayHP = []
 
-    arrayHP.push({ "maHocPhan": maHP, "maHocKy": hocKy, "namHocB": namHocB, "namHocK": namHocK, "hanNop": hanNop })
+    arrayHP.push({
+        "maHocPhan": maHP,
+        "maHocKy": hocKy,
+        "namHocB": namHocB,
+        "namHocK": namHocK,
+        "hanNop": hanNop,
+        "diemTP": diemTP,
+    })
 
     for (i = 1; i < rowLength; i++) {
         var oCells = table.rows.item(i).cells;
@@ -238,7 +241,10 @@ function ThemHocPhanMoi() {
         },
         success: function (data) {
             if (data == "error") {
-                HienLoi()
+                HienLoi("Có lỗi xảy ra, vui lòng thử lại sau")
+            }
+            else if (data == 'exists') {
+                HienLoi("Đã tồn tại mã học phần này trong niên khóa")
             }
             else {
                 window.location.href = '/Nhom/DanhSachNhomHocPhan?id=' + data

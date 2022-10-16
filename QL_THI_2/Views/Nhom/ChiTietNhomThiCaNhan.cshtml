@@ -169,7 +169,7 @@
         </div>
         <div class="card-footer">
             <div class="row justify-content-end">
-                <div class="col-sm-4" id="divBtn">
+                <div class="col-sm-6" id="divBtn">
                     <button onclick="ChinhSua('@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value','@Model.id')" class="btn btn-primary">
                         Chỉnh sửa
                     </button>
@@ -179,4 +179,42 @@
     </div>
 </div>
 
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">Chi tiết điểm của nhóm</h5>
+        <div class="card-body">
+
+        </div>
+    </div>
+</div>
+
+<!-- xac nhan modal -->
+<div class="modal fade" id="modalXacNhan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xác nhận chỉnh sửa?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="Luu('@Model.id')">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
+
+<script asp-append-version="true">
+    str = '<strong>Nhóm</strong> / Danh sách nhóm cá nhân ';
+    document.getElementById('DuongDan').innerHTML = str;
+</script>
 <script src="~/js/ChiTietNhomCaNhan.js" asp-append-version="true"></script>

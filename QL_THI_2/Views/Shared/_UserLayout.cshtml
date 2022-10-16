@@ -135,6 +135,19 @@
                     </li>
                     <!-- Tài khoản -->
                     <!-- Misc -->
+                    <li class="menu-header small text-uppercase">
+                        <span class="menu-header-text">Tùy chọn</span>
+                    </li>
+                    @if (@User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value == "admin")
+                    {
+                        <li class="menu-item">
+                            <a href="@Url.Action("DanhSachHocPhan","HocPhan")"
+                               class="menu-link">
+                                <i class="menu-icon tf-icons bx bx-subdirectory-left"></i>
+                                <div>Đi đến trang quản trị</div>
+                            </a>
+                        </li>
+                    }
                     <li class="menu-item">
                         <a href="@Url.Action("TaskDangXuat","TaiKhoan")"
                            class="menu-link">

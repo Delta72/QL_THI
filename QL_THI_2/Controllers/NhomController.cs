@@ -197,5 +197,11 @@ namespace QL_THI_2.Controllers
         };
             return Json(data);
         }
+
+        [NoDirectAccess]
+        public IActionResult LuuThongTinNhom(modelNhom m)
+        {
+            return Json(true);
+        }
     }
 }

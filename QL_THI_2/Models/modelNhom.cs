@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Http;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -25,6 +26,10 @@ namespace QL_THI_2.Models
         public string soDapAn { get; set; }
         public bool daNop { get; set; }
         public int slNop { get; set; }
+        public IFormFile fileZip { get; set; }
+        public IFormFile filePDFDe { get; set; }
+        public IFormFile filePDFDiem { get; set; }
+        public IFormFile fileExcel { get; set; }
     }
 
     public class DanhSachNhom
