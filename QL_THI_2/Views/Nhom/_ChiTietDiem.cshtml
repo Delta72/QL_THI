@@ -1,0 +1,151 @@
+﻿@model modelNhom
+
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">
+            Chi tiết điểm của nhóm
+            <button type="button"
+                    class="btn btn-xs btn-primary"
+                    onclick="ReloadChiTiet()">
+                <i class="fa fa-refresh"></i>
+            </button>
+        </h5>
+        <div class="card-body" id="bodyCard">
+            <table class="table table-sm table-edit" id="tableDiemThi">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;text-align: center">STT</th>
+                        <th style="width: 200px;text-align: left">MSSV</th>
+                        @foreach (var i in Model.thanhPhan)
+                        {
+                            <th style="text-align: left;">@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @if (Model.diem.Count > 0)
+                    {
+                        @foreach (var item in Model.diem)
+                        {
+                            <tr>
+                                <td style="width: 50px; text-align: center" class="count">
+                                </td>
+                                <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left">
+                                    @item.mssv
+                                </td>
+                                @foreach (var i in item.diem)
+                                {
+                                    <td class="editabletd editDiem" contenteditable="true">
+                                        @i
+                                    </td>
+                                }
+                                <td class="cursorPointer">
+                                    <i class="fa fa-times" onclick="XoaHang(this)"></i>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    <tr onclick="ThemHangDiem(@Model.thanhPhan.Count(), this)">
+                        <td style="width: 50px; text-align: center" class="count">
+                        </td>
+                        <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left" placeholder="...">
+                        </td>
+                        @foreach (var i in Model.thanhPhan)
+                        {
+                            <td class="editabletd" contenteditable="true">
+                            </td>
+                        }
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="card-footer">
+            <div class="row" style="text-align: right">
+                <div class="col-sm-12" id="divBtn">
+                    <button onclick="LuuDiem()" class="btn btn-primary" id="btnLuuDiem" style="display: none">
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card-body" id="bodyCardTemp" style="display: none">
+    <table class="table table-sm table-edit" id="tableDiemThi">
+        <thead>
+            <tr>
+                <th style="width: 50px;text-align: center">STT</th>
+                <th style="width: 200px;text-align: left">MSSV</th>
+                @foreach (var i in Model.thanhPhan)
+                {
+                    <th style="text-align: left;">@i</th>
+                }
+            </tr>
+        </thead>
+        <tbody class="">
+            @if (Model.diem.Count > 0)
+            {
+                @foreach (var item in Model.diem)
+                {
+                    <tr>
+                        <td style="width: 50px; text-align: center" class="count">
+                        </td>
+                        <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left">
+                            @item.mssv
+                        </td>
+                        @foreach (var i in item.diem)
+                        {
+                            <td class="editabletd editDiem" contenteditable="true">
+                                @i
+                            </td>
+                        }
+                        <td class="cursorPointer">
+                            <i class="fa fa-times" onclick="XoaHang(this)"></i>
+                        </td>
+                    </tr>
+                }
+            }
+            <tr onclick="ThemHangDiem(@Model.thanhPhan.Count(), this)">
+                <td style="width: 50px; text-align: center" class="count">
+                </td>
+                <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left" placeholder="...">
+                </td>
+                @foreach (var i in Model.thanhPhan)
+                {
+                    <td class="editabletd" contenteditable="true">
+                    </td>
+                }
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- xac nhan modal -->
+<button data-bs-toggle="modal" data-bs-target="#modalDiem" style="display: none" id="btnDiem"></button>
+<div class="modal fade" id="modalDiem" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xác nhận chỉnh sửa?</h4>
+                <small style="color: red">*Tập tin Excel sẽ được thay đổi theo thông tin trong bảng này</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="LuuChiTietDiem()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
+
+<script src="~/js/_ChiTietDiem.js" asp-append-version="true"></script>
+

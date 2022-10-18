@@ -81,6 +81,7 @@ namespace QL_THI_2.Controllers
         }
 
         [Authorize]
+        [NoDirectAccess]
         public IActionResult ChiTietThongBao(string id)
         {
             THONG_BAO T = db.THONG_BAOs.Where(a => a.ID_TB == id).FirstOrDefault();
@@ -89,6 +90,7 @@ namespace QL_THI_2.Controllers
             m.tuaDe = T.TUADE_TB;
             m.noiDung = T.NOIDUNG_TB;
             m.taiKhoan = new modelTaiKhoan();
+            m.taiKhoan.dn = db.TAI_KHOANs.Where(a => a.ID_TK == T.ID_TK).Select(a => a.DN_TK).FirstOrDefault();
             m.taiKhoan.id = T.ID_TK;
             m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == T.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
             m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == T.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();

@@ -17,7 +17,7 @@ namespace QL_THI_2.Models
         {
         }
 
-        public virtual DbSet<CHI_TIET_BAI_THI> CHI_TIET_BAI_THIs { get; set; }
+        public virtual DbSet<CHI_TIET_DIEM> CHI_TIET_DIEMs { get; set; }
         public virtual DbSet<HINH_THUC_THI> HINH_THUC_THIs { get; set; }
         public virtual DbSet<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
         public virtual DbSet<MA_HOC_PHAN> MA_HOC_PHANs { get; set; }
@@ -38,26 +38,17 @@ namespace QL_THI_2.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
-            modelBuilder.Entity<CHI_TIET_BAI_THI>(entity =>
+            modelBuilder.Entity<CHI_TIET_DIEM>(entity =>
             {
-                entity.HasKey(e => e.ID_CTBT)
+                entity.HasKey(e => new { e.ID_N, e.MSSV_CTBT })
+                    .HasName("PK_CHI_TIET_BAI_THI")
                     .IsClustered(false);
 
-                entity.ToTable("CHI_TIET_BAI_THI");
+                entity.ToTable("CHI_TIET_DIEM");
 
                 entity.HasIndex(e => e.ID_N, "CO_FK");
 
-                entity.Property(e => e.ID_CTBT)
-                    .HasMaxLength(36)
-                    .IsUnicode(false)
-                    .IsFixedLength(true);
-
-                entity.Property(e => e.DIEM_CTBT)
-                    .HasMaxLength(500)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ID_N)
-                    .IsRequired()
                     .HasMaxLength(36)
                     .IsUnicode(false);
 
@@ -66,8 +57,12 @@ namespace QL_THI_2.Models
                     .IsUnicode(false)
                     .IsFixedLength(true);
 
+                entity.Property(e => e.DIEM_CTBT)
+                    .HasMaxLength(500)
+                    .IsUnicode(false);
+
                 entity.HasOne(d => d.ID_NNavigation)
-                    .WithMany(p => p.CHI_TIET_BAI_THIs)
+                    .WithMany(p => p.CHI_TIET_DIEMs)
                     .HasForeignKey(d => d.ID_N)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_CHI_TIET_CO_NHOM_THI");

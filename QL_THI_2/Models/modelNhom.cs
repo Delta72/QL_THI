@@ -30,6 +30,8 @@ namespace QL_THI_2.Models
         public IFormFile filePDFDe { get; set; }
         public IFormFile filePDFDiem { get; set; }
         public IFormFile fileExcel { get; set; }
+        public List<string> thanhPhan { get; set; }
+        public List<modelDiem> diem { get; set; }
     }
 
     public class DanhSachNhom

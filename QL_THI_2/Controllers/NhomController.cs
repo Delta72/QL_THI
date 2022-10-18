@@ -6,6 +6,7 @@ using System.Linq;
 using QL_THI_2.Models;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using System.IO;
 
 namespace QL_THI_2.Controllers
 {
@@ -23,7 +24,12 @@ namespace QL_THI_2.Controllers
                     N.ID_N = TimIDNhom(Guid.NewGuid().ToString());
                     N.ID_HP = idHP;
                     N.ID_HT = 1;
-                    N.ID_TK = i.idGV;
+
+                    string str = i.idGV;
+                    int pFrom = str.IndexOf(">") + ">".Length;
+                    int pTo = str.LastIndexOf("<");
+                    N.ID_TK = str.Substring(pFrom, pTo - pFrom);
+
                     string stt = i.idN;
                     N.STT_N = short.Parse(stt);
                     N.DANOP_N = false;
@@ -96,6 +102,7 @@ namespace QL_THI_2.Controllers
             m.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == N.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
             m.taiKhoan = new modelTaiKhoan();
             m.taiKhoan.id = N.ID_TK;
+            m.taiKhoan.dn = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.DN_TK).FirstOrDefault();
             m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
             m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
             m.daNop = (bool)N.DANOP_N;
@@ -114,7 +121,31 @@ namespace QL_THI_2.Controllers
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
             string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             m.duongDan = hk + ", " + nh + " > " + mon + " > " + "Nhóm " + m.stt;
+            string[] thanhPhan = H.DIEMTHANHPHAN_HP.Split(" |");
+            thanhPhan = thanhPhan.Where(a => a != "").ToArray();
+            m.thanhPhan = new List<string>();
+            foreach(var i in thanhPhan) { m.thanhPhan.Add(i); }
             return m;
+        }
+
+        [NoDirectAccess]
+        public List<modelDiem> LayThongTinDiem(string idN)
+        {
+            List<modelDiem> L = new List<modelDiem>();
+            foreach(var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == idN).OrderBy(a => a.MSSV_CTBT))
+            {
+                modelDiem m = new modelDiem();
+                m.mssv = i.MSSV_CTBT;
+                m.diem = new List<double>();
+                string[] str = i.DIEM_CTBT.Split(" ");
+                foreach(var s in str)
+                {
+                    double d = 0;
+                    if (double.TryParse(s, out d)) m.diem.Add(d);
+                }
+                L.Add(m);
+            }
+            return L;
         }
 
         [Authorize]
@@ -173,6 +204,8 @@ namespace QL_THI_2.Controllers
         {
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             modelNhom m = LayThongTinNhom(N);
+            m.diem = new List<modelDiem>();
+            m.diem = LayThongTinDiem(N.ID_N);
             return View(m);
         }
 
@@ -189,19 +222,79 @@ namespace QL_THI_2.Controllers
                 h.Add(i);
             }
 
+
             var data = new
             {
                 nhom = m,
                 hinhThuc = h,
                 TK = User.FindFirstValue(ClaimTypes.NameIdentifier),
-        };
+            };
             return Json(data);
         }
 
         [NoDirectAccess]
         public IActionResult LuuThongTinNhom(modelNhom m)
         {
-            return Json(true);
+            string idTK = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            string currentDir = Directory.GetCurrentDirectory();
+            try
+            {
+                NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == m.id).FirstOrDefault();
+                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
+                if (m.ngayThi != null)
+                {
+                    N.ID_HT = (short)m.hinhThuc.id;
+                    DateTime nThi = DateTime.ParseExact(m.ngayThi, "yyyy-MM-dd",
+                                           System.Globalization.CultureInfo.InvariantCulture);
+                    N.NGAYTHI_N = nThi;
+                }
+                N.SISO_N = (m.siSo == null) ? 0 : int.Parse(m.siSo);
+                N.SOLUONGTHI_N = (m.thamDu == null) ? 0 : int.Parse(m.thamDu);
+                N.SODE_N = (m.soDe == null) ? (short)0 : short.Parse(m.soDe);
+                N.SODAPAN_N = (m.soDapAn == null) ? (short)0 : short.Parse(m.soDapAn);
+
+                bool daNop = true;
+                if (m.fileZip != null)
+                {
+                    UploadController.DeleteFile(N.LINKZIPBAI_N, currentDir);
+                    N.LINKZIPBAI_N = UploadController.UploadFile(m.fileZip, m.id, idTK, currentDir);
+                }
+                else { daNop = false; }
+                if (m.filePDFDe != null)
+                {
+                    UploadController.DeleteFile(N.LINKPDFDE_N, currentDir);
+                    N.LINKPDFDE_N = UploadController.UploadFile(m.filePDFDe, m.id, idTK, currentDir);
+                }
+                else { daNop = false; }
+                if (m.filePDFDiem != null)
+                {
+                    UploadController.DeleteFile(N.LINKPDFDIEM_N, currentDir);
+                    N.LINKPDFDIEM_N = UploadController.UploadFile(m.filePDFDiem, m.id, idTK, currentDir);
+                }
+                else { daNop = false; }
+                if (m.fileExcel != null)
+                {
+                    UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
+                    N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
+                }
+                else { daNop = false; }
+                if (m.elearning != null)
+                {
+                    N.LINKELEARNING_N = m.elearning;
+                }
+                else { daNop = false; }
+
+                N.DANOP_N = daNop;
+
+                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.SaveChanges();
+                return Json("true");
+            }
+            catch (Exception)
+            {
+                return Json("error");
+            }
         }
     }
 }

@@ -102,7 +102,7 @@
                                 <div id="pdfDe">
                                     @if (Model.pdfDe != null && Model.pdfDe != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDe')">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDe')">Tải xuống .PDF</button>
                                     }
                                     else
                                     {
@@ -120,7 +120,7 @@
                                 <div id="pdfDiem">
                                     @if (Model.pdfDiem != null && Model.pdfDiem != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDiem')">Tải xuống .Zip</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDiem')">Tải xuống .PDF</button>
                                     }
                                     else
                                     {
@@ -137,7 +137,7 @@
                                 <div id="excel">
                                     @if (Model.excelDiem != null && Model.excelDiem != "")
                                     {
-                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.excelDiem')">Tải xuống .xlsx</button>
+                                        <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.excelDiem')">Tải xuống Excel</button>
                                     }
                                     else
                                     {
@@ -168,8 +168,8 @@
             </div>
         </div>
         <div class="card-footer">
-            <div class="row justify-content-end">
-                <div class="col-sm-6" id="divBtn">
+            <div class="row" style="text-align: right">
+                <div class="col-sm-12" id="divBtn">
                     <button onclick="ChinhSua('@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value','@Model.id')" class="btn btn-primary">
                         Chỉnh sửa
                     </button>
@@ -179,13 +179,8 @@
     </div>
 </div>
 
-<div class="col-xxl">
-    <div class="card mb-4">
-        <h5 class="card-header">Chi tiết điểm của nhóm</h5>
-        <div class="card-body">
-
-        </div>
-    </div>
+<div id="partial">
+    @await Html.PartialAsync("../Nhom/_ChiTietDiem.cshtml")
 </div>
 
 <!-- xac nhan modal -->

@@ -30,6 +30,7 @@
                         @foreach (var i in Model.DS)
                         {
                             <tr data-bs-toggle="modal"
+                            class="cursor-pointer"
                                  data-bs-target="#modalScrollable"
                                  onclick="HienNoiDung('@i.id')">
                                 <td style="width: 60vw">

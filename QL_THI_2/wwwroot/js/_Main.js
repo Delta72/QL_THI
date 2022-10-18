@@ -92,3 +92,14 @@ function HienLoi(str) {
 function Download(link) {
     window.location.href = '/api/Download?link=' + String(link).replace(/\\/g, "%5C");
 }
+
+$("[contenteditable]").show(function () {
+        var element = $(this);
+        if (!element.text().trim().length) {
+            element.empty();
+        }
+});
+
+$(document).ready(function () {
+
+})

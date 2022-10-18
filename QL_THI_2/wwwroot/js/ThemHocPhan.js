@@ -5,7 +5,7 @@ function ThemThanhPhan() {
     var str = document.getElementById('txtTP').value;
     if (str != "") {
         var id = document.getElementById('divThanhPhanDiem').children.length + 1;
-        var s = '<span class="badge bg-primary tpdiem" id="span' + id + '">' + str + ' |<i class="fa fa-times" onclick="Xoa(' + id + ')"></i></span>'
+        var s = '<span class="tpdiem badge badge-primary" id="span' + id + '">' + str + ' |<i class="fa fa-times" onclick="Xoa(' + id + ')"></i></span>'
         document.getElementById('divThanhPhanDiem').innerHTML += s;
         document.getElementById('txtTP').value = ""
     }
@@ -186,7 +186,7 @@ function ThemGV() {
         var cell5 = row.insertCell(4);
 
         cell1.innerHTML = (count).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
-        cell2.innerHTML = '<p style="display: none">' + id + '</p>'
+        cell2.innerHTML = '<p style="display: none" disabled>' + id + '</p>'
         cell3.innerHTML = dn
         str = ''
         str += '<ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">'

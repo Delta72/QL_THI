@@ -31,25 +31,16 @@
                     <tbody class="table-border-bottom-0">
                         @foreach (var i in Model.DS)
                         {
-                            <tr>
-                                <td style="width: 60vw">
-                                    <i class="fab fa-angular fa-lg text-danger me-3"></i>
-                                    <strong>@i.tuaDe</strong>
-                                </td>
-                                <td style="text-align: center;">@i.thoiGian</td>
-                                <td>
-                                    <div class="dropdown" style="z-index: 1 !important">
-                                        <button type="button"
-                                                class="btn p-0 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#modalScrollable"
-                                                onclick="HienNoiDung('@i.id')">
-                                            <i class="bx bx-detail"></i>
-                                        </button>
-                                    </div>
-
-                                </td>
-                            </tr>
+                        <tr data-bs-toggle="modal"
+                            class="cursor-pointer"
+                            data-bs-target="#modalScrollable"
+                            onclick="HienNoiDung('@i.id')">
+                            <td style="width: 60vw">
+                                <i class="fa fa-bullhorn fa-lg text-primary me-3"></i>
+                                <strong>@i.tuaDe</strong>
+                            </td>
+                            <td style="text-align: center;">@i.thoiGian</td>
+                        </tr>
                         }
 
                     </tbody>

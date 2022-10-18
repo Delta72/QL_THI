@@ -1,5 +1,6 @@
 ﻿
 
+
 // Ve do thi
 function VeDoThi() {
     var xValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -62,16 +63,16 @@ function HienChinhSua(data) {
     var nThi = '<input type="date" class="form-control" id="textNgayThi" value="' + date + '">'
     document.getElementById('ngayThi').innerHTML = nThi;
 
-    var siSo = '<input type="number" min="0" class="form-control" id="textSiSo">'
+    var siSo = '<input type="number" min="0" class="form-control" id="textSiSo" value="' + data.nhom.siSo + '">'
     document.getElementById('siSo').innerHTML = siSo;
 
-    var tDu = '<input type="number" min="0" class="form-control" id="textThamDu">'
+    var tDu = '<input type="number" min="0" class="form-control" id="textThamDu" value="' + data.nhom.thamDu + '">'
     document.getElementById('thamDu').innerHTML = tDu;
 
-    var slDe = '<input type="number" min="0" class="form-control" id="textSoDe">'
+    var slDe = '<input type="number" min="0" class="form-control" id="textSoDe" value="' + data.nhom.soDe + '">'
     document.getElementById('soDe').innerHTML = slDe;
 
-    var slDA = '<input type="number" min="0" class="form-control" id="textSoDA">'
+    var slDA = '<input type="number" min="0" class="form-control" id="textSoDA"  value="' + data.nhom.soDapAn + '">'
     document.getElementById('soDapAn').innerHTML = slDA;
 
     var q = 0, w = 0, e = 0, r = 0;
@@ -137,6 +138,10 @@ function TaiLenPDFDe() { $('#filePDFDe').click(); }
 function TaiLenPDFDiem() { $('#filePDFDiem').click(); }
 function TaiLenExcel() { $('#fileExcel').click(); }
 
+$('#fileZip').on('change', function (e) {
+    console.log(e)
+})
+
 // Luu
 function Luu(id) {
     var ngayThi = document.getElementById('textNgayThi').value;
@@ -153,15 +158,18 @@ function Luu(id) {
     var elearning = document.getElementById('textElearning').value;
 
     var frm = new FormData();
+    frm.append('id', id)
     frm.append('ngayThi', ngayThi)
     frm.append('hinhThuc.id', hinhThuc)
     frm.append('siSo', siSo)
     frm.append('thamDu', thamDu)
     frm.append('soDe', soDe)
     frm.append('soDapAn', soDapAn)
-    if (zip.length > 0) {
-        frm.append('fileZip', zip[0])
-    }
+    if (zip.length > 0) frm.append('fileZip', zip[0])
+    if (pdfDe.length > 0) frm.append('filePDFDe', pdfDe[0])
+    if (pdfDiem.length > 0) frm.append('filePDFDiem', pdfDiem[0])
+    if (excel.length > 0) frm.append('fileExcel', excel[0])
+    frm.append('elearning', elearning)
 
     $.ajax({
         url: '/Nhom/LuuThongTinNhom',
@@ -172,8 +180,12 @@ function Luu(id) {
         contentType: false,
         data: frm,
         success: function (data) {
-            $('#modalDong').click()
-            HuyBo(id)
+            if (data == "error") {
+                HienLoi("Có lỗi xảy ra, vui lòng thử lại")
+            }
+            else {
+                window.location.reload()
+            }
         }
     })
 }
@@ -223,10 +235,10 @@ function HienThongTin(a, b, c, d) {
     var tt = ''
     tt += '<div class="demo-inline-spacing mt-3">'
     tt += '<ul class="list-group">'
-    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-archive-o" style="margin-right: 20px"></i><span class="col-md-6">.Zip bài thi: </span><span class="col-md-3">' + x1 + '</span></li>'
-    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-pdf-o" style="margin-right: 20px"></i><span class="col-md-6">.PDF đề thi: </span><span class="col-md-3">' + x2 + '</span></li>'
-    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-pdf-o" style="margin-right: 20px"></i><span class="col-md-6">.PDF điểm thi: </span><span class="col-md-3">' + x3 + '</span></li>'
-    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-excel-o" style="margin-right: 20px"></i><span class="col-md-6">.xlsx điểm thi: </span><span class="col-md-3">' + x4 + '</span></li>'
+    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-archive-o" style="margin-right: 20px"></i><span class="col-md-6">.Zip bài thi: </span><span class="col-md-3" id="nameZip">' + x1 + '</span></li>'
+    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-pdf-o" style="margin-right: 20px"></i><span class="col-md-6">.PDF đề thi: </span><span class="col-md-3" id="nameDe">' + x2 + '</span></li>'
+    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-pdf-o" style="margin-right: 20px"></i><span class="col-md-6">.PDF điểm thi: </span><span class="col-md-3" id="nameDiem">' + x3 + '</span></li>'
+    tt += '<li class="list-group-item d-flex align-items-left"><i class="fa fa-file-excel-o" style="margin-right: 20px"></i><span class="col-md-6">.xlsx điểm thi: </span><span class="col-md-3" id="nameExcel">' + x4 + '</span></li>'
     tt += '</ul></div>'
 
     if (document.getElementById('DoThiDiem') != null) {
