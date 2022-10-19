@@ -5,16 +5,10 @@ using System.Threading.Tasks;
 
 namespace QL_THI_2.Models
 {
-    public class modelDiem
+    public class modelChiTietDiem
     {
         public string idNhom { get; set; }
         public string mssv { get; set; }
         public List<double> diem { get; set; }
-    }
-
-    public class DoThi
-    {
-        public List<int> soLuong { get; set; }
-        public List<double> chiTietDiem { get; set; }
     }
 }

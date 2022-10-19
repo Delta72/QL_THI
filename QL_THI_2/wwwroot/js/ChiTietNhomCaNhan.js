@@ -2,10 +2,18 @@
 
 
 // Ve do thi
-function VeDoThi() {
-    var xValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    var yValues = [1, 2, 3, 4, 5, 6.5, 7, 8, 9, 10];
-    var barColors = ["blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue"];
+function VeDoThi(data) {
+    var xValues = [];
+    var yValues = [];
+    var barColors = [];
+
+    for (var i in data.chiTietDiem) {
+        xValues.push(data.chiTietDiem[i])
+        barColors.push("#007bff")
+    }
+    for (var i in data.soLuong) {
+        yValues.push(data.soLuong[i])
+    }
 
     new Chart("canvasDoThi", {
         type: "bar",
@@ -17,6 +25,14 @@ function VeDoThi() {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        stepSize: 1
+                    }
+                }]
+            },
             legend: { display: false },
             title: {
                 display: true,
@@ -132,15 +148,25 @@ function HienChinhSua(data) {
     var btn = '<button onclick="HuyBo(\'' + data.nhom.id + '\')" class="btn btn-secondary">Hủy bỏ</button>'
     btn += '<button data-bs-toggle="modal" data-bs-target="#modalXacNhan" class="btn btn-success">Lưu</button > '
     document.getElementById('divBtn').innerHTML = btn;
+
+    $('#fileZip').change(function () {
+        document.getElementById('nameZip').innerHTML = $(this).val().split(/(\\|\/)/g).pop()
+    })
+    $('#filePDFDe').change(function () {
+        document.getElementById('nameDe').innerHTML = $(this).val().split(/(\\|\/)/g).pop()
+    })
+    $('#filePDFDiem').change(function () {
+        document.getElementById('nameDiem').innerHTML = $(this).val().split(/(\\|\/)/g).pop()
+    })
+    $('#fileExcel').change(function () {
+        document.getElementById('nameExcel').innerHTML = $(this).val().split(/(\\|\/)/g).pop()
+    })
 }
 function TaiLenZip() { $('#fileZip').click(); }
 function TaiLenPDFDe() { $('#filePDFDe').click(); }
 function TaiLenPDFDiem() { $('#filePDFDiem').click(); }
 function TaiLenExcel() { $('#fileExcel').click(); }
 
-$('#fileZip').on('change', function (e) {
-    console.log(e)
-})
 
 // Luu
 function Luu(id) {
@@ -205,7 +231,6 @@ function HuyBo(id) {
     })
 }
 function QuayLai(data) {
-    // console.log(data)
     document.getElementById('hinhThuc').innerHTML = data.nhom.hinhThuc.tenHinhThuc;
     document.getElementById('ngayThi').innerHTML = data.nhom.ngayThi;
     document.getElementById('siSo').innerHTML = data.nhom.siSo;
@@ -215,7 +240,7 @@ function QuayLai(data) {
     document.getElementById('elearning').innerHTML = (data.nhom.elearning == null) ? "---" : data.nhom.elearning;
     document.getElementById('zip').innerHTML = (data.nhom.zipBaiThi == null) ? "---" : '<button type="button" class="btn btn-xs btn-primary" onclick="Download(\'' + data.nhom.zipBaiThi + '\')">Tải xuống .Zip</button>';
     document.getElementById('DoThiDiem').innerHTML = (data.nhom.excelDiem == null) ? "<h5>Chưa có thông tin chi tiết điểm</h5>" : '<canvas id="canvasDoThi" style="max-width: 350px"></canvas>';
-    if (document.getElementById('canvasDoThi') != null) { VeDoThi() }
+    if (document.getElementById('canvasDoThi') != null) { VeDoThi(data.nhom.doThi) }
     document.getElementById('pdfDe').innerHTML = (data.nhom.pdfDe == null) ? "---" : '<button type="button" class="btn btn-xs btn-primary" onclick="Download(\'' + data.nhom.pdfDe + '\')">Tải xuống .PDF</button>';
     document.getElementById('pdfDiem').innerHTML = (data.nhom.pdfDiem == null) ? "---" : '<button type="button" class="btn btn-xs btn-primary" onclick="Download(\'' + data.nhom.pdfDiem + '\')">Tải xuống .PDF</button>';;
     document.getElementById('excel').innerHTML = (data.nhom.excelDiem == null) ? "---" : '<button type="button" class="btn btn-xs btn-primary" onclick="Download(\'' + data.nhom.excelDiem + '\')">Tải xuống .xlsx</button>';;
@@ -250,8 +275,6 @@ function HienThongTin(a, b, c, d) {
 // Ready
 $(document).ready(function () {
     if (document.getElementById('canvasDoThi') != null) {
-        VeDoThi()
-    }
 
-    
+    }
 })

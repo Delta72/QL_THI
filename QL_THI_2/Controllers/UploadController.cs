@@ -21,7 +21,7 @@ namespace QL_THI_2.Controllers
             using var image = SixLabors.ImageSharp.Image.Load(img.OpenReadStream());
             image.Mutate(x => x.Resize(200, 200));
             image.Save(filepath);
-            var report = "\\user\\" + id + "\\" + filename;
+            var report = "/user/" + id + "/" + filename;
             return report;
         }
 
@@ -33,7 +33,7 @@ namespace QL_THI_2.Controllers
             {
                 file.CopyToAsync(fileStream);
             }
-            string report = "\\user\\" + idTK + "\\" + idN + "\\"+ filename;
+            string report = "/user/" + idTK + "/" + idN + "/"+ filename;
             return report;
         }
 

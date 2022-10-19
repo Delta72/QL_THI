@@ -7,6 +7,8 @@ using QL_THI_2.Models;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IO;
+using ExcelDataReader;
+using Microsoft.AspNetCore.Http;
 
 namespace QL_THI_2.Controllers
 {
@@ -148,6 +150,40 @@ namespace QL_THI_2.Controllers
             return L;
         }
 
+        [NoDirectAccess]
+        public DoThi VeDoThi(List<modelDiem> m)
+        {
+            DoThi D = new DoThi();
+            D.soLuong = new List<int>();
+            D.chiTietDiem = new List<double>();
+
+            List<double> d = new List<double>();
+            foreach(var i in m)
+            {
+                double a = 0;
+                foreach(var x in i.diem) { a = x; }
+                d.Add(a);
+            }
+
+            foreach(var i in d.OrderBy(a => a).Distinct())
+            {
+                int c = 0;
+                foreach(var x in d)
+                {
+                    if(x == i)
+                    {
+                        c++;
+                    }
+                }
+                D.soLuong.Add(c);
+                D.chiTietDiem.Add(i);
+            }
+
+            
+
+            return D;
+        }
+
         [Authorize]
         public IActionResult DanhSachNhomThiCaNhan()
         {
@@ -206,6 +242,7 @@ namespace QL_THI_2.Controllers
             modelNhom m = LayThongTinNhom(N);
             m.diem = new List<modelDiem>();
             m.diem = LayThongTinDiem(N.ID_N);
+            m.doThi = VeDoThi(m.diem);
             return View(m);
         }
 
@@ -215,13 +252,14 @@ namespace QL_THI_2.Controllers
         {
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             modelNhom m = LayThongTinNhom(N);
-
+            m.diem = new List<modelDiem>();
+            m.diem = LayThongTinDiem(N.ID_N);
+            m.doThi = VeDoThi(m.diem);
             List<string> h = new List<string>();
             foreach(var i in db.HINH_THUC_THIs.Select(a => a.TEN_HT))
             {
                 h.Add(i);
             }
-
 
             var data = new
             {
@@ -237,8 +275,6 @@ namespace QL_THI_2.Controllers
         {
             string idTK = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string currentDir = Directory.GetCurrentDirectory();
-            try
-            {
                 NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == m.id).FirstOrDefault();
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 
@@ -275,8 +311,18 @@ namespace QL_THI_2.Controllers
                 else { daNop = false; }
                 if (m.fileExcel != null)
                 {
+                    string tp = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).Select(a => a.DIEMTHANHPHAN_HP).FirstOrDefault();
+                    string[] thanhPhan = tp.Split(" |");
+                    thanhPhan = thanhPhan.Where(a => a != "").ToArray();
+                    if(KiemTraExcel(m, idTK, currentDir, thanhPhan.Length))
+                    {
+
+                    }
+
+                    /*
                     UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
                     N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
+                    */
                 }
                 else { daNop = false; }
                 if (m.elearning != null)
@@ -290,11 +336,43 @@ namespace QL_THI_2.Controllers
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 db.SaveChanges();
                 return Json("true");
-            }
-            catch (Exception)
+        }
+
+        public Boolean KiemTraExcel(modelNhom m, string idTK, string currentDir, int tp)
+        {
+            bool hopLe = true;
+            string link = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
+            var filepath = currentDir + "\\wwwroot" + link;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            List<modelChiTietDiem> L = new List<modelChiTietDiem>();
+            using (var stream = System.IO.File.Open(filepath, FileMode.Open, FileAccess.Read))
             {
-                return Json("error");
+                using (var reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream))
+                {
+                    while (reader.Read())
+                    {
+                        modelChiTietDiem c = new modelChiTietDiem();
+                        c.diem = new List<double>();
+                        c.idNhom = m.id;
+                        c.mssv = reader.GetValue(0).ToString();
+                        for(int i = 1; i <= tp;i++)
+                        {
+                            double d = 0;
+                            string str = reader.GetValue(i).ToString();
+                            if(double.TryParse(str, out d))
+                            {
+                                c.diem.Add(d);
+                            }
+                            else
+                            {
+                                hopLe = false;
+                            }
+                        }
+                        L.Add(c);
+                    }
+                }
             }
+            return hopLe;
         }
     }
 }

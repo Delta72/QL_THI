@@ -208,8 +208,11 @@
 </div>
 <!-- xac nhan modal -->
 
+<script src="~/js/ChiTietNhomCaNhan.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     str = '<strong>Nhóm</strong> / Danh sách nhóm cá nhân ';
     document.getElementById('DuongDan').innerHTML = str;
+
+    var json = @Html.Raw(Json.Serialize(@Model.doThi));
+    VeDoThi(json)
 </script>
-<script src="~/js/ChiTietNhomCaNhan.js" asp-append-version="true"></script>

@@ -116,6 +116,7 @@ function XoaHang(i) {
     var row = i.closest('tr')
     var table = document.getElementById('tableDiemThi')
     table.deleteRow(row.rowIndex)
+    document.getElementById('btnLuuDiem').style.display = 'unset'
 
     if (table.rows.length == 2) {
         document.getElementById('btnLuuDiem').style.display = 'none'

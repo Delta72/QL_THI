@@ -80,7 +80,7 @@ namespace QL_THI_2.Controllers
                     H.NAMHOCK_HP = namHocK;
                     H.HANNOP_HP = DateTime.Parse(hanNop);
                     H.SONHOM_HP = so_nhom;
-                    H.DIEMTHANHPHAN_HP = diemTP;
+                    H.DIEMTHANHPHAN_HP = diemTP + "Tổng |";
                     db.HOC_PHAN_THIs.Add(H);
                     db.SaveChanges();
 

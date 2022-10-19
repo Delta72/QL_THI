@@ -14,15 +14,22 @@ namespace QL_THI_2.Controllers
     {
         public async Task<IActionResult> Download(string link)
         {
-            var path = Directory.GetCurrentDirectory() + "\\wwwroot" + link;
-            var memory = new MemoryStream();
-            using (var stream = new FileStream(path, FileMode.Open))
+            try
             {
-                await stream.CopyToAsync(memory);
+                var path = Directory.GetCurrentDirectory() + "\\wwwroot" + link;
+                var memory = new MemoryStream();
+                using (var stream = new FileStream(path, FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                var ext = Path.GetExtension(path).ToLowerInvariant();
+                return File(memory, GetMimeTypes()[ext], Path.GetFileName(path));
             }
-            memory.Position = 0;
-            var ext = Path.GetExtension(path).ToLowerInvariant();
-            return File(memory, GetMimeTypes()[ext], Path.GetFileName(path));
+            catch (Exception)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
 
         public static Dictionary<string, string> GetMimeTypes()
@@ -33,7 +40,8 @@ namespace QL_THI_2.Controllers
                 {".xls", "application/vnd.ms-excel" },
                 {".xlsx", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" },
                 {".csv", "text/csv" },
-                {".zip", "application/zip" }
+                {".zip", "application/zip" },
+                {".pdf", "application/pdf"}
             };
         }
     }
