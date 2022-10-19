@@ -133,7 +133,7 @@ function HienChinhSua(data) {
         r = 1
         excel += '<button type="button" class="btn btn-xs btn-warning" onclick="TaiLenExcel()">Tải file khác</button>'
     }
-    excel += '<input type="file" id="fileExcel" style="display: none" accept=".xlsx,.csv">'
+    excel += '<input type="file" id="fileExcel" style="display: none" accept=".xlsx">'
     document.getElementById('excel').innerHTML = excel
 
     var elearning = '<input type="text" class="form-control" id="textElearning" value="'
@@ -208,6 +208,10 @@ function Luu(id) {
         success: function (data) {
             if (data == "error") {
                 HienLoi("Có lỗi xảy ra, vui lòng thử lại")
+            }
+            else if (data == "excel") {
+                HienLoi("Tập tin excel không hợp lệ! Dữ liệu không thay đổi")
+                HuyBo(id)
             }
             else {
                 window.location.reload()

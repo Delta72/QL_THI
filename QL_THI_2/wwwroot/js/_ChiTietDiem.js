@@ -49,25 +49,49 @@ function LuuDiem() {
     }
 }
 
-function LuuChiTietDiem() {
+function LuuChiTietDiem(id) {
     var table = document.getElementById('tableDiemThi')
     var rCount = table.rows.length
 
     var data = []
     for (i = 1; i < rCount - 1; i++) {
-        var diem = []
+        var diem = ''
         var row = table.rows[i];
         var cCount = row.cells.length;
         for (x = 2; x < cCount - 1; x++) {
             var cell = row.cells[x].innerText;
-            diem.push(cell)
+            diem += cell + ' '
         }
         for (x = 1; x < cCount - 1; x++) {
             var cell = row.cells[x].innerText;
         }
-        data.push({ "mssv": row.cells[1].innerText, diem })
+        diem = diem.slice(0, -1)
+        data.push({"id": id, "mssv": row.cells[1].innerText, diem })
     }
 
+    $.ajax({
+        url: '/ChiTietDiem/LuuChiTietDiem',
+        type: 'post',
+        data: {
+            str: JSON.stringify(data)
+        },
+        beforeSend: function () {
+            var str = '<div class="spinner-border text-light" style="height: 15px;width: 15px"><span class="visually-hidden"></span></div>'
+            document.getElementById('btnXNSuaDiem').innerHTML = str;
+        },
+        complete: function () {
+            document.getElementById('btnXNSuaDiem').innerHTML = "Lưu";
+        },
+        success: function (data) {
+            if (data == "error") {
+                HienLoi("Dữ liệu không hợp lệ!");
+                ReloadChiTiet();
+            }
+            else {
+                window.location.reload()
+            }
+        }
+    })
     console.log(data)
 }
 

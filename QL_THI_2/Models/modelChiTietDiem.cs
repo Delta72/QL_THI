@@ -9,6 +9,6 @@ namespace QL_THI_2.Models
     {
         public string idNhom { get; set; }
         public string mssv { get; set; }
-        public List<double> diem { get; set; }
+        public string diem { get; set; }
     }
 }

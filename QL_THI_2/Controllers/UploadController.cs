@@ -27,7 +27,7 @@ namespace QL_THI_2.Controllers
 
         public static string UploadFile(IFormFile file, string idN, string idTK, string currentDir)
         {
-            var filename = Guid.NewGuid().ToString() + file.FileName;
+            var filename = Guid.NewGuid().ToString() + ".xlsx";
             var filepath = currentDir + "\\wwwroot\\user\\" + idTK + "\\" + idN + "\\"+ filename;
             using (Stream fileStream = new FileStream(filepath, FileMode.Create))
             {

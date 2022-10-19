@@ -273,74 +273,134 @@ namespace QL_THI_2.Controllers
         [NoDirectAccess]
         public IActionResult LuuThongTinNhom(modelNhom m)
         {
+            var result = "success";
             string idTK = User.FindFirstValue(ClaimTypes.NameIdentifier);
             string currentDir = Directory.GetCurrentDirectory();
-                NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == m.id).FirstOrDefault();
-                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+            NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == m.id).FirstOrDefault();
+            db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
 
-                if (m.ngayThi != null)
-                {
-                    N.ID_HT = (short)m.hinhThuc.id;
-                    DateTime nThi = DateTime.ParseExact(m.ngayThi, "yyyy-MM-dd",
-                                           System.Globalization.CultureInfo.InvariantCulture);
-                    N.NGAYTHI_N = nThi;
-                }
-                N.SISO_N = (m.siSo == null) ? 0 : int.Parse(m.siSo);
-                N.SOLUONGTHI_N = (m.thamDu == null) ? 0 : int.Parse(m.thamDu);
-                N.SODE_N = (m.soDe == null) ? (short)0 : short.Parse(m.soDe);
-                N.SODAPAN_N = (m.soDapAn == null) ? (short)0 : short.Parse(m.soDapAn);
+            if (m.ngayThi != null)
+            {
+                N.ID_HT = (short)m.hinhThuc.id;
+                DateTime nThi = DateTime.ParseExact(m.ngayThi, "yyyy-MM-dd",
+                                       System.Globalization.CultureInfo.InvariantCulture);
+                N.NGAYTHI_N = nThi;
+            }
+            N.SISO_N = (m.siSo == null) ? 0 : int.Parse(m.siSo);
+            N.SOLUONGTHI_N = (m.thamDu == null) ? 0 : int.Parse(m.thamDu);
+            N.SODE_N = (m.soDe == null) ? (short)0 : short.Parse(m.soDe);
+            N.SODAPAN_N = (m.soDapAn == null) ? (short)0 : short.Parse(m.soDapAn);
 
-                bool daNop = true;
-                if (m.fileZip != null)
+            bool daNop = true;
+            if (m.fileZip != null)
+            {
+                UploadController.DeleteFile(N.LINKZIPBAI_N, currentDir);
+                N.LINKZIPBAI_N = UploadController.UploadFile(m.fileZip, m.id, idTK, currentDir);
+            }
+            else { daNop = false; }
+            if (m.filePDFDe != null)
+            {
+                UploadController.DeleteFile(N.LINKPDFDE_N, currentDir);
+                N.LINKPDFDE_N = UploadController.UploadFile(m.filePDFDe, m.id, idTK, currentDir);
+            }
+            else { daNop = false; }
+            if (m.filePDFDiem != null)
+            {
+                UploadController.DeleteFile(N.LINKPDFDIEM_N, currentDir);
+                N.LINKPDFDIEM_N = UploadController.UploadFile(m.filePDFDiem, m.id, idTK, currentDir);
+            }
+            else { daNop = false; }
+            if (m.fileExcel != null)
+            {
+                string tp = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).Select(a => a.DIEMTHANHPHAN_HP).FirstOrDefault();
+                string[] thanhPhan = tp.Split(" |");
+                thanhPhan = thanhPhan.Where(a => a != "").ToArray();
+                if (KiemTraExcel(m, idTK, currentDir, thanhPhan.Length))
                 {
-                    UploadController.DeleteFile(N.LINKZIPBAI_N, currentDir);
-                    N.LINKZIPBAI_N = UploadController.UploadFile(m.fileZip, m.id, idTK, currentDir);
-                }
-                else { daNop = false; }
-                if (m.filePDFDe != null)
-                {
-                    UploadController.DeleteFile(N.LINKPDFDE_N, currentDir);
-                    N.LINKPDFDE_N = UploadController.UploadFile(m.filePDFDe, m.id, idTK, currentDir);
-                }
-                else { daNop = false; }
-                if (m.filePDFDiem != null)
-                {
-                    UploadController.DeleteFile(N.LINKPDFDIEM_N, currentDir);
-                    N.LINKPDFDIEM_N = UploadController.UploadFile(m.filePDFDiem, m.id, idTK, currentDir);
-                }
-                else { daNop = false; }
-                if (m.fileExcel != null)
-                {
-                    string tp = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).Select(a => a.DIEMTHANHPHAN_HP).FirstOrDefault();
-                    string[] thanhPhan = tp.Split(" |");
-                    thanhPhan = thanhPhan.Where(a => a != "").ToArray();
-                    if(KiemTraExcel(m, idTK, currentDir, thanhPhan.Length))
+                    List<modelChiTietDiem> L = LayDiem(m, idTK, currentDir, thanhPhan.Length);
+                    // Xoa thong tin cu
+                    using(var dbtemp = new QL_THIContext())
                     {
-
+                        foreach (var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == m.id))
+                        {
+                            dbtemp.CHI_TIET_DIEMs.Remove(i);
+                        }
+                        dbtemp.SaveChanges();
                     }
-
-                    /*
+                    // Luu thong tin moi
+                    using (var dbtemp = new QL_THIContext())
+                    {
+                        foreach (var i in L)
+                        {
+                            CHI_TIET_DIEM C = new CHI_TIET_DIEM()
+                            {
+                                ID_N = i.idNhom,
+                                MSSV_CTBT = i.mssv,
+                                DIEM_CTBT = i.diem,
+                            };
+                            dbtemp.CHI_TIET_DIEMs.Add(C);
+                        }
+                        dbtemp.SaveChanges();
+                    }
                     UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
                     N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
-                    */
                 }
-                else { daNop = false; }
-                if (m.elearning != null)
+                else
                 {
-                    N.LINKELEARNING_N = m.elearning;
+                    daNop = false;
+                    result = "excel";
                 }
-                else { daNop = false; }
+            }
+            else { daNop = false; }
+            if (m.elearning != null)
+            {
+                N.LINKELEARNING_N = m.elearning;
+            }
+            else { daNop = false; }
 
-                N.DANOP_N = daNop;
+            N.DANOP_N = daNop;
 
-                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                db.SaveChanges();
-                return Json("true");
+            db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            db.SaveChanges();
+            return Json(result);
         }
 
         public Boolean KiemTraExcel(modelNhom m, string idTK, string currentDir, int tp)
         {
             bool hopLe = true;
+            string link = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
+            var filepath = currentDir + "\\wwwroot" + link;
+            System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+            try
+            {
+                using (var stream = System.IO.File.Open(filepath, FileMode.Open, FileAccess.Read))
+                {
+                    using (var reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream))
+                    {
+                        while (reader.Read())
+                        {
+                            for (int i = 1; i <= tp; i++)
+                            {
+                                double d = 0;
+                                string str = reader.GetValue(i).ToString();
+                                if (!double.TryParse(str, out d)) hopLe = false;
+                            }
+                        }
+                        reader.Close();
+                    }
+                    stream.Close();
+                }
+            }
+            catch (Exception)
+            {
+                hopLe = false;
+            }
+            UploadController.DeleteFile(link, currentDir);
+            return hopLe;
+        }
+
+        public List<modelChiTietDiem> LayDiem(modelNhom m, string idTK, string currentDir, int tp)
+        {
             string link = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
             var filepath = currentDir + "\\wwwroot" + link;
             System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
@@ -352,27 +412,23 @@ namespace QL_THI_2.Controllers
                     while (reader.Read())
                     {
                         modelChiTietDiem c = new modelChiTietDiem();
-                        c.diem = new List<double>();
+                        c.diem = "";
                         c.idNhom = m.id;
                         c.mssv = reader.GetValue(0).ToString();
-                        for(int i = 1; i <= tp;i++)
+                        for (int i = 1; i <= tp; i++)
                         {
-                            double d = 0;
                             string str = reader.GetValue(i).ToString();
-                            if(double.TryParse(str, out d))
-                            {
-                                c.diem.Add(d);
-                            }
-                            else
-                            {
-                                hopLe = false;
-                            }
+                            c.diem += str + " ";
                         }
+                        c.diem = c.diem[..^1];
                         L.Add(c);
                     }
+                    reader.Close();
                 }
+                stream.Close();
             }
-            return hopLe;
+            UploadController.DeleteFile(link, currentDir);
+            return L;
         }
     }
 }
