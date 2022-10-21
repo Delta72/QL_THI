@@ -7,13 +7,15 @@
 <div class="" style="margin-bottom: 10px;">
     <div class="card">
         <h5 class="card-header">@Model.hocPhan</h5>
+        @await Html.PartialAsync("../HocPhan/_ChinhSuaHocPhan.cshtml")
+        <h5 class="card-header">Danh sách nhóm</h5>
         <div class="table-responsive text-nowrap">
-            <table class="table table-hover">
+            <table class="table table-hover table-responsive tableDSNhom">
                 <thead>
                     <tr>
-                        <th style="width: 20px"></th>
                         <th>STT</th>
-                        <th style="text-align: center;">Phụ trách</th>
+                        <th style="text-align: left;">Phụ trách</th>
+                        <th style="text-align: left;">Ngày thi</th>
                         <th style="text-align: center;">Hình thức thi</th>
                         <th style="text-align: center;">Trạng thái</th>
                     </tr>
@@ -21,30 +23,33 @@
                 <tbody class="table-border-bottom-0">
                     @foreach (var i in Model.danhSachNhom)
                     {
-                    <tr onclick="ChiTietNhom('@i.id')" class="cursor-pointer">
-                        <td style="width: 20px"><i class="fa fa-book fa-lg text-primary me-3"></i></td>
-                        <td style=""> <strong>@i.stt</strong></td>
-                        <td style="text-align: center;">
-                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
-                                <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.taiKhoan.hoTen" style="text-align: center !important">
-                                    <img src="@i.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
-                                </li>
-                            </ul>
-                        </td>
-                        <td style="text-align: center;">
-                            @i.hinhThuc.tenHinhThuc
-                        </td>
-                        <td style="text-align: center;">
-                            @if (i.daNop == true)
-                            {
-                                <span class="badge bg-label-primary me-1">Đã nộp</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-label-warning me-1">Chưa nộp</span>
-                            }
-                        </td>
-                    </tr>
+                        <tr onclick="ChiTietNhom('@i.id')" class="cursor-pointer">
+                            <td><i class="fa fa-book fa-lg text-primary me-3"></i> <strong>@i.stt</strong></td>
+                            <td>
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex ulAvatar">
+                                    <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.taiKhoan.hoTen">
+                                        <img src="@i.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
+                                        <span>@i.taiKhoan.dn</span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td style="text-align: left;">
+                                @i.ngayThi
+                            </td>
+                            <td style="text-align: center;">
+                                @i.hinhThuc.tenHinhThuc
+                            </td>
+                            <td style="text-align: center;">
+                                @if (i.daNop == true)
+                                {
+                                    <span class="badge bg-label-primary me-1">Đã nộp</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-label-warning me-1">Chưa nộp</span>
+                                }
+                            </td>
+                        </tr>
                     }
 
                 </tbody>

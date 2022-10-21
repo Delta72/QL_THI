@@ -1,51 +1,56 @@
-﻿// Luu diem
+﻿if (document.getElementById('tableDiemThi').rows.length < 3) {
+    document.getElementById('btnLuuDiem').style.display = 'none'
+}
+// Luu diem
 function LuuDiem() {
     var table = document.getElementById('tableDiemThi')
     var rCount = table.rows.length
 
-    var data = []
-    var errorTrong = []
-    var errorTrung = []
-    var mssv = []
-    for (i = 1; i < rCount - 1; i++) {
-        var diem = []
-        var row = table.rows[i];
-        var cCount = row.cells.length;
-        for (x = 2; x < cCount - 1; x++) {
-            var cell = row.cells[x].innerText;
-            diem.push(cell)
-        }
-        for (x = 1; x < cCount - 1; x++) {
-            var cell = row.cells[x].innerText;
-            if (cell == "") { errorTrong.push(row.rowIndex) }
-        }
-        data.push({ "mssv": row.cells[1].innerText, diem })
+    if (rCount > 2) {
+        var data = []
+        var errorTrong = []
+        var errorTrung = []
+        var mssv = []
+        for (i = 1; i < rCount - 1; i++) {
+            var diem = []
+            var row = table.rows[i];
+            var cCount = row.cells.length;
+            for (x = 2; x < cCount - 1; x++) {
+                var cell = row.cells[x].innerText;
+                diem.push(cell)
+            }
+            for (x = 1; x < cCount - 1; x++) {
+                var cell = row.cells[x].innerText;
+                if (cell == "") { errorTrong.push(row.rowIndex) }
+            }
+            data.push({ "mssv": row.cells[1].innerText, diem })
 
-        if (mssv.includes(row.cells[1].innerText)) {
-            errorTrung.push(row.rowIndex)
+            if (mssv.includes(row.cells[1].innerText)) {
+                errorTrung.push(row.rowIndex)
+            }
+            mssv.push(row.cells[1].innerText)
         }
-        mssv.push(row.cells[1].innerText)
-    }
-    errorTrong = [... new Set(errorTrong)]
+        errorTrong = [... new Set(errorTrong)]
 
-    if (errorTrong.length > 0) {
-        var str = ''
-        for (i = 0; i < errorTrong.length; i++) {
-            str += errorTrong[i] + ', '
+        if (errorTrong.length > 0) {
+            var str = ''
+            for (i = 0; i < errorTrong.length; i++) {
+                str += errorTrong[i] + ', '
+            }
+            str = str.slice(0, -2)
+            HienLoi("Dữ liệu trống: Hàng " + str)
         }
-        str = str.slice(0, -2)
-        HienLoi("Dữ liệu trống: Hàng " + str)
-    }
-    else if (errorTrung.length > 0) {
-        var str = ''
-        for (i = 0; i < errorTrung.length; i++) {
-            str += errorTrung[i] + ', '
+        else if (errorTrung.length > 0) {
+            var str = ''
+            for (i = 0; i < errorTrung.length; i++) {
+                str += errorTrung[i] + ', '
+            }
+            str = str.slice(0, -2)
+            HienLoi("Dữ liệu trùng: Hàng " + str)
         }
-        str = str.slice(0, -2)
-        HienLoi("Dữ liệu trùng: Hàng " + str)
-    }
-    else {
-        $('#btnDiem').click();
+        else {
+            $('#btnDiem').click();
+        }
     }
 }
 
@@ -142,7 +147,7 @@ function XoaHang(i) {
     table.deleteRow(row.rowIndex)
     document.getElementById('btnLuuDiem').style.display = 'unset'
 
-    if (table.rows.length == 2) {
+    if (table.rows.length < 3) {
         document.getElementById('btnLuuDiem').style.display = 'none'
     }
 }

@@ -10,7 +10,6 @@ function ThemThanhPhan() {
         document.getElementById('txtTP').value = ""
     }
 }
-
 // Xoa
 function Xoa(i) {
     var span = document.getElementById('span' + i)

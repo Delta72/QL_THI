@@ -38,6 +38,7 @@ namespace QL_THI_2.Models
     public class DanhSachNhom
     {
         public string hocPhan { get; set; }
+        public modelHocPhan chiTietHP { get; set; }
         public List<modelNhom> danhSachNhom { get; set; }
     }
 }

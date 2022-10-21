@@ -9,6 +9,7 @@ namespace QL_THI_2.Models
     {
         public string id { get; set; }
         public string ngayThem { get; set; }
+        public modelHocKy mHocKy { get; set; }
         public string hocKy { get; set; }
         public string namHocB { get; set; }
         public string namHocK { get; set; }
@@ -16,6 +17,7 @@ namespace QL_THI_2.Models
         public string hanNop { get; set; }
         public int daNop { get; set; }
         public modelMaHocPhan maHocPhan { get; set; }
+        public List<string> diemThanhPhan { get; set; }
     }
 
     public class DanhSachHocPhan

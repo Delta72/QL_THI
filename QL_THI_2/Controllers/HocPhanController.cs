@@ -80,7 +80,7 @@ namespace QL_THI_2.Controllers
                     H.NAMHOCK_HP = namHocK;
                     H.HANNOP_HP = DateTime.Parse(hanNop);
                     H.SONHOM_HP = so_nhom;
-                    H.DIEMTHANHPHAN_HP = diemTP + "Tổng |";
+                    H.DIEMTHANHPHAN_HP = diemTP + "TỔNG |";
                     db.HOC_PHAN_THIs.Add(H);
                     db.SaveChanges();
 
@@ -161,6 +161,7 @@ namespace QL_THI_2.Controllers
             return View(D);
         }
 
+        [Authorize(Roles = "admin")]
         public IActionResult TimKiemHocPhan(string hocKy, string namHoc)
         {
             int hk; int.TryParse(hocKy, out hk);
@@ -190,6 +191,35 @@ namespace QL_THI_2.Controllers
             }
             D.hocPhan = L;
             return View(D);
+        }
+
+        [Authorize]
+        public static modelHocPhan LayThongTinHP(string id)
+        {
+            using(var db = new QL_THIContext())
+            {
+
+                modelHocPhan m = new modelHocPhan();
+                HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).First();
+
+                m.id = H.ID_HP;
+                m.maHocPhan = new modelMaHocPhan();
+                m.maHocPhan.id = H.ID_MHP;
+                m.maHocPhan.tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).First();
+                m.hocKy = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
+                m.mHocKy = new modelHocKy()
+                {
+                    id = (int)H.HOCKY_HP,
+                    tenHocKy = m.hocKy,
+                };
+                m.namHocB = H.NAMHOCB_HP;
+                m.namHocK = H.NAMHOCK_HP;
+                m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
+                m.diemThanhPhan = new List<string>();
+                m.diemThanhPhan = (H.DIEMTHANHPHAN_HP.Split(" |").Where(a => a != "").ToList());
+
+                return m;
+            }
         }
     }
 }

@@ -66,6 +66,7 @@
 
 .tpdiem i:hover{
     cursor: pointer;
+    color: red;
 }
 
 #divThanhPhanDiem span{
@@ -112,4 +113,31 @@
     color: #007bff;
     width: 20px;
     border-bottom: 0px solid white;
+}
+
+.tableChiTietHocPhan td {
+}
+
+    .tableChiTietHocPhan td:nth-child(2n+1) {
+        font-weight: bold;
+    }
+
+    .tableChiTietHocPhan td:nth-child(2n) {
+        color: #696cff;
+        font-weight: bold;
+    }
+
+.ulAvatar {
+    padding-left: 0px;
+    font-weight: bold;
+    text-align: center;
+    width: 100px;
+    margin: 0 auto;
+}
+
+.tableDSNhom tr td:nth-child(1){
+    width: 10px;
+}
+.tableDSNhom tr td:nth-child(2) ul{
+    text-align: center;
 }

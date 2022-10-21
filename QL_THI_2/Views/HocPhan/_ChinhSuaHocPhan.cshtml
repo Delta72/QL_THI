@@ -1,0 +1,210 @@
+﻿@model DanhSachNhom
+
+<div id="showCS" class="table-responsive text-nowrap">
+
+</div>
+
+<div class="table-responsive text-nowrap" id="mainCS" style="display: none">
+    <table class="table table-borderless tableChiTietHocPhan">
+        <tbody class="table-border-bottom-0">
+            <tr>
+                <td>
+                    Học kì:
+                </td>
+                <td>
+                    @Model.chiTietHP.hocKy
+                </td>
+                <td>
+                    Năm học:
+                </td>
+                <td>
+                    @Model.chiTietHP.namHocB - @Model.chiTietHP.namHocK
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Mã học phần:
+                </td>
+                <td>
+                    @Model.chiTietHP.maHocPhan.id
+                </td>
+                <td>
+                    Tên học phần:
+                </td>
+                <td>
+                    @Model.chiTietHP.maHocPhan.tenHocPhan
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Hạn nộp:
+                </td>
+                <td>
+                    @Model.chiTietHP.hanNop
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Điểm thành phần:
+                </td>
+                <td>
+                    @for (int i = 1; i < Model.chiTietHP.diemThanhPhan.Count(); i++)
+                    {
+                        var space = " ";
+                        <span class="tpdiem badge badge-primary">
+                            @Model.chiTietHP.diemThanhPhan[i - 1]
+                        </span>
+                    }
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+                <td>
+                    <div id="buttonChuyenHuong">
+                        <button type="button" class="btn btn-primary" onclick="HienChinhSua()">Chỉnh sửa</button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="table-responsive text-nowrap" id="ChinhSuaCS" style="display: none">
+    <table class="table table-borderless tableChiTietHocPhan">
+        <tbody class="table-border-bottom-0">
+            <tr>
+                <td>
+                    Học kì:
+                </td>
+                <td>
+                    <select id="selectHocKy" class="form-select color-dropdown">
+                        @for (int i = 1; i < 4; i++)
+                        {
+                            var h = (i == 1) ? "I" : (i == 2) ? "II" : "hè";
+                            if (Model.chiTietHP.mHocKy.id == i)
+                            {
+                                <option value="1" selected>Học kỳ @h</option>
+                            }
+                            else
+                            {
+                                <option value="1">Học kỳ @h</option>
+                            }
+                        }
+                    </select>
+                </td>
+                <td>
+                    Năm học:
+                </td>
+                <td>
+                    <div id="selectNamHoc" style="display: flex">
+                        <select id="slB" class="form-select color-dropdown">
+                            @{ var namB = int.Parse(Model.chiTietHP.namHocB); }
+                            <option value="@Model.chiTietHP.namHocB">@Model.chiTietHP.namHocB</option>
+                            @for (var n = 1; n <= 5; n++)
+                            {
+                                <option value="@(namB + n)">@(namB + n)</option>
+                            }
+                        </select>
+                        
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Mã học phần:
+                </td>
+                <td>
+                    <select id="selectMHP" class="form-select color-dropdown" required>
+
+                    </select>
+                </td>
+                <td></td>
+                <td>
+                    <input id="slK" class="form-control col-md-5" disabled value="@Model.chiTietHP.namHocK">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Hạn nộp:
+                </td>
+                <td>
+                    @{ 
+                        string[] d = Model.chiTietHP.hanNop.Split("/");
+                        string date = d[2].ToString() + "-" + d[1].ToString() + "-" + d[0].ToString();
+                    }
+                    <input type="date" class="form-control" value="@date"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Điểm thành phần:
+                </td>
+                <td>
+                    <div style="display: flex;">
+                        <input type="text" class="form-control" id="txtTP" style="margin-right: 20px" placeholder="Thành phần điểm..." />
+                        <button type="button"
+                                class="btn btn-icon btn-primary"
+                                onclick="ThemThanhPhan()">
+                            <span class="tf-icons bx bx-plus"></span>
+                        </button>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                </td>
+                <td>
+                    <div class="row mb-3">
+                        <div class="col-sm-10" id="divThanhPhanDiem">
+                            @for (int i = 1; i < Model.chiTietHP.diemThanhPhan.Count(); i++)
+                            {
+                                var id = "span" + i;
+                                var space = " ";
+                                <span class="tpdiem badge badge-primary" id="@id">
+                                    @Model.chiTietHP.diemThanhPhan[i-1] @space|<i class="fa fa-times" onclick="XoaSpan(@i)"></i>
+                                </span>
+                            }
+                        </div>
+                    </div>
+                </td>
+                <td>
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+
+                </td>
+                <td colspan="1" style="display: flex; text-align: right;" class="justify-content-end">
+                    <button type="button" class="btn btn-secondary" style="margin-right: 30px"
+                            onclick="HuyBoCS()" >Hủy bỏ</button>
+                    <button type="button" class="btn btn-success" 
+                            onclick="">Lưu</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<script src="~/js/_ChinhSuaHocPhan.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    LayDanhSachHocPhan('@Model.chiTietHP.maHocPhan.id')
+</script>

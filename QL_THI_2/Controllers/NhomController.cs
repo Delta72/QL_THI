@@ -38,6 +38,13 @@ namespace QL_THI_2.Controllers
 
                     db.NHOM_THIs.Add(N);
                     db.SaveChanges();
+
+                    var p = @"wwwroot\user\" + N.ID_TK + @"\" + N.ID_N;
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), p);
+                    if (!Directory.Exists(filePath))
+                    {
+                        Directory.CreateDirectory(filePath);
+                    }
                 }
             }
         }
@@ -65,19 +72,16 @@ namespace QL_THI_2.Controllers
             string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             D.hocPhan = hk + ", " + nh + " > " + mon;
 
+            // Chi tiet hoc phan
+            D.chiTietHP = new modelHocPhan();
+            modelHocPhan m = HocPhanController.LayThongTinHP(H.ID_HP);
+            D.chiTietHP = m;
+
+            // Danh sach nhom trong hoc phan
             D.danhSachNhom = new List<modelNhom>();
             foreach(var i in db.NHOM_THIs.Where(a => a.ID_HP == id))
             {
-                modelNhom n = new modelNhom();
-                n.id = i.ID_N;
-                n.stt = i.STT_N.ToString().PadLeft(2, '0');
-                n.hinhThuc = new modelHinhThuc();
-                n.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == i.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
-                n.taiKhoan = new modelTaiKhoan();
-                n.taiKhoan.id = i.ID_TK;
-                n.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
-                n.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == i.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
-                n.daNop = (bool)i.DANOP_N;
+                modelNhom n = LayThongTinNhom(i);
                 D.danhSachNhom.Add(n);
             }
             return View(D);
@@ -178,9 +182,6 @@ namespace QL_THI_2.Controllers
                 D.soLuong.Add(c);
                 D.chiTietDiem.Add(i);
             }
-
-            
-
             return D;
         }
 
