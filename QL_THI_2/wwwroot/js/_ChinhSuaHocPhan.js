@@ -1,10 +1,23 @@
-﻿console.log(document.getElementById('divThanhPhanDiem').innerText.replaceAll('\n',"").replaceAll("  ", "").slice(0, -1))
+﻿
 
-document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
+document.getElementById('showCS').innerHTML = document.getElementById('mainCS').innerHTML
 
 $('#slB').on('change', function (e) {
     document.getElementById('slK').value = parseInt($('#slB').val()) + 1;
 })
+
+// Use datepicker on the date inputs
+$("input[type=date]").datepicker({
+    dateFormat: 'yy-mm-dd',
+    onSelect: function (dateText, inst) {
+        $(inst).val(dateText); // Write the value in the input
+    }
+});
+
+// Code below to avoid the classic date-picker
+$("input[type=date]").on('click', function () {
+    return false;
+});
 
 // Xoa
 function XoaSpan(i) {
@@ -20,6 +33,7 @@ function ThemThanhPhan() {
         var s = '<span class="tpdiem badge badge-primary" id="span' + id + '">' + str + ' |<i class="fa fa-times" onclick="XoaSpan(' + id + ')"></i></span>'
         document.getElementById('divThanhPhanDiem').innerHTML += s;
         document.getElementById('txtTP').value = ""
+        document.getElementById('txtTP').focus()
     }
 }
 
@@ -49,6 +63,52 @@ function LayDanhSachHocPhan(id) {
                     opt.selected = 'selected'
                 }
                 select.appendChild(opt);
+            }
+        }
+    })
+}
+
+// luu
+function LuuCS() {
+    var tPhan = document.getElementById('divThanhPhanDiem').innerText.replaceAll('\n', "").replaceAll("  ", "").slice(0, -1)
+    if (tPhan.length == 0) {
+        document.getElementById('txtTP').focus()
+    }
+    else {
+        $('#btnModalLuuCS').click()
+    }
+}
+
+// luu
+function TaskLuu(id) {
+    var hKy = document.getElementById('selectHocKy').value
+    var nHoc = document.getElementById('slB').value
+    var mHP = document.getElementById('selectMHP').value
+    var hNop = document.getElementById('dateHanNop').value
+    var tPhan = document.getElementById('divThanhPhanDiem').innerText.replaceAll('\n', "").replaceAll("  ", "").slice(0, -1)
+    $.ajax({
+        url: '/HocPhan/ChinhSuaHocPhan',
+        type: 'post',
+        data: {
+            id: id,
+            hocKy: hKy,
+            namHoc: nHoc,
+            maHocPhan: mHP,
+            hanNop: hNop,
+            thanhPhan: tPhan,
+        },
+        beforeSend: function () {
+            LoadingButton('btnLuu');
+        },
+        complete: function () {
+            document.getElementById('btnLuu').innerHTML = 'Lưu'
+        },
+        success: function (data) {
+            if (data == "error") {
+                HienLoi("Có lỗi xảy ra, vui lòng thử lại sau!")
+            }
+            else {
+                window.location.reload()
             }
         }
     })

@@ -87,8 +87,8 @@ namespace QL_THI_2.Controllers
                     }
                 }
 
-                var link = "\\user\\" + User.FindFirstValue(ClaimTypes.NameIdentifier)
-                    + "\\" + idN + "\\" + Guid.NewGuid().ToString() + ".xlsx";
+                var link = "/user/" + User.FindFirstValue(ClaimTypes.NameIdentifier)
+                    + "/" + idN + "/" + Guid.NewGuid().ToString() + ".xlsx";
                 NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == idN).First();
                 UploadController.DeleteFile(N.LINKEXCELDIEM_N, Directory.GetCurrentDirectory());
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
@@ -97,10 +97,14 @@ namespace QL_THI_2.Controllers
                 db.SaveChanges();
 
                 var path = Directory.GetCurrentDirectory()
-                    + "\\wwwroot" + link;
+                    + "/wwwroot" + link;
 
                 FileStream stream = new FileStream(path, FileMode.Create);
                 wb.SaveAs(stream);
+                stream.Close();
+
+                wb.Close();
+                ex.Dispose();
             }
         }
     }

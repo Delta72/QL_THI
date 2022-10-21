@@ -4,6 +4,7 @@
 
 </div>
 
+<!-- main -->
 <div class="table-responsive text-nowrap" id="mainCS" style="display: none">
     <table class="table table-borderless tableChiTietHocPhan">
         <tbody class="table-border-bottom-0">
@@ -54,7 +55,6 @@
                 <td>
                     @for (int i = 1; i < Model.chiTietHP.diemThanhPhan.Count(); i++)
                     {
-                        var space = " ";
                         <span class="tpdiem badge badge-primary">
                             @Model.chiTietHP.diemThanhPhan[i - 1]
                         </span>
@@ -74,14 +74,15 @@
                 </td>
                 <td>
                     <div id="buttonChuyenHuong">
-                        <button type="button" class="btn btn-primary" onclick="HienChinhSua()">Chỉnh sửa</button>
+                        <button type="button" class="btn btn-primary" onclick="HienChinhSua()">Chỉnh sửa học phần</button>
                     </div>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
-
+<!-- main -->
+<!-- chinhSua -->
 <div class="table-responsive text-nowrap" id="ChinhSuaCS" style="display: none">
     <table class="table table-borderless tableChiTietHocPhan">
         <tbody class="table-border-bottom-0">
@@ -96,11 +97,11 @@
                             var h = (i == 1) ? "I" : (i == 2) ? "II" : "hè";
                             if (Model.chiTietHP.mHocKy.id == i)
                             {
-                                <option value="1" selected>Học kỳ @h</option>
+                                <option value="@i" selected>Học kỳ @h</option>
                             }
                             else
                             {
-                                <option value="1">Học kỳ @h</option>
+                                <option value="@i">Học kỳ @h</option>
                             }
                         }
                     </select>
@@ -111,14 +112,24 @@
                 <td>
                     <div id="selectNamHoc" style="display: flex">
                         <select id="slB" class="form-select color-dropdown">
-                            @{ var namB = int.Parse(Model.chiTietHP.namHocB); }
-                            <option value="@Model.chiTietHP.namHocB">@Model.chiTietHP.namHocB</option>
-                            @for (var n = 1; n <= 5; n++)
+                            @{
+                                var namB = int.Parse(Model.chiTietHP.namHocB);
+                                DateTime D = DateTime.Now;
+                                int y = D.Year;
+                            }
+                            @for (var n = 0; n < 5; n++)
                             {
-                                <option value="@(namB + n)">@(namB + n)</option>
+                                if ((y + n) == namB)
+                                {
+                                    <option value="@(y + n)" selected>@(y+n)</option>
+                                }
+                                else
+                                {
+                                    <option value="@(y + n)">@(y+n)</option>
+                                }
                             }
                         </select>
-                        
+
                     </div>
                 </td>
             </tr>
@@ -128,7 +139,6 @@
                 </td>
                 <td>
                     <select id="selectMHP" class="form-select color-dropdown" required>
-
                     </select>
                 </td>
                 <td></td>
@@ -141,11 +151,11 @@
                     Hạn nộp:
                 </td>
                 <td>
-                    @{ 
+                    @{
                         string[] d = Model.chiTietHP.hanNop.Split("/");
                         string date = d[2].ToString() + "-" + d[1].ToString() + "-" + d[0].ToString();
                     }
-                    <input type="date" class="form-control" value="@date"/>
+                    <input type="date" id="dateHanNop" class="form-control" value="@date" />
                 </td>
             </tr>
             <tr>
@@ -178,7 +188,7 @@
                                 var id = "span" + i;
                                 var space = " ";
                                 <span class="tpdiem badge badge-primary" id="@id">
-                                    @Model.chiTietHP.diemThanhPhan[i-1] @space|<i class="fa fa-times" onclick="XoaSpan(@i)"></i>
+                                    @Model.chiTietHP.diemThanhPhan[i - 1] @space| <i class="fa fa-times" onclick="XoaSpan(@i)"></i>
                                 </span>
                             }
                         </div>
@@ -191,19 +201,53 @@
             </tr>
             <tr>
                 <td colspan="3">
-
                 </td>
                 <td colspan="1" style="display: flex; text-align: right;" class="justify-content-end">
                     <button type="button" class="btn btn-secondary" style="margin-right: 30px"
-                            onclick="HuyBoCS()" >Hủy bỏ</button>
-                    <button type="button" class="btn btn-success" 
-                            onclick="">Lưu</button>
+                            onclick="HuyBoCS()">
+                        Hủy bỏ
+                    </button>
+                    <button type="button" class="btn btn-success" id=""
+                            onclick="LuuCS()">
+                        Lưu
+                    </button>
                 </td>
             </tr>
         </tbody>
     </table>
 </div>
+<!-- chinhSua -->
+<!-- xac nhan modal -->
+<button id="btnModalLuuCS" style="display: none" data-bs-toggle="modal" data-bs-target="#modalLuuCS">
+</button>
+<div class="modal fade" id="modalLuuCS" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xác nhận thêm học phần này?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-success" onclick="TaskLuu('@Model.chiTietHP.id')" id="btnLuu">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan modal -->
 
+
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="~/js/_ChinhSuaHocPhan.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     LayDanhSachHocPhan('@Model.chiTietHP.maHocPhan.id')

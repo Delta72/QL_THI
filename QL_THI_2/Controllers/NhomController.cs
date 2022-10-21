@@ -291,26 +291,21 @@ namespace QL_THI_2.Controllers
             N.SOLUONGTHI_N = (m.thamDu == null) ? 0 : int.Parse(m.thamDu);
             N.SODE_N = (m.soDe == null) ? (short)0 : short.Parse(m.soDe);
             N.SODAPAN_N = (m.soDapAn == null) ? (short)0 : short.Parse(m.soDapAn);
-
-            bool daNop = true;
             if (m.fileZip != null)
             {
                 UploadController.DeleteFile(N.LINKZIPBAI_N, currentDir);
                 N.LINKZIPBAI_N = UploadController.UploadFile(m.fileZip, m.id, idTK, currentDir);
             }
-            else { daNop = false; }
             if (m.filePDFDe != null)
             {
                 UploadController.DeleteFile(N.LINKPDFDE_N, currentDir);
                 N.LINKPDFDE_N = UploadController.UploadFile(m.filePDFDe, m.id, idTK, currentDir);
             }
-            else { daNop = false; }
             if (m.filePDFDiem != null)
             {
                 UploadController.DeleteFile(N.LINKPDFDIEM_N, currentDir);
                 N.LINKPDFDIEM_N = UploadController.UploadFile(m.filePDFDiem, m.id, idTK, currentDir);
             }
-            else { daNop = false; }
             if (m.fileExcel != null)
             {
                 string tp = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).Select(a => a.DIEMTHANHPHAN_HP).FirstOrDefault();
@@ -348,17 +343,20 @@ namespace QL_THI_2.Controllers
                 }
                 else
                 {
-                    daNop = false;
                     result = "excel";
                 }
             }
-            else { daNop = false; }
             if (m.elearning != null)
             {
                 N.LINKELEARNING_N = m.elearning;
             }
-            else { daNop = false; }
 
+            bool daNop = (N.LINKZIPBAI_N == null) ? false
+                : (N.LINKPDFDE_N == null) ? false
+                : (N.LINKPDFDIEM_N == null) ? false
+                : (N.LINKEXCELDIEM_N == null) ? false
+                : true;
+            if (N.LINKELEARNING_N != null) daNop = true;
             N.DANOP_N = daNop;
 
             db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -378,13 +376,26 @@ namespace QL_THI_2.Controllers
                 {
                     using (var reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream))
                     {
+                        List<string> L = new List<string>();
                         while (reader.Read())
                         {
-                            for (int i = 1; i <= tp; i++)
+                            for (int i = 0; i <= tp; i++)
                             {
-                                double d = 0;
-                                string str = reader.GetValue(i).ToString();
-                                if (!double.TryParse(str, out d)) hopLe = false;
+                                if(i == 0)
+                                {
+                                    string str = reader.GetValue(i).ToString();
+                                    foreach (var x in L)
+                                    {
+                                        if(x == str) hopLe = false;
+                                    }
+                                    L.Add(str);
+                                }
+                                else
+                                {
+                                    double d = 0;
+                                    string str = reader.GetValue(i).ToString();
+                                    if (!double.TryParse(str, out d)) hopLe = false;
+                                }
                             }
                         }
                         reader.Close();
@@ -419,7 +430,8 @@ namespace QL_THI_2.Controllers
                         for (int i = 1; i <= tp; i++)
                         {
                             string str = reader.GetValue(i).ToString();
-                            c.diem += str + " ";
+                            double d = Math.Round(double.Parse(str), 1);
+                            c.diem += d.ToString() + " ";
                         }
                         c.diem = c.diem[..^1];
                         L.Add(c);

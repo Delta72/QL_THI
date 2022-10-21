@@ -221,5 +221,30 @@ namespace QL_THI_2.Controllers
                 return m;
             }
         }
+
+        [Authorize(Roles =("admin"))]
+        [NoDirectAccess]
+        public IActionResult ChinhSuaHocPhan(string id, string hocKy, string namHoc, string maHocPhan, string hanNop, string thanhPhan)
+        {
+            try
+            {
+                HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
+                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                H.HOCKY_HP = short.Parse(hocKy);
+                H.NAMHOCB_HP = namHoc;
+                int n = int.Parse(namHoc); n = n + 1;
+                H.NAMHOCK_HP = n.ToString();
+                H.ID_MHP = maHocPhan;
+                DateTime d = DateTime.Parse(hanNop);
+                H.DIEMTHANHPHAN_HP = thanhPhan + "TỔNG |";
+                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.SaveChanges();
+                return Json(true);
+            }
+            catch (Exception)
+            {
+                return Json("error");
+            }
+        }
     }
 }

@@ -100,6 +100,11 @@ $("[contenteditable]").show(function () {
         }
 });
 
+function LoadingButton(id) {
+    var str = '<div class="spinner-border text-light" style="height: 15px;width: 15px"><span class="visually-hidden"></span></div>'
+    document.getElementById(id).innerHTML = str;
+}
+
 $(document).ready(function () {
 
 })
