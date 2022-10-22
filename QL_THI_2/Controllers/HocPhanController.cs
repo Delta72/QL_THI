@@ -246,5 +246,31 @@ namespace QL_THI_2.Controllers
                 return Json("error");
             }
         }
+
+        [Authorize(Roles ="admin")]
+        [NoDirectAccess]
+        public IActionResult ChinhSuaDanhSachNhom(string maHocPhan, string danhSach, string soNhom)
+        {
+            short sn = short.Parse(soNhom);
+            if(sn == 0)
+            {
+                return Json("nhomtrong");
+            }
+            else
+            {
+                dynamic j = JsonConvert.DeserializeObject(danhSach);
+                HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == maHocPhan).FirstOrDefault();
+
+                // chinh sua so nhom trong hoc phan
+                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                H.SONHOM_HP = sn;
+                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.SaveChanges();
+
+                // chinh sua danh sach nhom
+                    NhomController.ChinhSuaDanhSachNhom(j, H.ID_HP);
+                    return Json(true);
+            }
+        }
     }
 }

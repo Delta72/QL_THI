@@ -84,6 +84,7 @@ namespace QL_THI_2.Controllers
                 modelNhom n = LayThongTinNhom(i);
                 D.danhSachNhom.Add(n);
             }
+            D.danhSachNhom = D.danhSachNhom.OrderBy(a => a.stt).ToList();
             return View(D);
         }
 
@@ -442,6 +443,72 @@ namespace QL_THI_2.Controllers
             }
             UploadController.DeleteFile(link, currentDir);
             return L;
+        }
+
+        public static void ChinhSuaDanhSachNhom(dynamic d, string idHP)
+        {
+            List<string> L = new List<string>();
+            List<string> Lid = new List<string>();
+            using (var db = new QL_THIContext())
+            {
+                // them/chinh sua nhom
+                foreach(var i in d)
+                {
+                    string idN = i.id;
+                    short stt = i.stt;
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == idN).FirstOrDefault();
+                    if (N != null)
+                    {
+                        // chinh sua stt nhom da co
+                        db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                        N.STT_N = stt;
+                        db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                        Lid.Add(N.ID_N);
+                    }
+                    else
+                    {
+                        // them nhom chua co
+                        N = new NHOM_THI();
+                        N.ID_N = TimIDNhom(Guid.NewGuid().ToString());
+                        N.ID_TK = idN;
+                        N.ID_HP = idHP;
+                        N.ID_HT = 1;
+                        N.STT_N = stt;
+                        N.DANOP_N = false;
+                        db.NHOM_THIs.Add(N);
+
+                        var p = @"wwwroot\user\" + N.ID_TK + @"\" + N.ID_N;
+                        var filePath = Path.Combine(Directory.GetCurrentDirectory(), p);
+                        if (!Directory.Exists(filePath))
+                        {
+                            Directory.CreateDirectory(filePath);
+                        }
+
+                        Lid.Add(N.ID_N);
+                    }
+                }
+                db.SaveChanges();
+            }
+            using(var db = new QL_THIContext())
+            {
+                // xoa nhom ko co
+                foreach (var i in db.NHOM_THIs.Where(a => a.ID_HP == idHP))
+                {
+                    L.Add(i.ID_N);
+                }
+                foreach(var i in L)
+                {
+                    if(Lid.Where(a => a == i).FirstOrDefault() == null)
+                    {
+                        NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i).FirstOrDefault();
+                        var p = new DirectoryInfo(Directory.GetCurrentDirectory() +  @"\user\" + N.ID_TK + @"\" + N.ID_N);
+                        p.Delete(true);
+
+                        db.NHOM_THIs.Remove(N);
+                    }
+                }
+                db.SaveChanges();
+            }
         }
     }
 }

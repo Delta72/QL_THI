@@ -1,4 +1,9 @@
-﻿
+﻿:root {
+    --blue: #696cff;
+    --orange: #ffab00;
+    --red: #ff3e1d;
+}
+
 .trGV:hover {
     cursor: pointer;
 }
@@ -140,4 +145,74 @@
 }
 .tableDSNhom tr td:nth-child(2) ul{
     text-align: center;
+}
+
+.right-align {
+    text-align: right;
+}
+
+.tableDSNhom i {
+    color: var(--blue);
+}
+
+.tableDSNhom i:hover {
+    color: var(--red);
+    cursor: pointer;
+}
+
+.tableDSNhom td:nth-child(2) ul {
+    justify-content: center;
+    width: 50px;
+}
+
+.tableDSNhom td:nth-child(2) img {
+    border: 2px solid var(--blue);
+}
+
+.tableDSNhom td:nth-child(2) {
+    max-width: 400px;
+    padding-left: 10vw;
+    text-align: center;
+}
+
+.tableDSNhom td:nth-child(3) {
+    text-align: left;
+    color: var(--blue);
+    font-weight: bold;
+}
+.tableDSNhom th:nth-child(2) {
+    text-align: center;
+}
+
+.tableDSNhom th {
+    font-weight: bold;
+}
+
+.tableDSNhom th:nth-child(2) {
+    padding-left: 10vw;
+}
+
+    .tableDSNhom td:nth-child(1) {
+        text-align: center;
+    }
+
+.add {
+    margin-top: -30px;
+}
+.add i{
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.tableDSNhom {
+    counter-reset: section;
+}
+
+    .tableDSNhom .count:before {
+        counter-increment: section;
+        content: counter(section);
+    }
+
+.tableDSNhom tr:hover{
+    cursor: move;
 }

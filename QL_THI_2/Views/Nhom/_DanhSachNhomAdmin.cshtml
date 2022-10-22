@@ -1,0 +1,190 @@
+﻿@model DanhSachNhom
+
+<div class="table-responsive text-nowrap" id="_showDS"></div>
+
+<!--main-->
+<div class="table-responsive text-nowrap" id="_mainDS" style="display: none">
+    <table class="table table-hover table-responsive tableDSNhomMain">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th style="text-align: left;">Phụ trách</th>
+                <th style="text-align: left;">Ngày thi</th>
+                <th style="text-align: center;">Hình thức thi</th>
+                <th style="text-align: center;">Trạng thái</th>
+            </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+            @foreach (var i in Model.danhSachNhom)
+            {
+                <tr onclick="ChiTietNhom('@i.id')" class="cursor-pointer">
+                    <td><i class="fa fa-book fa-lg text-primary me-3"></i> <strong>@i.stt</strong></td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex ulAvatar">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.taiKhoan.hoTen">
+                                <img src="@i.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
+                                <span>@i.taiKhoan.dn</span>
+                            </li>
+                        </ul>
+                    </td>
+                    <td style="text-align: left;">
+                        @i.ngayThi
+                    </td>
+                    <td style="text-align: center;">
+                        @i.hinhThuc.tenHinhThuc
+                    </td>
+                    <td style="text-align: center;">
+                        @if (i.daNop == true)
+                        {
+                            <span class="badge rounded-pill bg-success">Đã nộp</span>
+                        }
+                        else
+                        {
+                            <span class="badge rounded-pill bg-warning">Chưa nộp</span>
+                        }
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div class="card-footer right-align">
+        <button type="button" class="btn btn-primary" onclick="HienChinhSuaDS()">Chỉnh sửa danh sách nhóm</button>
+    </div>
+</div>
+<!--main-->
+<!--edit-->
+<div class="table-responsive text-nowrap" id="_editDS" style="display: none">
+    <div class="card-body">
+        <button type="button" class="btn btn-primary add" data-bs-toggle="modal" data-bs-target="#modalThemNhomDS"
+                onclick="resetModal()">
+            <i class="fa fa-plus"></i>Thêm nhóm
+        </button>
+    </div>
+    <table class="table table-hover table-responsive tableDSNhom" id="tableEditDS">
+        <thead>
+            <tr>
+                <th>STT</th>
+                <th colspan="2">Phụ trách</th>
+            </tr>
+        </thead>
+        <tbody class="table-border-bottom-0">
+            @foreach (var i in Model.danhSachNhom)
+            {
+                <tr id="@i.id">
+                    <td class="count"></td>
+                    <td>
+                        <ul class="list-unstyled users-list m-0 avatar-group d-flex ulAvatar">
+                            <li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@i.taiKhoan.hoTen">
+                                <img src="@i.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
+                            </li>
+                        </ul>
+                    </td>
+                    <td>
+                        @i.taiKhoan.dn - @i.taiKhoan.hoTen
+                    </td>
+                    <td>
+                        <i class="fa fa-trash" data-bs-toggle="modal" data-bs-target="#modalXNXoaNhom"
+                           onclick="editXoaNhom(this)"></i>
+                    </td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+    <div class="card-footer right-align">
+        <button type="button" class="btn btn-secondary" onclick="HuyBoDS()">Hủy bỏ</button>
+        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalXNLuuNhom">Lưu</button>
+    </div>
+</div>
+<!-- xac nhan xoa modal -->
+<div class="modal fade" id="modalXNXoaNhom" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <p id="pXNXoaNhom" style="display: none"></p>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Xóa nhóm này?</h4>
+                <small style="color: red">Nhóm thi này sẽ bị xóa trong học phần</small>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="xnXoaNhom()" data-bs-dismiss="modal">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan xoa modal -->
+<!-- them nhom modal -->
+<div class="modal fade" id="modalThemNhomDS" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Thêm nhóm</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <label for="nameWithTitle" class="form-label">Người phụ trách</label>
+                        <input type="text" id="textGV" class="form-control" autocomplete="off" placeholder="Nhập để tìm kiếm..." />
+                        <input type="text" id="textMGV" style="display: none" />
+                        <input type="text" id="textTGV" style="display: none" />
+                        <input type="text" id="textDN" style="display: none" />
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col mb-0" id="tableTK">
+
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDongThemNhomDS">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="ThemGV()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- them nhom modal -->
+<!-- xac nhan xoa modal -->
+<div class="modal fade" id="modalXNLuuNhom" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Lưu thông tin đã chỉnh sửa?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="btnDongXNLuuNhom">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-success" data-bs-dismiss="modal" id="btnxnXNLuuNhom"
+                        onclick="xnLuuNhomView()">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan xoa modal -->
+<!--edit-->
+
+<script asp-append-version="true">
+    function xnLuuNhomView() {
+        var s = @Html.Raw(Json.Serialize(@Model.chiTietHP.id));
+        xnLuuNhom(s);
+    }
+</script>
+<script src="~/js/_DanhSachNhomAdmin.js" asp-append-version="true"></script>

@@ -75,7 +75,7 @@ namespace QL_THI_2.Controllers
             str = str.ToLower();
             foreach(var i in db.TAI_KHOANs)
             {
-                if(i.ID_TK.ToLower().Contains(str) || i.HOTEN_TK.ToLower().Contains(str))
+                if(i.DN_TK.ToLower().Contains(str) || i.HOTEN_TK.ToLower().Contains(str) || i.EMAIL_TK.ToLower().Contains(str))
                 {
                     modelTaiKhoan m = new modelTaiKhoan();
                     m.id = i.ID_TK;

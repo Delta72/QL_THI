@@ -55,7 +55,7 @@
 
     <!-- Page CSS -->
     <!-- Helpers -->
-    <script src="~/js/jquery-3.3.1.min.js"></script>
+    <script src="~/js/jquery-3.5.1.min.js"></script>
     <script src="/template/assets/vendor/js/helpers.js"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
@@ -74,7 +74,7 @@
                 <div class="app-brand demo">
                     <a href="@Url.Action("DanhSachHocPhan","HocPhan")" class="app-brand-link">
                         <span class="app-brand-logo demo">
-                            <img src="~/template/assets/img/icons/logo.png" style="width: 40px; height: 40px;"/>
+                            <img src="~/template/assets/img/icons/logo.png" style="width: 40px; height: 40px;" />
                         </span>
                         <span class=" demo menu-text fw-bolder ms-2">HTQL Thi</span>
                     </a>
@@ -143,13 +143,13 @@
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Tùy chọn</span>
                     </li>
-                        <li class="menu-item">
-                            <a href="@Url.Action("DanhSachThongBao_GV","ThongBao")"
-                               class="menu-link">
-                                <i class="menu-icon tf-icons bx bx-home"></i>
-                                <div>Đi đến trang chủ</div>
-                            </a>
-                        </li>
+                    <li class="menu-item">
+                        <a href="@Url.Action("DanhSachThongBao_GV","ThongBao")"
+                           class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home"></i>
+                            <div>Đi đến trang chủ</div>
+                        </a>
+                    </li>
                     <li class="menu-item">
                         <a href="@Url.Action("TaskDangXuat","TaiKhoan")"
                            class="menu-link">
@@ -227,26 +227,26 @@
                         </div>
                         <!-- error modal -->
                     </div>
-                        <!-- / Content -->
-                        <!-- Footer -->
-                        <footer class="content-footer footer bg-footer-theme">
-                            <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
-                                <div class="mb-2 mb-md-0">
-                                    ©
-                                    <script>
-                                        document.write(new Date().getFullYear());
-                                    </script>
-                                    , made with ❤️ by
-                                    <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
-                                </div>
+                    <!-- / Content -->
+                    <!-- Footer -->
+                    <footer class="content-footer footer bg-footer-theme">
+                        <div class="container-xxl d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
+                            <div class="mb-2 mb-md-0">
+                                ©
+                                <script>
+                                    document.write(new Date().getFullYear());
+                                </script>
+                                , made with ❤️ by
+                                <a href="https://themeselection.com" target="_blank" class="footer-link fw-bolder">ThemeSelection</a>
                             </div>
-                        </footer>
-                        <!-- / Footer -->
+                        </div>
+                    </footer>
+                    <!-- / Footer -->
 
-                        <div class="content-backdrop fade"></div>
-                    </div>
-                    <!-- Content wrapper -->
+                    <div class="content-backdrop fade"></div>
                 </div>
+                <!-- Content wrapper -->
+            </div>
             <!-- / Layout page -->
         </div>
 
@@ -254,13 +254,13 @@
         <div class="layout-overlay layout-menu-toggle"></div>
     </div>
     <!-- / Layout wrapper -->
-
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="/template/assets/vendor/libs/jquery/jquery.js"></script>
     <script src="/template/assets/vendor/libs/popper/popper.js"></script>
     <script src="/template/assets/vendor/js/bootstrap.js"></script>
     <script src="/template/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js"></script>
+    <script src="~/js/jquery-ui.min.js"></script>
 
     <script src="/template/assets/vendor/js/menu.js"></script>
     <!-- endbuild -->
