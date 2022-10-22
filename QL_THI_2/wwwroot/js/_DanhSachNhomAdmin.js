@@ -25,6 +25,16 @@ function HuyBoDS() {
 // hien chinh sua
 function HienChinhSuaDS() {
     document.getElementById('_showDS').innerHTML = document.getElementById('_editDS').innerHTML;
+    $('#tableEditDS tbody').sortable({
+        helper: function (e, row) {
+            var oCell = row.children();
+            var cRow = row.clone();
+            cRow.children().each(function (i) {
+                $(this).width(oCell.eq(i).width());
+            })
+            return cRow;
+        }
+    })
 }
 
 // xoa nhom
@@ -185,16 +195,5 @@ function TaskChinhSuaNhom(maHocPhan, ds) {
 }
 
 $(document).ready(function () {
-    document.getElementById('_showDS').innerHTML = document.getElementById('_editDS').innerHTML;
-
-    $('#tableEditDS tbody').sortable({
-        helper: function (e, row) {
-            var oCell = row.children();
-            var cRow = row.clone();
-            cRow.children().each(function (i) {
-                $(this).width(oCell.eq(i).width());
-            })
-            return cRow;
-        }
-    })
+    document.getElementById('_showDS').innerHTML = document.getElementById('_mainDS').innerHTML;
 })

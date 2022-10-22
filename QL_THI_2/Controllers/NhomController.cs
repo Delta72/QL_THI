@@ -502,8 +502,7 @@ namespace QL_THI_2.Controllers
                     {
                         NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i).FirstOrDefault();
                         var p = new DirectoryInfo(Directory.GetCurrentDirectory() +  @"\user\" + N.ID_TK + @"\" + N.ID_N);
-                        p.Delete(true);
-
+                        if(p != null) p.Delete();
                         db.NHOM_THIs.Remove(N);
                     }
                 }

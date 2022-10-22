@@ -38,8 +38,12 @@ function ThemThanhPhan() {
 }
 
 // chinh sua CS
-function HienChinhSua() {
-    document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
+function HienChinhSua(han) {
+    var hanStr = han.split('/')
+    var date = hanStr[2] + '-' + hanStr[1] + '-' + hanStr[0]
+    var D = Date.parse(date)
+    var now = new Date().toISOString().slice(0, 10)
+    console.log(now < D)
 }
 
 // huy bo cs
