@@ -4,7 +4,7 @@
     Layout = "~/Views/Shared/_UserLayout.cshtml";
 }
 
-@foreach (var item in Model)
+@foreach (var item in Model.OrderByDescending(a => a.chiTietHP.hocKy).ThenBy(a => a.chiTietHP.namHocB))
 {
     <div class="" style="margin-bottom: 10px;">
         <div class="card">
@@ -36,7 +36,7 @@
                                     {
                                         <span class="badge bg-danger">0 / 4</span>
                                     }
-                                    else if (i.slNop > 0 && i.slNop < 5)
+                                    else if (i.slNop > 0 && i.slNop < 4)
                                     {
                                         <span class="badge bg-warning">@i.slNop / 4</span>
                                     }

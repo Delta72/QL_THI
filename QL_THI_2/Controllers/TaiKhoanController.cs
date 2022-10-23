@@ -35,6 +35,10 @@ namespace QL_THI_2.Controllers
             {
                 return Json("error");
             }
+            else if(T.HOATDONG_TK == false)
+            {
+                return Json("blocked");
+            }
             else
             {
                 string role = "";
@@ -231,6 +235,7 @@ namespace QL_THI_2.Controllers
                 {
                     modelTaiKhoan m = new modelTaiKhoan();
                     m.id = i.ID_TK;
+                    m.dn = i.DN_TK;
                     m.hoTen = i.HOTEN_TK;
                     m.email = i.EMAIL_TK;
                     m.lanHDCuoi = ((DateTime)i.LANHDCUOI_TK).ToString("dd/MM/yyyy");
@@ -245,10 +250,11 @@ namespace QL_THI_2.Controllers
                 str = str.ToLower();
                 foreach (var i in db.TAI_KHOANs)
                 {
-                    if (i.ID_TK.ToLower().Contains(str) || i.HOTEN_TK.ToLower().Contains(str) || i.EMAIL_TK.ToLower().Contains(str))
+                    if (i.DN_TK.ToLower().Contains(str) || i.HOTEN_TK.ToLower().Contains(str) || i.EMAIL_TK.ToLower().Contains(str))
                     {
                         modelTaiKhoan m = new modelTaiKhoan();
                         m.id = i.ID_TK;
+                        m.dn = i.DN_TK;
                         m.hoTen = i.HOTEN_TK;
                         m.email = i.EMAIL_TK;
                         m.lanHDCuoi = ((DateTime)i.LANHDCUOI_TK).ToString("dd/MM/yyyy");

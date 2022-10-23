@@ -9,9 +9,9 @@ function ChiTietNhom(id) {
         },
         success: function (data) {
             if (data.nhom.taiKhoan.id == data.tk) {
-                window.location.href = '/Nhom/ChiTietNhomThiCaNhan?id=' + id
+                window.location.href = '/Nhom/ChiTietNhomThiCaNhan?id=' + data.nhom.id
             } else {
-                window.location.href = '/Nhom/ChiTietNhom?id=' + id
+                window.location.href = '/Nhom/ChiTietNhom?id=' + data.nhom.id
             }
         }
     })
@@ -23,25 +23,51 @@ function HuyBoDS() {
 }
 
 // hien chinh sua
-function HienChinhSuaDS() {
-    document.getElementById('_showDS').innerHTML = document.getElementById('_editDS').innerHTML;
-    $('#tableEditDS tbody').sortable({
-        helper: function (e, row) {
-            var oCell = row.children();
-            var cRow = row.clone();
-            cRow.children().each(function (i) {
-                $(this).width(oCell.eq(i).width());
-            })
-            return cRow;
-        }
-    })
+function HienChinhSuaDS(han) {
+    var hanStr = han.split('/')
+    var date = hanStr[2] + '-' + hanStr[1] + '-' + hanStr[0]
+    var D = new Date(date)
+    var now = new Date()
+    if (now <= D) {
+        document.getElementById('_showDS').innerHTML = document.getElementById('_editDS').innerHTML;
+        $('#tableEditDS tbody').sortable({
+            helper: function (e, row) {
+                var oCell = row.children();
+                var cRow = row.clone();
+                cRow.children().each(function (i) {
+                    $(this).width(oCell.eq(i).width());
+                })
+                return cRow;
+            }
+        })
+    }
+    else {
+        HienLoi("Đã quá hạn chỉnh sửa!")
+    }
 }
 
 // xoa nhom
 function editXoaNhom(i) {
     var row = i.closest('tr');
-    // console.log(row.id)
-    document.getElementById('pXNXoaNhom').innerHTML = row.rowIndex;
+    $.ajax({
+        url: '/Nhom/KiemTraXoaNhom',
+        type: 'post',
+        data: {
+            id: row.id,
+        },
+        success: function (data) {
+            if (data == 'error') {
+                HienLoi()
+            }
+            else if (data == 'submitted') {
+                HienLoi("Không thể xóa nhóm này!")
+            }
+            else {
+                document.getElementById('pXNXoaNhom').innerHTML = row.rowIndex;
+                document.getElementById('btnXNXoaNhom').click();
+            }
+        }
+    })
 }
 function xnXoaNhom() {
     var r = document.getElementById('pXNXoaNhom').innerHTML

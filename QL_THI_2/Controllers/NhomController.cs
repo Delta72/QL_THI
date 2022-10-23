@@ -106,6 +106,7 @@ namespace QL_THI_2.Controllers
             m.id = N.ID_N;
             m.stt = N.STT_N.ToString().PadLeft(2, '0');
             m.hinhThuc = new modelHinhThuc();
+            m.hinhThuc.id = N.ID_HT;
             m.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == N.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
             m.taiKhoan = new modelTaiKhoan();
             m.taiKhoan.id = N.ID_TK;
@@ -124,6 +125,7 @@ namespace QL_THI_2.Controllers
             m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : "---";
             m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : "---";
             HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).FirstOrDefault();
+            m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
             string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
             string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
@@ -203,10 +205,14 @@ namespace QL_THI_2.Controllers
                 string nh = item.NAMHOCB_HP.ToString() + " - " + item.NAMHOCK_HP.ToString();
                 d.hocPhan = hk + ", " + nh;
                 d.danhSachNhom = new List<modelNhom>();
+                
 
                 foreach (var i in db.HOC_PHAN_THIs.Where(a => a.HOCKY_HP == item.HOCKY_HP && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
                 {
-                    foreach(var x in db.NHOM_THIs.Where(a => a.ID_HP == i.ID_HP))
+                    d.chiTietHP = new modelHocPhan();
+                    d.chiTietHP = HocPhanController.LayThongTinHP(i.ID_HP);
+
+                    foreach (var x in db.NHOM_THIs.Where(a => a.ID_HP == i.ID_HP))
                     {
                         if(x.ID_TK == id)
                         {
@@ -258,7 +264,7 @@ namespace QL_THI_2.Controllers
             m.diem = LayThongTinDiem(N.ID_N);
             m.doThi = VeDoThi(m.diem);
             List<string> h = new List<string>();
-            foreach(var i in db.HINH_THUC_THIs.Select(a => a.TEN_HT))
+            foreach (var i in db.HINH_THUC_THIs.Select(a => a.TEN_HT))
             {
                 h.Add(i);
             }
@@ -365,6 +371,7 @@ namespace QL_THI_2.Controllers
             return Json(result);
         }
 
+        [NoDirectAccess]
         public Boolean KiemTraExcel(modelNhom m, string idTK, string currentDir, int tp)
         {
             bool hopLe = true;
@@ -412,6 +419,7 @@ namespace QL_THI_2.Controllers
             return hopLe;
         }
 
+        [NoDirectAccess]
         public List<modelChiTietDiem> LayDiem(modelNhom m, string idTK, string currentDir, int tp)
         {
             string link = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
@@ -445,6 +453,7 @@ namespace QL_THI_2.Controllers
             return L;
         }
 
+        [NoDirectAccess]
         public static void ChinhSuaDanhSachNhom(dynamic d, string idHP)
         {
             List<string> L = new List<string>();
@@ -507,6 +516,62 @@ namespace QL_THI_2.Controllers
                     }
                 }
                 db.SaveChanges();
+            }
+        }
+
+        [NoDirectAccess]
+        public IActionResult KiemTraXoaNhom(string id)
+        {
+            var report = "";
+            try
+            {
+                NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
+                if(N.LINKELEARNING_N != null || N.LINKEXCELDIEM_N != null || N.LINKPDFDE_N != null || N.LINKZIPBAI_N != null || N.LINKPDFDIEM_N != null)
+                {
+                    report = "submitted";
+                }
+            }
+            catch (Exception)
+            {
+                report = "error";
+            }
+            return Json(report);
+        }
+
+        [NoDirectAccess]
+        public IActionResult XoaFile(string id, string type)
+        {
+            try
+            {
+                NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).First();
+                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                if(type == "zip")
+                {
+                    UploadController.DeleteFile(N.LINKZIPBAI_N, Directory.GetCurrentDirectory());
+                    N.LINKZIPBAI_N = null;
+                }
+                if(type == "pdfDe")
+                {
+                    UploadController.DeleteFile(N.LINKPDFDE_N, Directory.GetCurrentDirectory());
+                    N.LINKPDFDE_N = null;
+                }
+                if (type == "excel")
+                {
+                    UploadController.DeleteFile(N.LINKEXCELDIEM_N, Directory.GetCurrentDirectory());
+                    N.LINKEXCELDIEM_N = null;
+                }
+                if (type == "pdfDiem")
+                {
+                    UploadController.DeleteFile(N.LINKPDFDIEM_N, Directory.GetCurrentDirectory());
+                    N.LINKPDFDIEM_N = null;
+                }
+                db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.SaveChanges();
+                return Json(true);
+            }
+            catch (Exception)
+            {
+                return Json("error");
             }
         }
     }

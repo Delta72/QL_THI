@@ -38,12 +38,28 @@ function ThemThanhPhan() {
 }
 
 // chinh sua CS
-function HienChinhSua(han) {
-    var hanStr = han.split('/')
-    var date = hanStr[2] + '-' + hanStr[1] + '-' + hanStr[0]
-    var D = Date.parse(date)
-    var now = new Date().toISOString().slice(0, 10)
-    console.log(now < D)
+function HienChinhSua(id) {
+    $.ajax({
+        url: '/HocPhan/KiemTraChinhSua',
+        type: 'post',
+        data: {
+            id: id,
+        },
+        success: function (data) {
+            if (data == "outdated") {
+                HienLoi("Đã quá hạn chỉnh sửa!")
+            }
+            else if (data == "error") {
+                HienLoi()
+            }
+            else if (data == "submitted") {
+                HienLoi("Đã có nhóm nộp điểm, không thể chỉnh sửa học phần!")
+            }
+            else {
+                document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
+            }
+        }
+    })
 }
 
 // huy bo cs

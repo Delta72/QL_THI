@@ -40,6 +40,10 @@ function DangNhap() {
             if (data == 'error') {
                 ThongBaoSai()
             }
+            else if (data == 'blocked') {
+                ThongBaoSai()
+                document.getElementById('modalContent').innerHTML = "Tài khoản đã bị vô hiệu hóa!"
+            }
             else if (data == 'admin') {
                 window.location.href = '/HocPhan/DanhSachHocPhan'
             }

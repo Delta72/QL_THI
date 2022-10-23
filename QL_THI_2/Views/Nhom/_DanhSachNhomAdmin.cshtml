@@ -49,7 +49,7 @@
         </tbody>
     </table>
     <div class="card-footer right-align">
-        <button type="button" class="btn btn-primary" onclick="HienChinhSuaDS()">Chỉnh sửa danh sách nhóm</button>
+        <button type="button" class="btn btn-primary" onclick="HienChinhSuaDS('@Model.chiTietHP.hanNop')">Chỉnh sửa danh sách nhóm</button>
     </div>
 </div>
 <!--main-->
@@ -84,8 +84,7 @@
                         @i.taiKhoan.dn - @i.taiKhoan.hoTen
                     </td>
                     <td>
-                        <i class="fa fa-trash" data-bs-toggle="modal" data-bs-target="#modalXNXoaNhom"
-                           onclick="editXoaNhom(this)"></i>
+                        <i class="fa fa-trash" onclick="editXoaNhom(this)"></i>
                     </td>
                 </tr>
             }
@@ -98,6 +97,7 @@
     </div>
 </div>
 <!-- xac nhan xoa modal -->
+<button id="btnXNXoaNhom" data-bs-toggle="modal" data-bs-target="#modalXNXoaNhom" style="display: none"></button>
 <div class="modal fade" id="modalXNXoaNhom" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <p id="pXNXoaNhom" style="display: none"></p>
@@ -114,7 +114,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
                     Đóng
                 </button>
-                <button type="button" class="btn btn-primary" onclick="xnXoaNhom()" data-bs-dismiss="modal">Xác nhận</button>
+                <button type="button" class="btn btn-danger" onclick="xnXoaNhom()" data-bs-dismiss="modal">Xác nhận</button>
             </div>
         </div>
     </div>

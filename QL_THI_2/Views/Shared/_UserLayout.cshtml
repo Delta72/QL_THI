@@ -72,7 +72,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="index.html" class="app-brand-link">
+                    <a href="@Url.Action("DanhSachTHongBao_GV","ThongBao")" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <img src="~/template/assets/img/icons/logo.png" style="width: 40px; height: 40px;" />
                         </span>
@@ -106,31 +106,11 @@
                         </a>
                     </li>
                     <!-- Thông báo -->
-                    <!-- Thông báo -->
-                    <li class="menu-item" id="menu2">
-                        <a href="javascript:void(0);" class="menu-link menu-toggle">
-                            <i class="menu-icon tf-icons bx bx-note"></i>
-                            <div data-i18n="Account Settings">Quản lý thông báo</div>
-                        </a>
-                        <ul class="menu-sub">
-                            <li class="menu-item" id="li3">
-                                <a href="@Url.Action("ThemThongBao","ThongBao")" class="menu-link">
-                                    <div data-i18n="Account">Thêm thông báo mới</div>
-                                </a>
-                            </li>
-                            <li class="menu-item" id="li4">
-                                <a href="@Url.Action("DanhSachThongBao","")" class="menu-link">
-                                    <div data-i18n="Notifications">Danh sách thông báo</div>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                    <!-- Thông báo -->
                     <!-- Tài khoản -->
                     <li class="menu-item" id="li5">
                         <a href="@Url.Action("DanhSachTaiKhoan","TaiKhoan")" class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-group"></i>
-                            <div data-i18n="Notifications">Danh sách tài khoản</div>
+                            <i class="menu-icon tf-icons bx bx-user"></i>
+                            <div data-i18n="Notifications">Tài khoản cá nhân</div>
                         </a>
                     </li>
                     <!-- Tài khoản -->

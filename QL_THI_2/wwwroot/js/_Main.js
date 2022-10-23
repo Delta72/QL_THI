@@ -84,8 +84,13 @@ function sortTable(n, id) {
 
 // Hien loi
 function HienLoi(str) {
-    document.getElementById('buttonError').click()
-    document.getElementById('noiDungError').innerHTML = str
+    if (str == null) {
+        document.getElementById('buttonError').click()
+    }
+    else {
+        document.getElementById('buttonError').click()
+        document.getElementById('noiDungError').innerHTML = str
+    }
 }
 
 // Download

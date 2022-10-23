@@ -2,56 +2,80 @@
     document.getElementById('btnLuuDiem').style.display = 'none'
 }
 // Luu diem
-function LuuDiem() {
+function LuuDiem(id, tk) {
     var table = document.getElementById('tableDiemThi')
     var rCount = table.rows.length
 
-    if (rCount > 2) {
-        var data = []
-        var errorTrong = []
-        var errorTrung = []
-        var mssv = []
-        for (i = 1; i < rCount - 1; i++) {
-            var diem = []
-            var row = table.rows[i];
-            var cCount = row.cells.length;
-            for (x = 2; x < cCount - 1; x++) {
-                var cell = row.cells[x].innerText;
-                diem.push(cell)
+    $.ajax({
+        url: '/Nhom/ChiTietNhomThiCaNhanJson',
+        type: 'post',
+        data: {
+            id: id,
+        },
+        success: function (data) {
+            var d1 = new Date()
+            var d2 = new Date()
+            var han = []
+            if (data.nhom.hanNop != "---") {
+                han = data.nhom.hanNop.split('/')
+                d2 = new Date(han[2] + '-' + han[1] + '-' + han[0])
             }
-            for (x = 1; x < cCount - 1; x++) {
-                var cell = row.cells[x].innerText;
-                if (cell == "") { errorTrong.push(row.rowIndex) }
+            if (d1 >= d2 && data.nhom.hanNop != "---") {
+                HienLoi("Đã quá thời hạn chỉnh sửa!")
             }
-            data.push({ "mssv": row.cells[1].innerText, diem })
+            else if (tk != data.nhom.taiKhoan.id) {
+                HienLoi("Bạn không có quyền chỉnh sửa!")
+            }
+            else {
+                if (rCount > 2) {
+                    var data = []
+                    var errorTrong = []
+                    var errorTrung = []
+                    var mssv = []
+                    for (i = 1; i < rCount - 1; i++) {
+                        var diem = []
+                        var row = table.rows[i];
+                        var cCount = row.cells.length;
+                        for (x = 2; x < cCount - 1; x++) {
+                            var cell = row.cells[x].innerText;
+                            diem.push(cell)
+                        }
+                        for (x = 1; x < cCount - 1; x++) {
+                            var cell = row.cells[x].innerText;
+                            if (cell == "") { errorTrong.push(row.rowIndex) }
+                        }
+                        data.push({ "mssv": row.cells[1].innerText, diem })
 
-            if (mssv.includes(row.cells[1].innerText)) {
-                errorTrung.push(row.rowIndex)
-            }
-            mssv.push(row.cells[1].innerText)
-        }
-        errorTrong = [... new Set(errorTrong)]
+                        if (mssv.includes(row.cells[1].innerText)) {
+                            errorTrung.push(row.rowIndex)
+                        }
+                        mssv.push(row.cells[1].innerText)
+                    }
+                    errorTrong = [... new Set(errorTrong)]
 
-        if (errorTrong.length > 0) {
-            var str = ''
-            for (i = 0; i < errorTrong.length; i++) {
-                str += errorTrong[i] + ', '
+                    if (errorTrong.length > 0) {
+                        var str = ''
+                        for (i = 0; i < errorTrong.length; i++) {
+                            str += errorTrong[i] + ', '
+                        }
+                        str = str.slice(0, -2)
+                        HienLoi("Dữ liệu trống: Hàng " + str)
+                    }
+                    else if (errorTrung.length > 0) {
+                        var str = ''
+                        for (i = 0; i < errorTrung.length; i++) {
+                            str += errorTrung[i] + ', '
+                        }
+                        str = str.slice(0, -2)
+                        HienLoi("Dữ liệu trùng: Hàng " + str)
+                    }
+                    else {
+                        $('#btnDiem').click();
+                    }
+                }
             }
-            str = str.slice(0, -2)
-            HienLoi("Dữ liệu trống: Hàng " + str)
         }
-        else if (errorTrung.length > 0) {
-            var str = ''
-            for (i = 0; i < errorTrung.length; i++) {
-                str += errorTrung[i] + ', '
-            }
-            str = str.slice(0, -2)
-            HienLoi("Dữ liệu trùng: Hàng " + str)
-        }
-        else {
-            $('#btnDiem').click();
-        }
-    }
+    })
 }
 
 function LuuChiTietDiem(id) {

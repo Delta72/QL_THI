@@ -128,7 +128,7 @@ namespace QL_THI_2.Controllers
                 .Select(a => new { a.HOCKY_HP, a.NAMHOCB_HP, a.NAMHOCK_HP })
                 .Distinct()
                 .ToList();
-            foreach (var item in temp.OrderByDescending(a => a.NAMHOCK_HP))
+            foreach (var item in temp.OrderByDescending(a => a.HOCKY_HP).ThenBy(a => a.NAMHOCB_HP))
             {
                 DanhSachHocPhan d = new DanhSachHocPhan();
                 string hk = (item.HOCKY_HP == 1) ? "Học kỳ I" : (item.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
@@ -268,9 +268,46 @@ namespace QL_THI_2.Controllers
                 db.SaveChanges();
 
                 // chinh sua danh sach nhom
+                try
+                {
                     NhomController.ChinhSuaDanhSachNhom(j, H.ID_HP);
                     return Json(true);
+                }
+                catch (Exception)
+                {
+                    return Json("error");
+                }
             }
+        }
+
+        [NoDirectAccess]
+        [Authorize(Roles = "admin")]
+        public IActionResult KiemTraChinhSua(string id)
+        {
+            var report = "";
+            try
+            {
+                HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
+                DateTime now = DateTime.Now;
+                DateTime deadline = (DateTime)H.HANNOP_HP;
+                if (now >= deadline)
+                {
+                    report = "outdated";
+                }
+
+                foreach (var i in db.NHOM_THIs.Where(a => a.ID_HP == id))
+                {
+                    if (i.LINKEXCELDIEM_N != null)
+                    {
+                        report = "submitted";
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                report = "error";
+            }
+            return Json(report);
         }
     }
 }

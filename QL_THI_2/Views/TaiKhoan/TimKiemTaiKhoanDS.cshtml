@@ -53,13 +53,16 @@
                         data-bs-toggle="modal"
                         data-bs-target="#modalXacNhanKhoa"
                         onclick="HienXacNhan('@i.id', '@i.hoatDong', this)">
-                    @if (i.hoatDong == true)
+                    @if (i.isAdmin == false)
                     {
-                        <i class="bx bx-lock-open-alt"></i>
-                    }
-                    else
-                    {
-                        <i class="bx bx-lock" style="color: red"></i>
+                        if (i.hoatDong == true)
+                        {
+                            <i class="bx bx-lock-open-alt"></i>
+                        }
+                        else
+                        {
+                            <i class="bx bx-lock" style="color: red"></i>
+                        }
                     }
                 </button>
             </div>
