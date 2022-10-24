@@ -57,6 +57,7 @@
     <!-- Helpers -->
     <script src="~/js/jquery-3.5.1.min.js"></script>
     <script src="/template/assets/vendor/js/helpers.js"></script>
+    <script src="~/js/_Main.js" asp-append-version="true"></script>
 
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
@@ -87,6 +88,35 @@
                 <div class="menu-inner-shadow"></div>
 
                 <ul class="menu-inner py-1">
+                    <!--Home-->
+                    <li class="menu-item">
+                        <a href="@Url.Action("DanhSachThongBao_GV","ThongBao")"
+                           class="menu-link">
+                            <i class="menu-icon tf-icons bx bx-home"></i>
+                            <div>Đi đến trang chủ</div>
+                        </a>
+                    </li>
+                    <!--Home-->
+                    <!--Search-->
+                    <li class="menu-item" id="menu3">
+                        <a href="javascript:void(0);" class="menu-link menu-toggle">
+                            <i class="menu-icon tf-icons bx bx-search"></i>
+                            <div data-i18n="Account Settings">Tìm kiếm</div>
+                        </a>
+                        <ul class="menu-sub">
+                            <li class="menu-item" id="li6">
+                                <a href="@Url.Action("TimKiemNhom","TimKiem")" class="menu-link">
+                                    <div>Nhóm</div>
+                                </a>
+                            </li>
+                            <li class="menu-item" id="li7">
+                                <a href="@Url.Action("TimKiemSinhVien","TimKiem")" class="menu-link">
+                                    <div>Sinh viên</div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <!--Search-->
                     <!-- Dashboard -->
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Quản lý</span>
@@ -130,6 +160,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <!-- Thông báo -->
                     <!-- Tài khoản -->
                     <li class="menu-item" id="li5">
@@ -142,13 +173,6 @@
                     <!-- Misc -->
                     <li class="menu-header small text-uppercase">
                         <span class="menu-header-text">Tùy chọn</span>
-                    </li>
-                    <li class="menu-item">
-                        <a href="@Url.Action("DanhSachThongBao_GV","ThongBao")"
-                           class="menu-link">
-                            <i class="menu-icon tf-icons bx bx-home"></i>
-                            <div>Đi đến trang chủ</div>
-                        </a>
                     </li>
                     <li class="menu-item">
                         <a href="@Url.Action("TaskDangXuat","TaiKhoan")"
@@ -272,7 +296,6 @@
 
     <!-- Page JS -->
     <script src="/template/assets/js/dashboards-analytics.js"></script>
-    <script src="~/js/_Main.js" asp-append-version="true"></script>
 
     <!-- Place this tag in your head or just before your close body tag. -->
     <script async defer src="https://buttons.github.io/buttons.js"></script>

@@ -1,0 +1,171 @@
+﻿@model IEnumerable<modelNhom>
+@{
+    ViewData["Title"] = "TimKiemNhom";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+<div class="card">
+    <div class="card-header header-search">
+        <div class="input-group input-group-merge">
+            <input type="text"
+                   class="form-control"
+                   placeholder="Tìm kiếm..." />
+            <span class="input-group-text" id="">
+                <i class="bx bx-search cursor-pointer"></i>
+            </span>
+        </div>
+    </div>
+    <div class="card-header" style="margin-top: -40px;">
+        <button class="btn btn-primary btn-sm"
+           data-bs-toggle="collapse" data-bs-target="#collapseExample"
+           aria-expanded="false" aria-controls="collapseExample">
+            <i class="fa fa-filter"></i>
+            Bộ lọc
+        </button>
+        <div class="collapse" id="collapseExample">
+            <table class="table table-borderless table-sm tableLocTimKiem">
+                <tbody>
+                    <tr>
+                        <td>Mã học phần:</td>
+                        <td>
+                            <select id="defaultSelect" class="form-select form-select-sm">
+                                <option>Tất cả</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td>Hình thức:</td>
+                        <td>
+                            <select id="defaultSelect" class="form-select form-select-sm">
+                                <option>Tất cả</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Học kỳ:</td>
+                        <td>
+                            <select id="defaultSelect" class="form-select form-select-sm">
+                                <option>Tất cả</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Năm học:</td>
+                        <td>
+                            <select id="defaultSelect" class="form-select form-select-sm">
+                                <option>Tất cả</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Ngày thi:
+                        </td>
+                        <td>
+                            <input type="date" class="form-control form-control-sm" />
+                        </td>
+                        <td>Đến ngày:</td>
+                        <td>
+                            <input type="date" class="form-control form-control-sm" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Giáo viên:</td>
+                        <td>
+                            <button class="btn btn-primary btn-sm"><i class="bx bx-search"></i></button>
+                        </td>
+                        <td colspan="2">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <button class="btn btn-primary btn-sm" style="float: right">Áp dụng</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+    </div>
+    <div class="card-body" style="margin-top: -30px;">
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover tableTimKiem" id="tableTimKiem">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th onclick="sortTable(1, 'tableTimKiem')">Tên nhóm<i class="bx bxs-sort-alt"></i></th>
+                        <th>Mã nhóm</th>
+                        <th>Niên khóa<i class="bx bxs-sort-alt"></i></th>
+                        <th>GV</th>
+                        <th>Đã nộp</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @foreach (var i in Model.OrderBy(a => a.duongDan.Split(">")[1]))
+                    {
+                        var str = i.duongDan.Split(">");
+                        var HK = str[0];
+                        var MHP = str[1];
+                        var STT = str[2];
+                        <tr class="cursor-pointer" onclick="ChiTietNhom('@i.id')">
+                            <td class="count"></td>
+                            <td><strong>@MHP</strong></td>
+                            <td>@STT.Split(" ")[2]</td>
+                            <td>@HK</td>
+                            <td>
+                                <img src="@i.taiKhoan.avatar"
+                                     data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                                     title="@i.taiKhoan.dn - @i.taiKhoan.hoTen"
+                                     class="rounded-circle avatar avatar-xs" />
+                            </td>
+                            <td>
+                                @{
+                                    int sl = 0;
+                                    if (i.excelDiem != null) sl++;
+                                    if (i.pdfDe != null) sl++;
+                                    if (i.pdfDiem != null) sl++;
+                                    if (i.zipBaiThi != null) sl++;
+                                    if (i.elearning != null) sl = 5;
+                                }
+                                @if (sl == 5)
+                                {
+                                    <span class="badge bg-success">1 / 1</span>
+                                }
+                                else if (sl == 0)
+                                {
+                                    <span class="badge bg-danger">0 / 4</span>
+                                }
+                                else if (sl > 0 && sl < 4)
+                                {
+                                    <span class="badge bg-warning">@sl / 4</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-success">4 / 4</span>
+                                }
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<script src="~/js/TimKiemNhom.js" asp-append-version="true"></script>

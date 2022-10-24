@@ -2,6 +2,8 @@
     --blue: #696cff;
     --orange: #ffab00;
     --red: #ff3e1d;
+    --grey: #8592a3;
+    --rgb-grey: rgba(67, 89, 113, 0.5);
 }
 
 .trGV:hover {
@@ -22,7 +24,7 @@
     border-radius: 5px;
 }
 
-.table_clickable tr:hover{
+.table_clickable tr:hover {
     cursor: pointer;
 }
 
@@ -37,7 +39,7 @@
     margin-right: auto;
 }
 
-#tableNhomCaNhan input{
+#tableNhomCaNhan input {
     border: 0.1px solid gray;
 }
 
@@ -49,7 +51,7 @@
     width: 100%;
 }
 
-#tableNhomCaNhan td:nth-child(2n){
+#tableNhomCaNhan td:nth-child(2n) {
     font-weight: bold;
     color: var(--blue);
 }
@@ -68,7 +70,7 @@
     text-align: left;
 }
 
-#divBtn button{
+#divBtn button {
     margin-right: 20px;
 }
 
@@ -80,16 +82,16 @@
 }
 
 
-.tpdiem i {
-    margin-left: 5px;
-}
+    .tpdiem i {
+        margin-left: 5px;
+    }
 
-.tpdiem i:hover{
-    cursor: pointer;
-    color: red;
-}
+        .tpdiem i:hover {
+            cursor: pointer;
+            color: red;
+        }
 
-#divThanhPhanDiem span{
+#divThanhPhanDiem span {
     margin-right: 10px;
 }
 
@@ -118,10 +120,10 @@
     counter-reset: section;
 }
 
-#tableDiemThi .count:before {
-    counter-increment: section;
-    content: counter(section);
-}
+    #tableDiemThi .count:before {
+        counter-increment: section;
+        content: counter(section);
+    }
 
 .cursorPointer:hover {
     color: red;
@@ -155,10 +157,11 @@
     margin: 0 auto;
 }
 
-.tableDSNhom tr td:nth-child(1){
+.tableDSNhom tr td:nth-child(1) {
     width: 10px;
 }
-.tableDSNhom tr td:nth-child(2) ul{
+
+.tableDSNhom tr td:nth-child(2) ul {
     text-align: center;
 }
 
@@ -170,10 +173,10 @@
     color: var(--blue);
 }
 
-.tableDSNhom i:hover {
-    color: var(--red);
-    cursor: pointer;
-}
+    .tableDSNhom i:hover {
+        color: var(--red);
+        cursor: pointer;
+    }
 
 .tableDSNhom td:nth-child(2) ul {
     justify-content: center;
@@ -195,6 +198,7 @@
     color: var(--blue);
     font-weight: bold;
 }
+
 .tableDSNhom th:nth-child(2) {
     text-align: center;
 }
@@ -203,21 +207,22 @@
     font-weight: bold;
 }
 
-.tableDSNhom th:nth-child(2) {
-    padding-left: 10vw;
-}
-
-    .tableDSNhom td:nth-child(1) {
-        text-align: center;
+    .tableDSNhom th:nth-child(2) {
+        padding-left: 10vw;
     }
+
+.tableDSNhom td:nth-child(1) {
+    text-align: center;
+}
 
 .add {
     margin-top: -30px;
 }
-.add i{
-    vertical-align: middle;
-    margin-right: 10px;
-}
+
+    .add i {
+        vertical-align: middle;
+        margin-right: 10px;
+    }
 
 .tableDSNhom {
     counter-reset: section;
@@ -228,14 +233,125 @@
         content: counter(section);
     }
 
-.tableDSNhom tr:hover{
-    cursor: move;
-}
+    .tableDSNhom tr:hover {
+        cursor: move;
+    }
 
-#divThongTin li span{
+#divThongTin li span {
     color: var(--blue)
 }
 
-#divThongTin li span:nth-child(3) {
+    #divThongTin li span:nth-child(3) {
+        font-weight: bold;
+    }
+
+.tableTimKiem {
+    counter-reset: section;
+}
+
+    .tableTimKiem .count:before {
+        counter-increment: section;
+        content: counter(section);
+    }
+
+    .tableTimKiem td:nth-child(1) {
+        width: 30px;
+        text-align: center;
+    }
+
+    .tableTimKiem th:nth-child(2n) i {
+        margin-left: 1vw;
+    }
+
+    .tableTimKiem td:nth-child(3) {
+        width: 30px;
+        text-align: center;
+    }
+
+    .tableTimKiem th:nth-child(3) {
+        width: 30px;
+        text-align: center;
+    }
+
+    .tableTimKiem td:nth-child(6) {
+        text-align: center;
+    }
+    .tableTimKiem td:nth-child(6) span{
+        width: 40px;
+    }
+
+    .tableTimKiem th:nth-child(6) {
+        text-align: center;
+    }
+
+    .tableTimKiem th:nth-child(5) {
+        text-align: center;
+    }
+
+    .tableTimKiem td:nth-child(5) {
+        text-align: center;
+    }
+
+        .tableTimKiem td:nth-child(5) img {
+        }
+
+    .tableTimKiem tbody tr:hover td {
+        color: var(--blue) !important;
+    }
+
+        .tableTimKiem tbody tr:hover td img {
+            border: 2px solid var(--blue) !important;
+        }
+
+    .tableTimKiem th:hover {
+        cursor: pointer;
+    }
+
+    .tableTimKiem tr:hover td {
+        color: white !important;
+    }
+
+.header-search .input-group {
+    width: 70%;
+    margin: 0 auto;
+}
+
+.header-search span{
+    background: var(--blue);
+    color: white;
+    border: 1px solid var(--blue);
+}
+
+    .header-search span:hover {
+        cursor: pointer;
+    }
+
+    .header-search span i {
+        font-size: 1.5em;
+    }
+
+    .header-search input {
+        border: 1px solid rgba(67, 89, 113, 0.5);
+    }
+
+.header-search a:hover {
+    cursor: pointer;
+}
+
+.tableLocTimKiem td:nth-child(1){
     font-weight: bold;
+    color: var(--blue);
+}
+
+.tableLocTimKiem td:nth-child(3) {
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.tableLocTimKiem td input {
+    border: 1px solid rgba(67, 89, 113, 0.5);
+}
+
+.tableLocTimKiem td select {
+    border: 1px solid rgba(67, 89, 113, 0.5);
 }

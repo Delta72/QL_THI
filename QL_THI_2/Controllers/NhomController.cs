@@ -100,41 +100,44 @@ namespace QL_THI_2.Controllers
         }
 
         [NoDirectAccess]
-        public modelNhom LayThongTinNhom(NHOM_THI N)
+        public static modelNhom LayThongTinNhom(NHOM_THI N)
         {
-            modelNhom m = new modelNhom();
-            m.id = N.ID_N;
-            m.stt = N.STT_N.ToString().PadLeft(2, '0');
-            m.hinhThuc = new modelHinhThuc();
-            m.hinhThuc.id = N.ID_HT;
-            m.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == N.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
-            m.taiKhoan = new modelTaiKhoan();
-            m.taiKhoan.id = N.ID_TK;
-            m.taiKhoan.dn = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.DN_TK).FirstOrDefault();
-            m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
-            m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
-            m.daNop = (bool)N.DANOP_N;
-            m.ngayThi = (N.NGAYTHI_N != null) ? ((DateTime)N.NGAYTHI_N).ToString("dd/MM/yyyy") : "---";
-            m.siSo = (N.SISO_N != null) ? (N.SISO_N.ToString().PadLeft(2, '0')) : "---";
-            m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
-            m.zipBaiThi = (N.LINKZIPBAI_N != null) ? (N.LINKZIPBAI_N) : null;
-            m.excelDiem = (N.LINKEXCELDIEM_N != null) ? (N.LINKEXCELDIEM_N) : null;
-            m.pdfDe = (N.LINKPDFDE_N != null) ? (N.LINKPDFDE_N) : null;
-            m.pdfDiem = (N.LINKPDFDIEM_N != null) ? (N.LINKPDFDIEM_N) : null;
-            m.elearning = (N.LINKELEARNING_N != null) ? (N.LINKELEARNING_N) : null;
-            m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : "---";
-            m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : "---";
-            HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).FirstOrDefault();
-            m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
-            string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
-            string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
-            string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
-            m.duongDan = hk + ", " + nh + " > " + mon + " > " + "Nhóm " + m.stt;
-            string[] thanhPhan = H.DIEMTHANHPHAN_HP.Split(" |");
-            thanhPhan = thanhPhan.Where(a => a != "").ToArray();
-            m.thanhPhan = new List<string>();
-            foreach(var i in thanhPhan) { m.thanhPhan.Add(i); }
-            return m;
+            using(var db = new QL_THIContext())
+            {
+                modelNhom m = new modelNhom();
+                m.id = N.ID_N;
+                m.stt = N.STT_N.ToString().PadLeft(2, '0');
+                m.hinhThuc = new modelHinhThuc();
+                m.hinhThuc.id = N.ID_HT;
+                m.hinhThuc.tenHinhThuc = db.HINH_THUC_THIs.Where(a => a.ID_HT == N.ID_HT).Select(a => a.TEN_HT).FirstOrDefault();
+                m.taiKhoan = new modelTaiKhoan();
+                m.taiKhoan.id = N.ID_TK;
+                m.taiKhoan.dn = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.DN_TK).FirstOrDefault();
+                m.taiKhoan.hoTen = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.HOTEN_TK).FirstOrDefault();
+                m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
+                m.daNop = (bool)N.DANOP_N;
+                m.ngayThi = (N.NGAYTHI_N != null) ? ((DateTime)N.NGAYTHI_N).ToString("dd/MM/yyyy") : "---";
+                m.siSo = (N.SISO_N != null) ? (N.SISO_N.ToString().PadLeft(2, '0')) : "---";
+                m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
+                m.zipBaiThi = (N.LINKZIPBAI_N != null) ? (N.LINKZIPBAI_N) : null;
+                m.excelDiem = (N.LINKEXCELDIEM_N != null) ? (N.LINKEXCELDIEM_N) : null;
+                m.pdfDe = (N.LINKPDFDE_N != null) ? (N.LINKPDFDE_N) : null;
+                m.pdfDiem = (N.LINKPDFDIEM_N != null) ? (N.LINKPDFDIEM_N) : null;
+                m.elearning = (N.LINKELEARNING_N != null) ? (N.LINKELEARNING_N) : null;
+                m.soDe = (N.SODE_N != null) ? (N.SODE_N.ToString().PadLeft(2, '0')) : "---";
+                m.soDapAn = (N.SODAPAN_N != null) ? (N.SODAPAN_N.ToString().PadLeft(2, '0')) : "---";
+                HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).FirstOrDefault();
+                m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
+                string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
+                string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
+                string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
+                m.duongDan = hk + ", " + nh + " > " + mon + " > " + "Nhóm " + m.stt;
+                string[] thanhPhan = H.DIEMTHANHPHAN_HP.Split(" |");
+                thanhPhan = thanhPhan.Where(a => a != "").ToArray();
+                m.thanhPhan = new List<string>();
+                foreach (var i in thanhPhan) { m.thanhPhan.Add(i); }
+                return m;
+            }
         }
 
         [NoDirectAccess]
