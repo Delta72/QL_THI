@@ -7,10 +7,10 @@
     <div class="card-header header-search">
         <div class="input-group input-group-merge">
             <input type="text"
-                   class="form-control"
+                   class="form-control" id="txtSearch"
                    placeholder="Tìm kiếm..." />
             <span class="input-group-text" id="">
-                <i class="bx bx-search cursor-pointer"></i>
+                <i class="bx bx-search cursor-pointer" onclick="TimKiemNhom()"></i>
             </span>
         </div>
     </div>
@@ -27,31 +27,26 @@
                     <tr>
                         <td>Mã học phần:</td>
                         <td>
-                            <select id="defaultSelect" class="form-select form-select-sm">
-                                <option>Tất cả</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select id="selectMHP" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
                             </select>
                         </td>
                         <td>Hình thức:</td>
                         <td>
-                            <select id="defaultSelect" class="form-select form-select-sm">
-                                <option>Tất cả</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select id="selectHT" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+
                             </select>
                         </td>
                     </tr>
                     <tr>
                         <td>Học kỳ:</td>
                         <td>
-                            <select id="defaultSelect" class="form-select form-select-sm">
-                                <option>Tất cả</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select id="selectHK" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+                                <option value="1">Học kỳ I</option>
+                                <option value="2">Học kỳ II</option>
+                                <option value="3">Học kỳ hè</option>
                             </select>
                         </td>
                         <td></td>
@@ -60,11 +55,8 @@
                     <tr>
                         <td>Năm học:</td>
                         <td>
-                            <select id="defaultSelect" class="form-select form-select-sm">
-                                <option>Tất cả</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
+                            <select id="selectNH" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
                             </select>
                         </td>
                         <td></td>
@@ -88,6 +80,7 @@
                             <button class="btn btn-primary btn-sm"><i class="bx bx-search"></i></button>
                         </td>
                         <td colspan="2">
+
                         </td>
                     </tr>
                     <tr>
@@ -165,7 +158,5 @@
         </div>
     </div>
 </div>
-
-
 
 <script src="~/js/TimKiemNhom.js" asp-append-version="true"></script>
