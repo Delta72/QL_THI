@@ -1,0 +1,66 @@
+﻿@model IEnumerable<modelNhom>
+@{
+    Layout = null;
+}
+
+<table class="table table-hover tableTimKiem" id="tableTimKiem">
+    <thead>
+        <tr>
+            <th>STT</th>
+            <th onclick="sortTable(1, 'tableTimKiem')">Tên nhóm<i class="bx bxs-sort-alt"></i></th>
+            <th>Mã nhóm</th>
+            <th>Niên khóa<i class="bx bxs-sort-alt"></i></th>
+            <th>GV</th>
+            <th>Đã nộp</th>
+        </tr>
+    </thead>
+    <tbody class="table-border-bottom-0">
+        @foreach (var i in Model.OrderBy(a => a.duongDan.Split(">")[1]))
+        {
+            var str = i.duongDan.Split(">");
+            var HK = str[0];
+            var MHP = str[1];
+            var STT = str[2];
+            <tr class="cursor-pointer" onclick="ChiTietNhom('@i.id')">
+                <td class="count"></td>
+                <td><strong>@MHP</strong></td>
+                <td>@STT.Split(" ")[2]</td>
+                <td>@HK</td>
+                <td>
+                    <img src="@i.taiKhoan.avatar"
+                         data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                         title="@i.taiKhoan.dn - @i.taiKhoan.hoTen"
+                         class="rounded-circle avatar avatar-xs" />
+                </td>
+                <td>
+                    @{
+                        int sl = 0;
+                        if (i.excelDiem != null) sl++;
+                        if (i.pdfDe != null) sl++;
+                        if (i.pdfDiem != null) sl++;
+                        if (i.zipBaiThi != null) sl++;
+                        if (i.elearning != null) sl = 5;
+                    }
+                    @if (sl == 5)
+                    {
+                        <span class="badge bg-success">1 / 1</span>
+                    }
+                    else if (sl == 0)
+                    {
+                        <span class="badge bg-danger">0 / 4</span>
+                    }
+                    else if (sl > 0 && sl < 4)
+                    {
+                        <span class="badge bg-warning">@sl / 4</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-success">4 / 4</span>
+                    }
+                </td>
+            </tr>
+        }
+
+    </tbody>
+</table>
+

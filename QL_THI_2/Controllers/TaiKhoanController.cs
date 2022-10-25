@@ -81,11 +81,7 @@ namespace QL_THI_2.Controllers
             {
                 if(i.DN_TK.ToLower().Contains(str) || i.HOTEN_TK.ToLower().Contains(str) || i.EMAIL_TK.ToLower().Contains(str))
                 {
-                    modelTaiKhoan m = new modelTaiKhoan();
-                    m.id = i.ID_TK;
-                    m.dn = i.DN_TK;
-                    m.hoTen = i.HOTEN_TK;
-                    m.avatar = i.ANHDAIDIEN_TK;
+                    modelTaiKhoan m = LayThongTinTaiKhoan(i);
                     L.Add(m);
                 }
             }
@@ -267,6 +263,30 @@ namespace QL_THI_2.Controllers
 
             }
             return View(L);
+        }
+
+        [NoDirectAccess]
+        public static modelTaiKhoan LayThongTinTaiKhoan(TAI_KHOAN T)
+        {
+            modelTaiKhoan m = new modelTaiKhoan()
+            {
+                id = T.ID_TK,
+                dn = T.DN_TK,
+                hoTen = T.HOTEN_TK,
+                avatar = T.ANHDAIDIEN_TK,
+                email = T.EMAIL_TK,
+                lanHDCuoi = ((DateTime)T.LANHDCUOI_TK).ToString("dd/MM/yyyy"),
+                isAdmin = (bool)T.LAADMIN_TK,
+            };
+            return m;
+        }
+
+        [NoDirectAccess]
+        public IActionResult LayThongTinTaiKhoanJson(string id)
+        {
+            TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).First();
+            modelTaiKhoan m = LayThongTinTaiKhoan(T);
+            return Json(m);
         }
     }
 }

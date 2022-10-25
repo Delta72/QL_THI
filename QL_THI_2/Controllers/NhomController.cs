@@ -92,10 +92,11 @@ namespace QL_THI_2.Controllers
         public IActionResult ChiTietNhom(string id)
         {
             modelNhom m = new modelNhom();
-
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             m = LayThongTinNhom(N);
-
+            m.diem = new List<modelDiem>();
+            m.diem = LayThongTinDiem(N.ID_N);
+            m.doThi = VeDoThi(m.diem);
             return View(m);
         }
 
@@ -561,6 +562,14 @@ namespace QL_THI_2.Controllers
                 if (type == "excel")
                 {
                     UploadController.DeleteFile(N.LINKEXCELDIEM_N, Directory.GetCurrentDirectory());
+                    using(var dtb = new QL_THIContext())
+                    {
+                        foreach(var i in dtb.CHI_TIET_DIEMs.Where(a => a.ID_N == N.ID_N))
+                        {
+                            dtb.Remove(i);
+                        }
+                        dtb.SaveChanges();
+                    }
                     N.LINKEXCELDIEM_N = null;
                 }
                 if (type == "pdfDiem")

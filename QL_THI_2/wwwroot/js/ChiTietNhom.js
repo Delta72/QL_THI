@@ -1,10 +1,18 @@
 ﻿
 
 // ve do thi
-function VeDoThi() {
-    var xValues = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-    var yValues = [1, 2, 3, 4, 5, 6.5, 7, 8, 9, 10];
-    var barColors = ["blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue", "blue"];
+function VeDoThi(data) {
+    var xValues = [];
+    var yValues = [];
+    var barColors = [];
+    console.log(data)
+    for (var i in data.chiTietDiem) {
+        xValues.push(data.chiTietDiem[i])
+        barColors.push("#007bff")
+    }
+    for (var i in data.soLuong) {
+        yValues.push(data.soLuong[i])
+    }
 
     new Chart("myChart", {
         type: "bar",
@@ -16,6 +24,14 @@ function VeDoThi() {
             }]
         },
         options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        stepSize: 1
+                    }
+                }]
+            },
             legend: { display: false },
             title: {
                 display: true,
@@ -34,5 +50,4 @@ function ThemDuongDan() {
 //ready
 $(document).ready(function () {
     ThemDuongDan()
-    VeDoThi()
 })

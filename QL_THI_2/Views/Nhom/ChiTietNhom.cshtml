@@ -4,82 +4,114 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
 }
 
+
+
 <div class="col-xxl">
     <div class="card mb-4">
         <h5 class="card-header">@Model.duongDan</h5>
         <div class="card-body">
-            <div class="row mb-3">
-                <label class="col-sm-2 col-form-label" for="basic-default-name">Giáo viên giảng dạy:</label>
-                <div class="col-sm-4" style="display: flex">
-                    <!-- ma hoc phan -->
-                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center" style="text-align: center !important; justify-content: center">
-                        <div data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="@Model.taiKhoan.hoTen" style="text-align: center !important">
-                            <img src="@Model.taiKhoan.avatar" alt="Avatar" class="rounded-circle" />
 
-                        </div>
-                    </div>
-                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                        <strong style="margin-left: 10px;margin-right: 10px">-</strong>
-                        <strong style="margin-right: 10px">@Model.taiKhoan.dn</strong>
-                        <strong style="margin-right: 10px">@Model.taiKhoan.hoTen</strong>
-                    </div>
-                    <!-- ma hoc phan -->
-                </div>
-                <label class="col-sm-2 col-form-label" for="basic-default-name">Hình thức thi:</label>
-                <div class="col-sm-4" style="display: flex">
-                    <div class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
-                        <strong>@Model.hinhThuc.tenHinhThuc</strong>
-                    </div>
-                </div>
-            </div>
-
-            <!-- hoc ky nam hoc -->
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="basic-default-company">Ngày thi:</label>
-                <div class="col-sm-3 col-form-label">
-                    <strong>@Model.ngayThi</strong>
-                </div>
-                <label class="col-sm-3 col-form-label" for="basic-default-company">Sĩ số:</label>
-                <div class="col-sm-3 col-form-label">
-                    <span class="badge bg-dark">@Model.thamDu / @Model.siSo</span>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="basic-default-company">Số đề:</label>
-                <div class="col-sm-3 col-form-label">
-                    <strong>@Model.soDe</strong>
-                </div>
-                <label class="col-sm-3 col-form-label" for="basic-default-company">Số đáp án:</label>
-                <div class="col-sm-3 col-form-label">
-                    <strong>@Model.soDapAn</strong>
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="basic-default-company">File .Zip:</label>
-                <div class="col-sm-9 col-form-label">
-                    @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
-                    {
-                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadZip()">Tải xuống .Zip</button>
-                    }
-                    else
-                    {
-                        <strong> --- </strong>
-                    }
-                </div>
-            </div>
-            <div class="row mb-3">
-                <label class="col-sm-3 col-form-label" for="basic-default-company">File .Excel:</label>
-                <div class="col-sm-9 col-form-label">
-                    @if (Model.excelDiem != null && Model.excelDiem != "")
-                    {
-                        <button type="button" class="btn btn-xs btn-primary" onclick="DownloadExcel()">Tải xuống .Excel</button>
-                    }
-                    else
-                    {
-                        <strong> --- </strong>
-                    }
-                </div>
-            </div>
+            <table class="table table-borderless">
+                <tbody>
+                    <tr>
+                        <td>Giáo viên giảng dạy:</td>
+                        <td>
+                            <img src="@Model.taiKhoan.avatar" alt="Avatar" class="rounded-circle avatar avatar-xs pull-up"
+                                 data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top"
+                                 title="@Model.taiKhoan.dn - @Model.taiKhoan.hoTen" />
+                        </td>
+                        <td>Hình thức thi:</td>
+                        <td>
+                            @Model.hinhThuc.tenHinhThuc
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Ngày thi:</td>
+                        <td>@Model.ngayThi</td>
+                        <td>Sĩ số:</td>
+                        <td><span class="badge bg-dark">@Model.thamDu / @Model.siSo</span></td>
+                    </tr>
+                    <tr>
+                        <td>Số đề:</td>
+                        <td>@Model.soDe</td>
+                        <td>Số đáp án:</td>
+                        <td>@Model.soDapAn</td>
+                    </tr>
+                    <tr>
+                        <td>File .zip bài thi:</td>
+                        <td>
+                            @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
+                            {
+                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.zipBaiThi')">Tải xuống .zip</button>
+                            }
+                            else
+                            {
+                                <strong> --- </strong>
+                            }
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>File .PDF đề thi:</td>
+                        <td>
+                            @if (Model.pdfDe != null && Model.pdfDe != "")
+                            {
+                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDe')">Tải xuống .PDF</button>
+                            }
+                            else
+                            {
+                                <strong> --- </strong>
+                            }
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>File .PDF điểm thi:</td>
+                        <td>
+                            @if (Model.pdfDiem != null && Model.pdfDiem != "")
+                            {
+                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.pdfDiem')">Tải xuống .PDF</button>
+                            }
+                            else
+                            {
+                                <strong> --- </strong>
+                            }
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>File .xlsx điểm thi:</td>
+                        <td>
+                            @if (Model.excelDiem != null && Model.excelDiem != "")
+                            {
+                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.excelDiem')">Tải xuống .xlsx</button>
+                            }
+                            else
+                            {
+                                <strong> --- </strong>
+                            }
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Link Elearning:</td>
+                        <td colspan="3">
+                            @if (Model.elearning != null && Model.elearning != "")
+                            {
+                                <a href="@Model.elearning" target="_blank">@Model.elearning</a>
+                            }
+                            else
+                            {
+                                <strong> --- </strong>
+                            }
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
@@ -88,19 +120,63 @@
 <div class="col-xxl">
     <div class="card mb-4">
         <h5 class="card-header">Bảng phân bố điểm của nhóm</h5>
-        <div class="card-body">
+        <div class="card-body" id="divDoThi">
             <canvas id="myChart" style="width:100%;"></canvas>
         </div>
     </div>
 </div>
 
-<script>
-    function DownloadZip() {
-        window.location.href = '@Url.Action("Download","Download", new { link = Model.zipBaiThi})'
-    }
-    function DownloadExcel() {
-        window.location.href = '@Url.Action("Download","Download", new { link = Model.excelDiem})'
-    }
+<div class="col-xxl">
+    <div class="card mb-4">
+        <h5 class="card-header">Chi tiết điểm của nhóm</h5>
+        <div class="card-body" id="divChiTietDiem">
+            <table class="table table-sm table-edit" id="tableDiemThi">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>MSSV</th>
+                        @foreach (var i in Model.thanhPhan)
+                        {
+                            <th>@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @if (Model.diem.Count > 0)
+                    {
+                        @foreach (var item in Model.diem)
+                        {
+                            <tr>
+                                <td style="width: 50px; text-align: center" class="count">
+                                </td>
+                                <td class="editabletd" style="width: 200px;text-align: left">
+                                    @item.mssv
+                                </td>
+                                @foreach (var i in item.diem)
+                                {
+                                    <td class="editabletd editDiem">
+                                        @i
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
+<script src="~/js/ChiTietNhom.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    var json = @Html.Raw(Json.Serialize(@Model.doThi));
+    if (json.soLuong.length > 0) {
+        VeDoThi(json)
+    }
+    else {
+        document.getElementById('divDoThi').style.textAlign = 'center'
+        document.getElementById('divChiTietDiem').style.textAlign = 'center'
+        document.getElementById('divDoThi').innerHTML = '<h3>Chưa có thông tin điểm</h3>'
+        document.getElementById('divChiTietDiem').innerHTML = '<h3>Chưa có thông tin điểm</h3>'
+    }
 </script>
-<script src="~/js/ChiTietNhom.js"></script>

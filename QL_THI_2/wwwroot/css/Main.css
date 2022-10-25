@@ -355,3 +355,39 @@
 .tableLocTimKiem td select {
     border: 1px solid rgba(67, 89, 113, 0.5);
 }
+
+.tableLocTimKiem td:nth-child(2n) {
+    width: 35%;
+}
+
+.tableLocTimKiem td:nth-child(2n+1) {
+    font-size: 13px;
+}
+
+#divImg img {
+    border: 2px solid rgba(67, 89, 113, 0.5);
+}
+
+
+#locDSGV i{
+    color: white;
+}
+
+#locDSGV {
+    float: right;
+}
+
+.tableLocTimKiem label {
+    font-size: 13px;
+}
+
+.control-dot {
+    display: flex;
+    z-index: 9999;
+    position: fixed;
+    margin: 0 auto;
+    text-align: center;
+    border: 1px solid red;
+    width: 100px;
+    float: right;
+}
