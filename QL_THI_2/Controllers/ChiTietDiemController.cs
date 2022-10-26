@@ -93,6 +93,7 @@ namespace QL_THI_2.Controllers
                 UploadController.DeleteFile(N.LINKEXCELDIEM_N, Directory.GetCurrentDirectory());
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
                 N.LINKEXCELDIEM_N = link;
+                if (N.NGAYTHI_N == null) N.NGAYTHI_N = DateTime.Now;
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 db.SaveChanges();
 

@@ -287,11 +287,15 @@ namespace QL_THI_2.Controllers
         }
 
         [Authorize]
-        public IActionResult TimKiemSinhVien()
+        public IActionResult TimKiemSinhVien(string page)
         {
+            int p = page != null ? int.Parse(page) : 1;
+            int soSV = 100;
+            int skip = (p - 1)*soSV;
+            DanhSachSinhVien D = new DanhSachSinhVien();
             List<modelSinhVien> L = new List<modelSinhVien>();
 
-            foreach(var i in db.CHI_TIET_DIEMs.OrderBy(a => a.MSSV_CTBT))
+            foreach(var i in db.CHI_TIET_DIEMs.OrderBy(a => a.MSSV_CTBT).Skip(skip).Take(soSV))
             {
                 modelSinhVien m = new modelSinhVien();
                 m.id = i.MSSV_CTBT;
@@ -304,8 +308,202 @@ namespace QL_THI_2.Controllers
                 m.nhom = NhomController.LayThongTinNhom(db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First());
                 L.Add(m);
             }
+            D.sinhVien = new List<modelSinhVien>();
+            D.sinhVien = L;
+            D.soTrang = (db.CHI_TIET_DIEMs.Count() % soSV == 0) 
+                ? (db.CHI_TIET_DIEMs.Count() / soSV) 
+                : ((db.CHI_TIET_DIEMs.Count() / soSV) + 1);
+            D.trangHienTai = p;
+            return View(D);
+        }
 
-            return View(L);
+        [NoDirectAccess]
+        public IActionResult LocSV(string txtSearch, string mhp, string ht, string hk, string nh, string date, string gv, string page)
+        {
+            txtSearch = txtSearch == null ? "" : txtSearch.ToLower();
+            int p = page == null ? 1 : int.Parse(page);
+            int soSV = 100;
+            int skip = (p - 1) * soSV;
+            short hinhThuc = short.Parse(ht);
+            short hocKy = short.Parse(hk);
+            short d = short.Parse(date);
+            dynamic GV = JsonConvert.DeserializeObject(gv);
+
+            List<CHI_TIET_DIEM> Na = new List<CHI_TIET_DIEM>();
+            List<CHI_TIET_DIEM> Nb = new List<CHI_TIET_DIEM>();
+
+            // tim theo txtSearch
+            if (txtSearch != null)
+            {
+                foreach (var i in db.CHI_TIET_DIEMs.OrderBy(a => a.MSSV_CTBT).ToList())
+                {
+                    var mssv = i.MSSV_CTBT;
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First();
+                    HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).First();
+                    string hp = H.ID_MHP + " " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).First();
+                    TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).FirstOrDefault();
+                    string tk = T.DN_TK + " " + T.HOTEN_TK + " " + T.EMAIL_TK;
+                    hp = hp.ToLower(); tk = tk.ToLower();
+                    if (mssv.ToLower().Contains(txtSearch) || hp.Contains(txtSearch) || tk.Contains(txtSearch))
+                    {
+                        Na.Add(i);
+                    }
+                }
+            }
+            else
+            {
+                Na = db.CHI_TIET_DIEMs.OrderBy(a => a.MSSV_CTBT).ToList();
+            }
+
+            // mhp
+            if (mhp != "0")
+            {
+                foreach (var i in Na.ToList())
+                {
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First();
+                    HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).First();
+                    if (mhp != H.ID_MHP)
+                    {
+                        Na.Remove(i);
+                    }
+                }
+            }
+
+            // tim theo hinhthuc
+            if (hinhThuc != 0)
+            {
+                foreach (var i in Na.ToList())
+                {
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).FirstOrDefault();
+                    if (N.ID_HT != hinhThuc)
+                    {
+                        Na.Remove(i);
+                    }
+                }
+            }
+
+            // tim theo hoc ky
+            if (hocKy != 0)
+            {
+                foreach (var i in Na.ToList())
+                {
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).FirstOrDefault();
+                    HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).First();
+                    if (H.HOCKY_HP != hocKy)
+                    {
+                        Na.Remove(i);
+                    }
+                }
+            }
+
+            // tim theo nam hoc
+            if (nh != "0")
+            {
+                foreach (var i in Na.ToList())
+                {
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).FirstOrDefault();
+                    HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).First();
+                    if (H.NAMHOCB_HP != nh)
+                    {
+                        Na.Remove(i);
+                    }
+                }
+            }
+
+            // tim theo ngay
+            if (date != "0")
+            {
+                DateTime D = DateTime.Now;
+                foreach(var i in Na.ToList())
+                {
+                    NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).FirstOrDefault();
+                    DateTime iD = (DateTime)N.NGAYTHI_N;
+                    if(date == "1")
+                    {
+                        if ((D - iD).TotalDays > 7 || (iD - D).TotalDays > 7)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                    if(date == "2")
+                    {
+                        if ((D - iD).TotalDays > 30 || (iD - D).TotalDays > 30)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                    if(date == "3")
+                    {
+                        if ((D - iD).TotalDays > 90 || (iD - D).TotalDays > 90)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                    if(date == "4")
+                    {
+                        if ((D - iD).TotalDays > 180 || (iD - D).TotalDays > 180)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                    if(date == "5")
+                    {
+                        if ((D - iD).TotalDays > 365 || (iD - D).TotalDays > 365)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                }
+            }
+
+            // theo giao vien
+            List<string> MGV = new List<string>();
+            foreach (var i in GV)
+            {
+                if (i != null)
+                {
+                    string str = i;
+                    MGV.Add(str.Trim('{', '}'));
+                }
+            }
+            if (MGV.Count() > 0)
+            {
+                foreach (var i in MGV)
+                {
+                    foreach (var x in Na.ToList())
+                    {
+                        NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == x.ID_N).FirstOrDefault();
+                        if (N.ID_TK == i)
+                        {
+                            Nb.Add(x);
+                        }
+                    }
+                }
+                Na = Nb.GroupBy(a => new { a.ID_N, a.MSSV_CTBT }).Select(g => g.FirstOrDefault()).ToList();
+            }
+
+            List<modelSinhVien> L = new List<modelSinhVien>();
+            foreach(var i in Na)
+            {
+                modelSinhVien m = new modelSinhVien();
+                m.id = i.MSSV_CTBT;
+                m.diem = new List<string>();
+                foreach (var s in i.DIEM_CTBT.Split(" ").Where(a => a != ""))
+                {
+                    m.diem.Add(s);
+                }
+                m.nhom = new modelNhom();
+                m.nhom = NhomController.LayThongTinNhom(db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First());
+                L.Add(m);
+            }
+            DanhSachSinhVien Ds = new DanhSachSinhVien();
+            Ds.sinhVien = new List<modelSinhVien>();
+            Ds.sinhVien = L.Skip(skip).Take(soSV).ToList();
+            Ds.soTrang = (Na.Count() % soSV == 0)
+                ? (Na.Count() / soSV)
+                : ((Na.Count() / soSV) + 1);
+            Ds.trangHienTai = p;
+            return View(Ds);
         }
     }
 }

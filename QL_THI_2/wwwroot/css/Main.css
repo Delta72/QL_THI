@@ -4,6 +4,7 @@
     --red: #ff3e1d;
     --grey: #8592a3;
     --rgb-grey: rgba(67, 89, 113, 0.5);
+    --green: #71dd37;
 }
 
 .trGV:hover {
@@ -411,13 +412,14 @@
 #divTimKiemSV table tr th:nth-child(6) {
     text-align: left;
 }
+
+#divTimKiemSV table tr td:nth-child(5) {
+    font-weight: bold;
+    color: var(--blue);
+}
 #divTimKiemSV table tr td:nth-child(6) span {
     text-align: center;
     width: 20px;
-}
-#divTimKiemSV table tr td:nth-child(4) span:nth-child(2) {
-    float: right;
-    margin-left: -150px;
 }
 
 #divTimKiemSV table tr td:nth-child(2) {
@@ -449,4 +451,8 @@
 
 #modalN i{
     color: var(--orange)
+}
+
+#divTimKiemSV table tbody tr:hover {
+    background-color: rgba(67, 89, 113, 0.1);
 }

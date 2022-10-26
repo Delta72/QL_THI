@@ -1,10 +1,125 @@
-﻿@model IEnumerable<modelSinhVien>
+﻿@model DanhSachSinhVien
 @{
-    ViewData["Title"] = "TimKiemSinhVien";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var user = User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value;
+    if (user == "admin")
+    {
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+    }
 }
 
 <div class="card">
+    <div class="card-header header-search">
+        <div class="input-group input-group-merge">
+            <input type="text"
+                   class="form-control" id="txtSearch"
+                   placeholder="Tìm kiếm..." />
+            <span class="input-group-text" onclick="TimKiemSV()">
+                <i class="bx bx-search cursor-pointer"></i>
+            </span>
+        </div>
+    </div>
+    <div class="card-header" style="margin-top: -40px;">
+        <button class="btn btn-secondary btn-sm" id="btnLoc"
+                data-bs-toggle="collapse" data-bs-target="#collapseExample"
+                aria-expanded="false" aria-controls="collapseExample">
+            <i class="fa fa-filter"></i>
+            Bộ lọc
+        </button>
+        <div class="collapse" id="collapseExample">
+            <table class="table table-borderless table-sm tableLocTimKiem">
+                <tbody>
+                    <tr>
+                        <td>Mã học phần:</td>
+                        <td>
+                            <select id="selectMHP" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+                            </select>
+                        </td>
+                        <td>Hình thức:</td>
+                        <td>
+                            <select id="selectHT" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Học kỳ:</td>
+                        <td>
+                            <select id="selectHK" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+                                <option value="1">Học kỳ I</option>
+                                <option value="2">Học kỳ II</option>
+                                <option value="3">Học kỳ hè</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Năm học:</td>
+                        <td>
+                            <select id="selectNH" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Ngày thi:
+                        </td>
+                        <td>
+                            <select id="selectNT" class="form-select form-select-sm">
+                                <option value="0">Tất cả</option>
+                                <option value="1">Trong tuần</option>
+                                <option value="2">Trong 1 tháng</option>
+                                <option value="3">Trong 3 tháng</option>
+                                <option value="4">Trong 6 tháng</option>
+                                <option value="5">Trong năm</option>
+                            </select>
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>Giáo viên:</td>
+                        <td colspan="1">
+                            <button class="btn btn-primary btn-sm"
+                                    data-bs-toggle="modal" data-bs-target="#modalTimGVLoc"
+                                    onclick="resetModal()">
+                                <i class="bx bx-search"></i>
+                            </button>
+                        </td>
+                        <td>
+                            <div style="" id="divImg">
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex" id="ListGV">
+                                </ul>
+                            </div>
+
+                        </td>
+                        <td>
+                            <button class="btn btn-xs btn-danger" id="locDSGV" onclick="XoaGV()">
+                                <i class="bx bx-x"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <button class="btn btn-primary btn-sm" style="float: right" onclick="TimKiemSV()">Áp dụng</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <hr />
+    </div>
+</div>
+
+<div class="card" id="cardSearchSV">
     <div class="card-body" style="margin-top: -30px;">
         <div class="table-responsive text-nowrap" id="divTimKiemSV">
             <table class="table table-hover tableTimKiem" id="tableTimKiemSV">
@@ -25,47 +140,81 @@
                         var ListTP = new List<List<string>>();
                         var ListBtnID = new List<string>();
                     }
-                    @foreach (var i in Model)
+                    @foreach (var i in Model.sinhVien)
                     {
                         List<string> tp = new List<string>();
                         tp = i.nhom.hocPhan.diemThanhPhan;
                         ListTP.Add(tp);
-                        <tr class="cursor-pointer" onclick="ChiTiet(this, '@i.nhom.id')" 
-                            data-bs-toggle="modal" data-bs-target="#modalCenter">
-                            <td class="count"></td>
-                            <td>@i.id</td>
-                            <td>
-                                @i.nhom.hocPhan.maHocPhan.id - @i.nhom.hocPhan.maHocPhan.tenHocPhan
-                            </td>
-                            <td>
-                                <span>Nhóm</span> <span>@i.nhom.stt</span>
-                            </td>
-                            <td>
-                                @{
-                                    List<double> L = new List<double>();
-                                    foreach (var d in i.diem)
-                                    {
-                                        L.Add(double.Parse(d));
-                                    }
-                                    ListDiem.Add(L);
+                    <tr class="cursor-pointer" onclick="ChiTiet(this, '@i.nhom.id')"
+                        data-bs-toggle="modal" data-bs-target="#modalCenter">
+                        <td class="count"></td>
+                        <td>@i.id</td>
+                        <td>
+                            @i.nhom.hocPhan.maHocPhan.id - @i.nhom.hocPhan.maHocPhan.tenHocPhan
+                        </td>
+                        <td>
+                            @i.nhom.stt
+                        </td>
+                        <td>
+                            @{
+                                List<double> L = new List<double>();
+                                foreach (var d in i.diem)
+                                {
+                                    L.Add(double.Parse(d));
                                 }
-                                @i.diem[i.diem.Count() - 1]
-                            </td>
-                            <td>
-                                @{
-                                    var date = @i.nhom.ngayThi.Split("/");
-                                }
-                                <span>@date[0]</span>/<span>@date[1]</span>/<span>@date[2]</span>
-                            </td>
-                            <td style="display: none">
-                                <img src="@i.nhom.taiKhoan.avatar" class="rounded-circle avatar" style="margin-right: 10px;"/>
-                                <span>@i.nhom.taiKhoan.dn - @i.nhom.taiKhoan.hoTen</span>
-                            </td>
-                        </tr>
+                                ListDiem.Add(L);
+                            }
+                            @i.diem[i.diem.Count() - 1]
+                        </td>
+                        <td>
+                            @{
+                                var date = @i.nhom.ngayThi.Split("/");
+                            }
+                            <span>@date[0]</span>/<span>@date[1]</span>/<span>@date[2]</span>
+                        </td>
+                        <td style="display: none">
+                            <img src="@i.nhom.taiKhoan.avatar" class="rounded-circle avatar" style="margin-right: 10px;" />
+                            <span>@i.nhom.taiKhoan.dn - @i.nhom.taiKhoan.hoTen</span>
+                        </td>
+                        <td style="display: none">
+                            <span>@i.nhom.hocPhan.hocKy, @i.nhom.hocPhan.namHocB - @i.nhom.hocPhan.namHocB</span>
+                        </td>
+                    </tr>
                     }
                 </tbody>
             </table>
         </div>
+    </div>
+    <div class="card-footer">
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                <li class="page-item prev">
+                    <a class="page-link" href="@Url.Action("TimKiemSinhVien","TimKiem", new { page = 1})">
+                        <i class="tf-icon bx bx-chevrons-left"></i>
+                    </a>
+                </li>
+                @for (var i = 1; i <= Model.soTrang; i++)
+                {
+                    if (i == Model.trangHienTai)
+                    {
+                        <li class="page-item active">
+                            <a class="page-link" href="@Url.Action("TimKiemSinhVien","TimKiem", new { page = i})">@i</a>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <a class="page-link" href="@Url.Action("TimKiemSinhVien","TimKiem", new { page = i})">@i</a>
+                        </li>
+                    }
+                }
+                <li class="page-item next">
+                    <a class="page-link" href="@Url.Action("TimKiemSinhVien","TimKiem", new { page = Model.soTrang})">
+                        <i class="tf-icon bx bx-chevrons-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
     </div>
 </div>
 
@@ -91,6 +240,10 @@
                         <tr>
                             <td>Học phần:</td>
                             <td id="modalHP"></td>
+                        </tr>
+                        <tr>
+                            <td>Niên khóa:</td>
+                            <td id="modalNK"></td>
                         </tr>
                         <tr>
                             <td>Nhóm:</td>
@@ -128,7 +281,40 @@
         </div>
     </div>
 </div>
+<!-- them nhom modal -->
+<div class="modal fade" id="modalTimGVLoc" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Tìm kiếm giáo viên</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mb-3">
+                        <input type="text" id="textGV" class="form-control" autocomplete="off" placeholder="Nhập để tìm kiếm..." />
+                        <input type="text" id="textMGV" style="display: none" />
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col mb-0" id="tableTK">
 
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDongThemNhomDS">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="ThemGV()">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- them nhom modal -->
 <script src="~/js/TimKiemSinhVien.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     var listid = @Html.Raw(Json.Serialize(@ListID));
@@ -147,6 +333,8 @@
         var gv = tr.cells[6].innerHTML
         console.log(gv)
         $('#modalGV').html(gv)
+        var nk = tr.cells[7].innerHTML
+        $('#modalNK').html(nk)
 
         var rI = tr.rowIndex
         var lD = listdiem[rI - 1]

@@ -197,6 +197,4 @@ function TimKiemNhom() {
             $("#collapseExample").collapse('hide')
         }
     })
-
-    console.log()
 }
