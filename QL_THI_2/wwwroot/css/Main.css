@@ -391,3 +391,62 @@
     width: 100px;
     float: right;
 }
+
+#divTimKiemSV table tr td:nth-child(3){
+    text-align: left;
+}
+
+#divTimKiemSV table tr td:nth-child(5) {
+    text-align: left;
+}
+
+#divTimKiemSV table tr th:nth-child(5) {
+    text-align: left;
+}
+
+#divTimKiemSV table tr td:nth-child(6) {
+    text-align: left;
+    display: flex;
+}
+#divTimKiemSV table tr th:nth-child(6) {
+    text-align: left;
+}
+#divTimKiemSV table tr td:nth-child(6) span {
+    text-align: center;
+    width: 20px;
+}
+#divTimKiemSV table tr td:nth-child(4) span:nth-child(2) {
+    float: right;
+    margin-left: -150px;
+}
+
+#divTimKiemSV table tr td:nth-child(2) {
+    font-weight: bold;
+}
+
+#tableCanvas td:nth-child(1){
+    font-weight: bold;
+    color: var(--blue);
+}
+
+.modalTable td:nth-child(1){
+    color: var(--blue);
+    font-weight: bold;
+}
+.modalTable td:nth-child(2) {
+    font-weight: bold;
+}
+
+#myModalCanvas {
+    max-width: 250px;
+}
+
+@media (max-width: 600px){
+    #tdCanvas {
+        display: none;
+    }
+}
+
+#modalN i{
+    color: var(--orange)
+}

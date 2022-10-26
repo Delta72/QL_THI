@@ -137,6 +137,8 @@ namespace QL_THI_2.Controllers
                 thanhPhan = thanhPhan.Where(a => a != "").ToArray();
                 m.thanhPhan = new List<string>();
                 foreach (var i in thanhPhan) { m.thanhPhan.Add(i); }
+                m.hocPhan = new modelHocPhan();
+                m.hocPhan = HocPhanController.LayThongTinHP(H.ID_HP);
                 return m;
             }
         }
@@ -298,6 +300,10 @@ namespace QL_THI_2.Controllers
                                        System.Globalization.CultureInfo.InvariantCulture);
                 N.NGAYTHI_N = nThi;
             }
+            else
+            {
+                N.NGAYTHI_N = DateTime.Now;
+            }
             N.SISO_N = (m.siSo == null) ? 0 : int.Parse(m.siSo);
             N.SOLUONGTHI_N = (m.thamDu == null) ? 0 : int.Parse(m.thamDu);
             N.SODE_N = (m.soDe == null) ? (short)0 : short.Parse(m.soDe);
@@ -369,6 +375,8 @@ namespace QL_THI_2.Controllers
                 : true;
             if (N.LINKELEARNING_N != null) daNop = true;
             N.DANOP_N = daNop;
+
+            
 
             db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             db.SaveChanges();

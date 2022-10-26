@@ -198,7 +198,6 @@ namespace QL_THI_2.Controllers
         {
             using(var db = new QL_THIContext())
             {
-
                 modelHocPhan m = new modelHocPhan();
                 HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).First();
 

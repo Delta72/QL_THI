@@ -1,0 +1,166 @@
+﻿@model IEnumerable<modelSinhVien>
+@{
+    ViewData["Title"] = "TimKiemSinhVien";
+    Layout = "~/Views/Shared/_MainLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body" style="margin-top: -30px;">
+        <div class="table-responsive text-nowrap" id="divTimKiemSV">
+            <table class="table table-hover tableTimKiem" id="tableTimKiemSV">
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th onclick="sortTable(1, 'tableTimKiemSV')">MSSV<i class="bx bxs-sort-alt"></i></th>
+                        <th onclick="sortTable(2, 'tableTimKiemSV')">Nhóm thi<i class="bx bxs-sort-alt"></i></th>
+                        <th></th>
+                        <th>Điểm</th>
+                        <th onclick="sortTable(5, 'tableTimKiemSV')">Ngày thi<i class="bx bxs-sort-alt"></i></th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    @{
+                        var ListID = new List<string>();
+                        var ListDiem = new List<List<double>>();
+                        var ListTP = new List<List<string>>();
+                        var ListBtnID = new List<string>();
+                    }
+                    @foreach (var i in Model)
+                    {
+                        List<string> tp = new List<string>();
+                        tp = i.nhom.hocPhan.diemThanhPhan;
+                        ListTP.Add(tp);
+                        <tr class="cursor-pointer" onclick="ChiTiet(this, '@i.nhom.id')" 
+                            data-bs-toggle="modal" data-bs-target="#modalCenter">
+                            <td class="count"></td>
+                            <td>@i.id</td>
+                            <td>
+                                @i.nhom.hocPhan.maHocPhan.id - @i.nhom.hocPhan.maHocPhan.tenHocPhan
+                            </td>
+                            <td>
+                                <span>Nhóm</span> <span>@i.nhom.stt</span>
+                            </td>
+                            <td>
+                                @{
+                                    List<double> L = new List<double>();
+                                    foreach (var d in i.diem)
+                                    {
+                                        L.Add(double.Parse(d));
+                                    }
+                                    ListDiem.Add(L);
+                                }
+                                @i.diem[i.diem.Count() - 1]
+                            </td>
+                            <td>
+                                @{
+                                    var date = @i.nhom.ngayThi.Split("/");
+                                }
+                                <span>@date[0]</span>/<span>@date[1]</span>/<span>@date[2]</span>
+                            </td>
+                            <td style="display: none">
+                                <img src="@i.nhom.taiKhoan.avatar" class="rounded-circle avatar" style="margin-right: 10px;"/>
+                                <span>@i.nhom.taiKhoan.dn - @i.nhom.taiKhoan.hoTen</span>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Thông tin chi tiết</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-borderless table-sm modalTable">
+                    <tbody>
+                        <tr>
+                            <td>MSSV:</td>
+                            <td id="modalMSSV"></td>
+                            <td colspan="2" rowspan="2"></td>
+                        </tr>
+                        <tr>
+                            <td>Học phần:</td>
+                            <td id="modalHP"></td>
+                        </tr>
+                        <tr>
+                            <td>Nhóm:</td>
+                            <td id="modalN"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Giáo viên:</td>
+                            <td id="modalGV"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>Điểm:</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" id="tdCanvas"></td>
+                            <td colspan="2">
+                                <table class="table table-sm table-bordered" id="tableCanvas">
+                                </table>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    Đóng
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/TimKiemSinhVien.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    var listid = @Html.Raw(Json.Serialize(@ListID));
+    var listdiem = @Html.Raw(Json.Serialize(@ListDiem));
+    var tp = @Html.Raw(Json.Serialize(@ListTP));
+
+    // chi tiet sinh vien
+    function ChiTiet(tr, id) {
+        var mssv = tr.cells[1].innerHTML
+        $('#modalMSSV').html(mssv)
+        var hp = tr.cells[2].innerHTML
+        $('#modalHP').html(hp)
+        var n = tr.cells[3].innerHTML
+        var icon = '<i onclick="ChiTietNhom(\'' + id + '\')" class="bx bx-info-circle pull-up cursor-pointer" data-bs-toggle="tooltip" data-bs-placement="top" title="Xem chi tiết nhóm"></i>'
+        $('#modalN').html(n + icon)
+        var gv = tr.cells[6].innerHTML
+        console.log(gv)
+        $('#modalGV').html(gv)
+
+        var rI = tr.rowIndex
+        var lD = listdiem[rI - 1]
+        var lTP = tp[rI - 1]
+        VeDoThi(lD, lTP)
+
+        var table = document.getElementById('tableCanvas')
+        table.innerHTML = ''
+        for (var i in lD) {
+            var row = table.insertRow(i);
+            var cell1 = row.insertCell(0);
+            cell1.innerHTML = lTP[i] + ':'
+            var cell2 = row.insertCell(1);
+            cell2.innerHTML = lD[i]
+        }
+    }
+</script>
