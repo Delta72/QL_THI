@@ -1,9 +1,15 @@
 ﻿@model modelNhom
 @{
-    ViewData["Title"] = "ChiTietNhom";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var user = User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value;
+    if (user == "admin")
+    {
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+    }
 }
-
 
 
 <div class="col-xxl">
@@ -42,7 +48,7 @@
                         <td>
                             @if (Model.zipBaiThi != null && Model.zipBaiThi != "")
                             {
-                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.zipBaiThi')">Tải xuống .zip</button>
+                                <button type="button" class="btn btn-xs btn-primary" onclick="Download('@Model.zipBaiThi')">Tải xuống .Zip</button>
                             }
                             else
                             {

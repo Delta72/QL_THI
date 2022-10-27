@@ -1,4 +1,14 @@
 ﻿
+$('#tableThemNhom tbody').sortable({
+    helper: function (e, row) {
+        var oCell = row.children();
+        var cRow = row.clone();
+        cRow.children().each(function (i) {
+            $(this).width(oCell.eq(i).width());
+        })
+        return cRow;
+    }
+})
 
 // Them thanh phan
 function ThemThanhPhan() {
@@ -89,15 +99,9 @@ $('#textGV').on('change input copy paste', function () {
 
 // Xoa nhom
 function XoaNhom(c) {
-    // console.log(c)
-    var table = document.getElementById("tableThemNhom")
-    table.deleteRow(c);
-    var total = table.rows.length;
-    for (var i = 0; i < total; i++) {
-        if (i > 0) {
-            table.rows[i].cells[0].innerHTML = (i).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });;
-        }
-    }
+    var row = c.closest('tr')
+    document.getElementById('tableThemNhom').deleteRow(row.rowIndex)
+    console.log(row)
 }
 
 // reset modal
@@ -174,7 +178,7 @@ function ThemGV() {
         var hoten = document.getElementById('textTGV').value
         var img = GetUserAvatar(id);
 
-        var table = document.getElementById("tableThemNhom");
+        var table = document.getElementById("tableThemNhom").getElementsByTagName('tbody')[0];
         var count = table.rows.length;
         var row = table.insertRow(count);
 
@@ -184,7 +188,7 @@ function ThemGV() {
         var cell4 = row.insertCell(3);
         var cell5 = row.insertCell(4);
 
-        cell1.innerHTML = (count).toLocaleString('en-US', { minimumIntegerDigits: 2, useGrouping: false });
+        cell1.classList.add('count')
         cell2.innerHTML = '<p style="display: none" disabled>' + id + '</p>'
         cell3.innerHTML = dn
         str = ''
@@ -192,7 +196,7 @@ function ThemGV() {
         str += '<li data-bs-toggle="tooltip" data-popup="tooltip-custom" data-bs-placement="top" class="avatar avatar-xs pull-up" title="' + dn + ' - ' + hoten + '">'
         str += '<img src="' + img + '" alt="Avatar" class="rounded-circle" /></li><li style="margin-left: 10px">' + hoten + '</li></ul>'
         cell4.innerHTML = str
-        cell5.innerHTML = '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" onclick="XoaNhom(' + count + ')"><i class="bx bx-trash"></i></button></div>'
+        cell5.innerHTML = '<div class="dropdown"><button type="button" class="btn p-0 dropdown-toggle hide-arrow" onclick="XoaNhom(this)"><i class="bx bx-trash"></i></button></div>'
 
         document.getElementById('modalDong').click()
         document.getElementById('buttonThemNhom').classList.remove('btn-danger')

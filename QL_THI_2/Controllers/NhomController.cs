@@ -20,6 +20,7 @@ namespace QL_THI_2.Controllers
         {
             using(var db = new QL_THIContext())
             {
+                short count = 1;
                 foreach (var i in D)
                 {
                     NHOM_THI N = new NHOM_THI();
@@ -31,9 +32,8 @@ namespace QL_THI_2.Controllers
                     int pFrom = str.IndexOf(">") + ">".Length;
                     int pTo = str.LastIndexOf("<");
                     N.ID_TK = str.Substring(pFrom, pTo - pFrom);
-
-                    string stt = i.idN;
-                    N.STT_N = short.Parse(stt);
+                    N.STT_N = count;
+                    count++;
                     N.DANOP_N = false;
 
                     db.NHOM_THIs.Add(N);

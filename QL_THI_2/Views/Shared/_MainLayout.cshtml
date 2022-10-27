@@ -56,6 +56,7 @@
     <!-- Page CSS -->
     <!-- Helpers -->
     <script src="~/js/jquery-3.5.1.min.js"></script>
+    <script src="~/js/jquery-ui.js"></script>
     <script src="/template/assets/vendor/js/helpers.js"></script>
     <script src="~/js/_Main.js" asp-append-version="true"></script>
 
@@ -73,7 +74,7 @@
 
             <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
                 <div class="app-brand demo">
-                    <a href="@Url.Action("DanhSachHocPhan","HocPhan")" class="app-brand-link">
+                    <a href="#" class="app-brand-link">
                         <span class="app-brand-logo demo">
                             <img src="~/template/assets/img/icons/logo.png" style="width: 40px; height: 40px;" />
                         </span>
@@ -136,6 +137,11 @@
                             <li class="menu-item active" id="li2">
                                 <a href="@Url.Action("DanhSachHocPhan","HocPhan")" class="menu-link">
                                     <div data-i18n="Notifications">Danh sách học phần</div>
+                                </a>
+                            </li>
+                            <li class="menu-item" id="li8">
+                                <a href="@Url.Action("MaHocPhan","MaHocPhan")" class="menu-link">
+                                    <div data-i18n="Notifications">Mã học phần</div>
                                 </a>
                             </li>
                         </ul>

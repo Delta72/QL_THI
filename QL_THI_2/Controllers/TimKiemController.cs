@@ -70,7 +70,7 @@ namespace QL_THI_2.Controllers
         }
 
         [NoDirectAccess]
-        public IActionResult LocNhom(string txtSearch, string mhp, string ht, string hk, string nh, string date, string daThi, string gv)
+        public IActionResult LocNhom(string txtSearch, string mhp, string ht, string hk, string nh, string date, string daThi, string daNop, string gv)
         {
             txtSearch = txtSearch == null ? "" : txtSearch;
             short hinhThuc = short.Parse(ht);
@@ -247,6 +247,31 @@ namespace QL_THI_2.Controllers
                             {
                                 Na.Remove(i);
                             }
+                        }
+                    }
+                }
+            }
+
+            // da nop
+            if (daNop != "0")
+            {
+                if (daNop == "1")
+                {
+                    foreach (var i in Na.ToList())
+                    {
+                        if (i.DANOP_N == false)
+                        {
+                            Na.Remove(i);
+                        }
+                    }
+                }
+                else
+                {
+                    foreach (var i in Na.ToList())
+                    {
+                        if (i.DANOP_N == true)
+                        {
+                            Na.Remove(i);
                         }
                     }
                 }

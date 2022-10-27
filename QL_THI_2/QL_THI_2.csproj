@@ -25,4 +25,9 @@
     <PackageReference Include="Syncfusion.XlsIO.Net.Core" Version="20.3.0.50" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\user\5f414a24-ef0f-4910-91ed-333f02797d9a\" />
+    <Folder Include="wwwroot\user\a4d38291-5bf8-4d35-9445-41be5f28d735\" />
+  </ItemGroup>
+
 </Project>

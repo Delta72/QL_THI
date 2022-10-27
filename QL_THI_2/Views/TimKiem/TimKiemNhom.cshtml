@@ -1,7 +1,14 @@
 ﻿@model IEnumerable<modelNhom>
 @{
-    ViewData["Title"] = "TimKiemNhom";
-    Layout = "~/Views/Shared/_MainLayout.cshtml";
+    var user = User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value;
+    if (user == "admin")
+    {
+        Layout = "~/Views/Shared/_MainLayout.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_UserLayout.cshtml";
+    }
 }
 <div class="card">
     <div class="card-header header-search">
@@ -87,8 +94,34 @@
                                 <option value="0">Tất cả</option>
                             </select>
                         </td>
-                        <td></td>
-                        <td></td>
+                        <td>Trạng thái:</td>
+                        <td>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       checked
+                                       name="inlineRadioOptions2"
+                                       id="inlineRadio4"
+                                       value="option4" />
+                                <label class="form-check-label" for="inlineRadio1">Tất cả</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="inlineRadioOptions2"
+                                       id="inlineRadio5"
+                                       value="option5" />
+                                <label class="form-check-label" for="inlineRadio2">Đã nộp</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="inlineRadioOptions2"
+                                       id="inlineRadio6"
+                                       value="option6" />
+                                <label class="form-check-label" for="inlineRadio2">Chưa nộp</label>
+                            </div>
+                        </td>
                     </tr>
                     <tr>
                         <td>

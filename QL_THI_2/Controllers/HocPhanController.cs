@@ -39,7 +39,7 @@ namespace QL_THI_2.Controllers
                 {
                     id = i.ID_MHP,
                     tenHocPhan = i.TEN_MHP,
-                    soTinChi = (int)i.TINCHI_MHP,
+                    soTinChi = (short)i.TINCHI_MHP,
                 };
                 L.Add(m);
             }
@@ -308,5 +308,6 @@ namespace QL_THI_2.Controllers
             }
             return Json(report);
         }
+
     }
 }

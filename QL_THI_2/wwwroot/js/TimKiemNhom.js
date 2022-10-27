@@ -163,6 +163,7 @@ function TimKiemNhom() {
     var nh = $('#selectNH').val();
     var date = $('#selectNT').val();
     var daThi = ''
+    var daNop = ''
     var gv = []
     if (document.getElementById('inlineRadio1').checked) {
         daThi = '0'
@@ -171,6 +172,13 @@ function TimKiemNhom() {
         daThi = '1'
     }
     else { daThi = '2' }
+    if (document.getElementById('inlineRadio4').checked) {
+        daNop = '0'
+    }
+    else if (document.getElementById('inlineRadio5').checked) {
+        daNop = '1'
+    }
+    else { daNop = '2' }
 
     var List = document.getElementById('divImg').getElementsByTagName("img");
     if (List.length > 0) {
@@ -190,6 +198,7 @@ function TimKiemNhom() {
             nh: nh,
             date: date,
             daThi: daThi,
+            daNop: daNop,
             gv: JSON.stringify(gv),
         },
         success: function (data) {

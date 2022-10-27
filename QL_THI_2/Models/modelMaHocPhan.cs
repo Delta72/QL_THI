@@ -9,6 +9,6 @@ namespace QL_THI_2.Models
     {
         public string id { get; set; }
         public string tenHocPhan { get; set; }
-        public int soTinChi { get; set; }
+        public short soTinChi { get; set; }
     }
 }

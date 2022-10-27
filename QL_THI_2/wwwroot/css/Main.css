@@ -238,6 +238,22 @@
         cursor: move;
     }
 
+#tableThemNhom {
+    counter-reset: section;
+}
+    #tableThemNhom .count:before {
+        counter-increment: section;
+        content: counter(section);
+    }
+
+    #tableThemNhom .count {
+        text-align: center;
+    }
+
+    #tableThemNhom tbody tr:hover {
+        cursor: move;
+    }
+
 #divThongTin li span {
     color: var(--blue)
 }
@@ -456,3 +472,43 @@
 #divTimKiemSV table tbody tr:hover {
     background-color: rgba(67, 89, 113, 0.1);
 }
+
+.table-mahocphan {
+    width: 50%;
+    margin: 0 auto;
+}
+
+.table-mahocphan thead tr th {
+    text-align: center;
+    font-weight: bold;
+    color: var(--blue);
+}
+
+    .table-mahocphan th i{
+        float: right;
+    }
+
+    .table-mahocphan th:hover {
+        cursor: pointer;
+    }
+
+.table-modal-mhp td:nth-child(1){
+    color: var(--blue);
+    font-weight: bold;
+}
+
+.table-modal-mhp td:nth-child(2) input{
+    border: 1px solid var(--rgb-grey);
+}
+
+.table-mahocphan td:nth-child(4) i:hover{
+    color: var(--orange);
+}
+
+.table-mahocphan tr:hover td{
+    color: var(--blue);
+}
+
+    .table-mahocphan tr:hover td:nth-child(1) {
+        font-weight: bold;
+    }
