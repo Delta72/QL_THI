@@ -33,11 +33,12 @@ namespace QL_THI_2.Controllers
         public IActionResult LayMaHocPhan()
         {
             List<modelMaHocPhan> L = new List<modelMaHocPhan>();
-            foreach(var i in db.MA_HOC_PHANs.OrderBy(a => a.ID_MHP))
+            foreach(var i in db.MA_HOC_PHANs.OrderBy(a => a.MA_MHP))
             {
                 modelMaHocPhan m = new modelMaHocPhan()
                 {
                     id = i.ID_MHP,
+                    ma = i.MA_MHP,
                     tenHocPhan = i.TEN_MHP,
                     soTinChi = (short)i.TINCHI_MHP,
                 };
@@ -55,7 +56,7 @@ namespace QL_THI_2.Controllers
                 // Them hoc phan
                 var str = jsonHP.Trim('[', ']');
                 dynamic j = JsonConvert.DeserializeObject(str);
-                string maHocPhan = j.maHocPhan;
+                int maHocPhan = j.maHocPhan;
                 short maHocKy = (short)j.maHocKy;
                 string namHocB = j.namHocB;
                 string namHocK = j.namHocK;
@@ -139,20 +140,7 @@ namespace QL_THI_2.Controllers
                 foreach (var i in db.HOC_PHAN_THIs.Where(a => a.HOCKY_HP == item.HOCKY_HP && a.NAMHOCB_HP == item.NAMHOCB_HP && a.NAMHOCK_HP == item.NAMHOCK_HP).OrderBy(a => a.ID_MHP))
                 {
                     modelHocPhan m = new modelHocPhan();
-                    m.id = i.ID_HP;
-                    m.soNhom = (int)i.SONHOM_HP;
-                    m.hocKy = (i.HOCKY_HP == 1) ? "Học kỳ I" : (i.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
-                    m.maHocPhan = new modelMaHocPhan()
-                    {
-                        id = i.ID_MHP,
-                        tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault()
-                    };
-                    m.namHocB = i.NAMHOCB_HP;
-                    m.namHocK = i.NAMHOCB_HP;
-                    m.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
-
-                    m.daNop = SoNhomDaNop(i.ID_HP);
-
+                    m = LayThongTinHP(i.ID_HP);
                     L.Add(m);
                 }
                 d.hocPhan = L;
@@ -204,6 +192,7 @@ namespace QL_THI_2.Controllers
                 m.id = H.ID_HP;
                 m.maHocPhan = new modelMaHocPhan();
                 m.maHocPhan.id = H.ID_MHP;
+                m.maHocPhan.ma = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.MA_MHP).First();
                 m.maHocPhan.tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).First();
                 m.hocKy = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
                 m.mHocKy = new modelHocKy()
@@ -213,9 +202,15 @@ namespace QL_THI_2.Controllers
                 };
                 m.namHocB = H.NAMHOCB_HP;
                 m.namHocK = H.NAMHOCK_HP;
+                m.soNhom = (int)H.SONHOM_HP;
                 m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
                 m.diemThanhPhan = new List<string>();
                 m.diemThanhPhan = (H.DIEMTHANHPHAN_HP.Split(" |").Where(a => a != "").ToList());
+                m.daNop = 0;
+                foreach(var i in db.NHOM_THIs.Where(a => a.ID_HP == m.id).ToList())
+                {
+                    if (i.DANOP_N == true) m.daNop++;
+                }
 
                 return m;
             }
@@ -233,9 +228,13 @@ namespace QL_THI_2.Controllers
                 H.NAMHOCB_HP = namHoc;
                 int n = int.Parse(namHoc); n = n + 1;
                 H.NAMHOCK_HP = n.ToString();
-                H.ID_MHP = maHocPhan;
+                H.ID_MHP = int.Parse(maHocPhan);
                 DateTime d = DateTime.Parse(hanNop);
-                H.DIEMTHANHPHAN_HP = thanhPhan + "TỔNG |";
+                H.HANNOP_HP = d;
+                if(thanhPhan != "same")
+                {
+                    H.DIEMTHANHPHAN_HP = thanhPhan + "TỔNG |";
+                }
                 db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 db.SaveChanges();
                 return Json(true);

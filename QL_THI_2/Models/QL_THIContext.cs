@@ -100,11 +100,6 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.HANNOP_HP).HasColumnType("datetime");
 
-                entity.Property(e => e.ID_MHP)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
                     .HasMaxLength(36)
@@ -140,7 +135,7 @@ namespace QL_THI_2.Models
 
                 entity.ToTable("MA_HOC_PHAN");
 
-                entity.Property(e => e.ID_MHP)
+                entity.Property(e => e.MA_MHP)
                     .HasMaxLength(20)
                     .IsUnicode(false);
 

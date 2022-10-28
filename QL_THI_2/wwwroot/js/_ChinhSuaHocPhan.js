@@ -47,7 +47,11 @@ function HienChinhSua(id) {
         },
         success: function (data) {
             if (data == "outdated") {
-                HienLoi("Đã quá hạn chỉnh sửa!")
+                document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
+                document.getElementById('txtTP').disabled = true;
+                document.getElementById('txtTPHPedit').innerHTML = '<span class="alert alert-danger">Đã hết thời hạn chỉnh sửa điểm thành phần</span>'
+                document.getElementById('divThanhPhanDiem').innerHTML = 'samee'
+                document.getElementById('divThanhPhanDiem').style.display = 'none'
             }
             else if (data == "error") {
                 HienLoi()
@@ -78,7 +82,7 @@ function LayDanhSachHocPhan(id) {
                 var select = document.getElementById('selectMHP')
                 var opt = document.createElement('option');
                 opt.value = data[i].id;
-                opt.innerHTML = data[i].id + ' - ' + data[i].tenHocPhan;
+                opt.innerHTML = data[i].ma + ' - ' + data[i].tenHocPhan;
                 if (data[i].id == id) {
                     opt.selected = 'selected'
                 }

@@ -144,8 +144,8 @@ function Luu(id) {
                 HienLoi("Có lỗi xảy ra, vui lòng thử lại")
             }
             else if (data == "excel") {
-                HienLoi("Tập tin excel không hợp lệ! Dữ liệu không thay đổi")
-                HuyBo(id)
+                alert("Tập tin excel không hợp lệ! Dữ liệu không thay đổi")
+                window.location.reload()
             }
             else {
                 window.location.reload()

@@ -7,7 +7,8 @@ namespace QL_THI_2.Models
 {
     public class modelMaHocPhan
     {
-        public string id { get; set; }
+        public int id { get; set; }
+        public string ma { get; set; }
         public string tenHocPhan { get; set; }
         public short soTinChi { get; set; }
     }

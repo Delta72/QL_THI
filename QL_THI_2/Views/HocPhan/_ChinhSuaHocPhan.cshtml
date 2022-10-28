@@ -27,7 +27,7 @@
                     Mã học phần:
                 </td>
                 <td>
-                    @Model.chiTietHP.maHocPhan.id
+                    @Model.chiTietHP.maHocPhan.ma
                 </td>
                 <td>
                     Tên học phần:
@@ -52,7 +52,7 @@
                 <td>
                     Điểm thành phần:
                 </td>
-                <td>
+                <td id="txtTPHPmain">
                     @for (int i = 1; i < Model.chiTietHP.diemThanhPhan.Count(); i++)
                     {
                         <span class="tpdiem badge badge-primary">
@@ -152,10 +152,10 @@
                 <td>
                     Điểm thành phần:
                 </td>
-                <td>
+                <td id="txtTPHPedit">
                     <div style="display: flex;">
                         <input type="text" class="form-control" id="txtTP" style="margin-right: 20px" placeholder="Thành phần điểm..." />
-                        <button type="button"
+                        <button type="button" id="btnThemTPHP"
                                 class="btn btn-icon btn-primary"
                                 onclick="ThemThanhPhan()">
                             <span class="tf-icons bx bx-plus"></span>

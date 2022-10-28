@@ -37,7 +37,7 @@ function LayDanhSachHocPhan() {
                 var select = document.getElementById('selectMHP')
                 var opt = document.createElement('option');
                 opt.value = data[i].id;
-                opt.innerHTML = data[i].id + ' - ' + data[i].tenHocPhan;
+                opt.innerHTML = data[i].ma + ' - ' + data[i].tenHocPhan;
                 select.appendChild(opt);
             }
         }

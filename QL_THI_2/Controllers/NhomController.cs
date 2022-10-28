@@ -69,7 +69,7 @@ namespace QL_THI_2.Controllers
             HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
             string hk = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
             string nh = H.NAMHOCB_HP.ToString() + " - " + H.NAMHOCK_HP.ToString();
-            string mon = H.ID_MHP + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
+            string mon = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.MA_MHP).FirstOrDefault() + " - " + db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).FirstOrDefault();
             D.hocPhan = hk + ", " + nh + " > " + mon;
 
             // Chi tiet hoc phan
@@ -330,33 +330,40 @@ namespace QL_THI_2.Controllers
                 thanhPhan = thanhPhan.Where(a => a != "").ToArray();
                 if (KiemTraExcel(m, idTK, currentDir, thanhPhan.Length))
                 {
-                    List<modelChiTietDiem> L = LayDiem(m, idTK, currentDir, thanhPhan.Length);
-                    // Xoa thong tin cu
-                    using(var dbtemp = new QL_THIContext())
+                    try
                     {
-                        foreach (var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == m.id))
+                        List<modelChiTietDiem> L = LayDiem(m, idTK, currentDir, thanhPhan.Length);
+                        // Xoa thong tin cu
+                        using (var dbtemp = new QL_THIContext())
                         {
-                            dbtemp.CHI_TIET_DIEMs.Remove(i);
-                        }
-                        dbtemp.SaveChanges();
-                    }
-                    // Luu thong tin moi
-                    using (var dbtemp = new QL_THIContext())
-                    {
-                        foreach (var i in L)
-                        {
-                            CHI_TIET_DIEM C = new CHI_TIET_DIEM()
+                            foreach (var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == m.id))
                             {
-                                ID_N = i.idNhom,
-                                MSSV_CTBT = i.mssv,
-                                DIEM_CTBT = i.diem,
-                            };
-                            dbtemp.CHI_TIET_DIEMs.Add(C);
+                                dbtemp.CHI_TIET_DIEMs.Remove(i);
+                            }
+                            dbtemp.SaveChanges();
                         }
-                        dbtemp.SaveChanges();
+                        // Luu thong tin moi
+                        using (var dbtemp = new QL_THIContext())
+                        {
+                            foreach (var i in L)
+                            {
+                                CHI_TIET_DIEM C = new CHI_TIET_DIEM()
+                                {
+                                    ID_N = i.idNhom,
+                                    MSSV_CTBT = i.mssv,
+                                    DIEM_CTBT = i.diem,
+                                };
+                                dbtemp.CHI_TIET_DIEMs.Add(C);
+                            }
+                            dbtemp.SaveChanges();
+                        }
+                        UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
+                        N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
                     }
-                    UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
-                    N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
+                    catch (Exception)
+                    {
+                        result = "excel";
+                    }
                 }
                 else
                 {

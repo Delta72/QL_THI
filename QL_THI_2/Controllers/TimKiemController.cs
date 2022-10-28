@@ -38,6 +38,7 @@ namespace QL_THI_2.Controllers
                 modelMaHocPhan m = new modelMaHocPhan()
                 {
                     id = i.ID_MHP,
+                    ma = i.MA_MHP,
                     tenHocPhan = i.TEN_MHP,
                 };
                 MHP.Add(m);
@@ -108,7 +109,7 @@ namespace QL_THI_2.Controllers
                 foreach (var i in Na.ToList())
                 {
                     HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == i.ID_HP).First();
-                    if (mhp != H.ID_MHP)
+                    if (int.Parse(mhp) != H.ID_MHP)
                     {
                         Na.Remove(i);
                     }
@@ -387,7 +388,7 @@ namespace QL_THI_2.Controllers
                 {
                     NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First();
                     HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == N.ID_HP).First();
-                    if (mhp != H.ID_MHP)
+                    if (int.Parse(mhp) != H.ID_MHP)
                     {
                         Na.Remove(i);
                     }

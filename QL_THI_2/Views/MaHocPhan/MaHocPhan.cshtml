@@ -7,7 +7,7 @@
 <div class="card">
     <div class="card-header">
         <h4>Danh sách mã học phần</h4>
-        <button class="btn btn-sm btn-primary" 
+        <button class="btn btn-sm btn-primary"
                 onclick="ResetModal()"
                 data-bs-toggle="modal"
                 data-bs-target="#modalCenter">
@@ -28,7 +28,7 @@
                 {
                     <tr>
                         <td>
-                            @i.id
+                            @i.ma
                         </td>
                         <td>
                             @i.tenHocPhan
@@ -37,7 +37,8 @@
                             @i.soTinChi
                         </td>
                         <td class="text-center">
-                            <i class="bx bx-edit-alt cursor-pointer" onclick="ChinhSuaMHP(this)"></i>
+                            <i class="bx bx-edit-alt cursor-pointer" onclick="ChinhSuaMHP(this)" 
+                               data-bs-toggle="modal" data-bs-target="#modalEditMHP"></i>
                         </td>
                     </tr>
                 }
@@ -88,7 +89,7 @@
                                        id="textTC"
                                        class="form-control"
                                        autocomplete="off" min="0"
-                                       placeholder="Nhập tên học phần..." />
+                                       placeholder="Nhập số tín chỉ..." />
                             </td>
                         </tr>
                     </table>
@@ -99,6 +100,65 @@
                     Đóng
                 </button>
                 <button type="button" class="btn btn-primary" onclick="ThemMHP()" id="btnLuuMHP">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- them nhom modal -->
+
+<!-- them hp modal -->
+<div class="modal fade" id="modalEditMHP" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Thêm mã học phần</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <span class="alert-danger" id="span-existed" style="display: none">*Mã học phần đã tồn tại</span>
+                    <table class="table table-borderless table-responsive table-modal-mhp">
+                        <tr>
+                            <td>Mã học phần:</td>
+                            <td>
+                                <input type="text"
+                                       id="textEditMHP"
+                                       class="form-control"
+                                       autocomplete="off"
+                                       placeholder="Nhập mã học phần..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tên học phần:</td>
+                            <td>
+                                <input type="text"
+                                       id="textEditTHP"
+                                       class="form-control"
+                                       autocomplete="off"
+                                       placeholder="Nhập tên học phần..." />
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Số tín chỉ:</td>
+                            <td>
+                                <input type="number"
+                                       id="textEditTC"
+                                       class="form-control"
+                                       autocomplete="off" min="0"
+                                       placeholder="Nhập số tín chỉ..." />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-primary" onclick="LuuChinhSua()" id="btnEditMHP">Lưu</button>
             </div>
         </div>
     </div>
@@ -163,12 +223,71 @@
     // chinh sua mhp
     function ChinhSuaMHP(i) {
         var row = i.closest('tr')
-        var table = row.closest('table')
-        for (var x = 0; x < row.cells.length; x++) {
-            row.cells[x].style.border = '1px solid rgba(67, 89, 113, 0.5)'
+        var id = row.cells[0].innerText
+        var ten = row.cells[1].innerText
+        var tc = row.cells[2].innerText
+        $('#textEditMHP').val(id)
+        $('#textEditTHP').val(ten)
+        $('#textEditTC').val(tc)
+
+        $.ajax({
+            url: '/MaHocPhan/KiemTraChinhSua',
+            type: 'post',
+            data: {
+                id: id,
+            },
+            success: function (data) {
+                if (data != true) {
+                    document.getElementById('textEditMHP').disabled = true;
+                }
+                else {
+                    document.getElementById('textEditMHP').disabled = false;
+                }
+            }
+        })
+    }
+
+    // luu chinh sua
+    function LuuChinhSua() {
+        var ma = $('#textMHP').val()
+        var ten = $('#textTHP').val()
+        var tc = $('#textTC').val()
+        var existed = false;
+        for (var i in data) {
+            if (data[i].id.toLowerCase() == ma.toLowerCase()) {
+                existed = true;
+            }
         }
-        var id = row.cells[0].innerHTML
-        row.cells[0].contentEditable = true;
-        row.cells[0].focus()
+        if (existed == true) {
+            document.getElementById('span-existed').style.display = 'unset'
+        }
+        else {
+            document.getElementById('span-existed').style.display = 'none'
+        }
+
+        if (existed == false) {
+            if (ma != null && ten != null && tc != null) {
+                $.ajax({
+                    url: '/MaHocPhan/ChinhSuaMHP',
+                    type: 'post',
+                    data: {
+                        ma: ma,
+                        ten: ten,
+                        tc: tc,
+                    },
+                    beforeSend: function () {
+                        LoadingButton('btnEditMHP')
+                    },
+                    success: function (data) {
+                        if (data == 'error') {
+                            HienLoi()
+                        }
+                        else {
+                            window.location.reload()
+                        }
+                    }
+                })
+            }
+        }
     }
 </script>

@@ -12,7 +12,8 @@ namespace QL_THI_2.Models
             HOC_PHAN_THIs = new HashSet<HOC_PHAN_THI>();
         }
 
-        public string ID_MHP { get; set; }
+        public int ID_MHP { get; set; }
+        public string MA_MHP { get; set; }
         public string TEN_MHP { get; set; }
         public short? TINCHI_MHP { get; set; }
 

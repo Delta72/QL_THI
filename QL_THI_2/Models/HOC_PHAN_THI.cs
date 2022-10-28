@@ -14,7 +14,7 @@ namespace QL_THI_2.Models
 
         public string ID_HP { get; set; }
         public string ID_TK { get; set; }
-        public string ID_MHP { get; set; }
+        public int ID_MHP { get; set; }
         public short? HOCKY_HP { get; set; }
         public string NAMHOCB_HP { get; set; }
         public string NAMHOCK_HP { get; set; }

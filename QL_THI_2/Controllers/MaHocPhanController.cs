@@ -37,7 +37,7 @@ namespace QL_THI_2.Controllers
             {
                 MA_HOC_PHAN M = new MA_HOC_PHAN()
                 {
-                    ID_MHP = ma,
+                    MA_MHP = ma,
                     TEN_MHP = ten,
                     TINCHI_MHP = short.Parse(tc)
                 };
@@ -49,6 +49,28 @@ namespace QL_THI_2.Controllers
             {
                 return Json("error");
             }
+        }
+
+        [NoDirectAccess]
+        public IActionResult KiemTraChinhSua(string id)
+        {
+            MA_HOC_PHAN m = db.MA_HOC_PHANs.Where(a => a.ID_MHP == int.Parse(id)).First();
+            if(db.HOC_PHAN_THIs.Where(a => a.ID_MHP == m.ID_MHP).Count() != 0)
+            {
+                return Json(false);
+            }
+            else
+            {
+                return Json(true);
+            }
+        }
+
+        [NoDirectAccess]
+        [Authorize(Roles = "admin")]
+        public IActionResult ChinhSuaMHP(string ma, string ten, string tc)
+        {
+            short stc = short.Parse(tc);
+            return View();
         }
     }
 }
