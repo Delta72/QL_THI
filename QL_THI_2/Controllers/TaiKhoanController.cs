@@ -9,6 +9,9 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using System.IO;
+using Microsoft.AspNetCore.Http;
+using SixLabors.ImageSharp.Processing;
+using SixLabors.ImageSharp;
 
 namespace QL_THI_2.Controllers
 {
@@ -287,6 +290,98 @@ namespace QL_THI_2.Controllers
             TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).First();
             modelTaiKhoan m = LayThongTinTaiKhoan(T);
             return Json(m);
+        }
+
+        [Authorize]
+        public IActionResult ChiTietTaiKhoan()
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).FirstOrDefault();
+            modelTaiKhoan m = LayThongTinTaiKhoan(T);
+            return View(m);
+        }
+
+        [Authorize]
+        [NoDirectAccess]
+        public IActionResult SuaThongTin(modelTaiKhoan m)
+        {
+            var result = "success";
+            try
+            {
+                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).First();
+                TAI_KHOAN T2 = db.TAI_KHOANs.Where(a => a.DN_TK == m.dn).FirstOrDefault();
+                if (T2 != null && T2.ID_TK != id)
+                {
+                    result = "dn";
+                }
+                else
+                {
+                    db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    T.DN_TK = m.dn;
+                    T.HOTEN_TK = m.hoTen;
+                    T.EMAIL_TK = m.email;
+
+                    if(m.img != null)
+                    {
+                        UploadController.DeleteFile(T.ANHDAIDIEN_TK, Directory.GetCurrentDirectory());
+                        T.ANHDAIDIEN_TK = UploadImage(m.img);
+                    }
+
+                    db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    db.SaveChanges();
+                    result = "success";
+                }
+            }
+            catch (Exception)
+            {
+                result = "error";
+            }
+            return Json(result);
+        }
+
+        [NoDirectAccess]
+        public string UploadImage(IFormFile img)
+        {
+            string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var filename = id + System.IO.Path.GetExtension(img.FileName);
+            var filepath = Directory.GetCurrentDirectory() + "\\wwwroot\\user\\" + id + "\\" + filename;
+            using var image = SixLabors.ImageSharp.Image.Load(img.OpenReadStream());
+            image.Mutate(x => x.Resize(200, 200));
+            image.Save(filepath);
+            var report = "\\user\\" + id + "\\" + filename;
+            return report;
+        }
+
+        [Authorize]
+        [NoDirectAccess]
+        public IActionResult DoiMatKhau(string p1, string p2)
+        {
+            var result = "success";
+            try
+            {
+                string id = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                TAI_KHOAN T = db.TAI_KHOANs.Where(a => a.ID_TK == id).First();
+                var pass = Rijindael.Decrypt(T.MK_TK, T.ID_TK.Replace("-", ""));
+                if (pass != p1)
+                {
+                    result = "mk";
+                }
+                else
+                {
+                    db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    T.MK_TK = Rijindael.Encrypt(p2, T.ID_TK.Replace("-", ""));
+                    db.Entry(T).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    db.SaveChanges();
+                    HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+                    result = "success";
+                }
+            }
+            catch (Exception)
+            {
+                result = "error";
+            }
+            return Json(result);
         }
     }
 }

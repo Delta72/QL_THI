@@ -16,7 +16,7 @@ namespace QL_THI_2.Controllers
         QL_THIContext db = new QL_THIContext();
 
         [NoDirectAccess]
-        public IActionResult LuuChiTietDiem(string str)
+        public IActionResult LuuChiTietDiem(string lydo, string str)
         {
             var result = "success";
             dynamic j = JsonConvert.DeserializeObject(str);
@@ -24,15 +24,31 @@ namespace QL_THI_2.Controllers
             try
             {
                 string id = "";
-                
+
                 foreach(var i in j) { id = i.id; }
-                using (var temp = new QL_THIContext())
+
+                CHINH_SUA_DIEM CS = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == id).FirstOrDefault();
+                int scs = 0;
+                if(CS == null)
                 {
-                    foreach (var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == id))
+                    CS = new CHINH_SUA_DIEM();
+                    CS.ID_N = id;
+                    CS.LANCHINHSUA_V = 0;
+                    CS.LYDO_V = lydo;
+                    CS.THOIGIAN_V = DateTime.Now;
+                }
+                else
+                {
+                    CHINH_SUA_DIEM CS2 = new CHINH_SUA_DIEM()
                     {
-                        temp.CHI_TIET_DIEMs.Remove(i);
-                    }
-                    temp.SaveChanges();
+                        ID_N = CS.ID_N,
+                        LANCHINHSUA_V = CS.LANCHINHSUA_V + 1,
+                        THOIGIAN_V = DateTime.Now,
+                        LYDO_V = lydo,
+                    };
+                    db.CHINH_SUA_DIEMs.Add(CS2);
+                    db.SaveChanges();
+                    scs = CS2.LANCHINHSUA_V;
                 }
 
                 using (var temp = new QL_THIContext())
@@ -43,6 +59,7 @@ namespace QL_THI_2.Controllers
                         C.ID_N = i.id;
                         C.MSSV_CTBT = i.mssv;
                         C.DIEM_CTBT = i.diem;
+                        C.SOCHINHSUA_CTBT = scs;
                         temp.CHI_TIET_DIEMs.Add(C);
                     }
                     temp.SaveChanges();

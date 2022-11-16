@@ -512,3 +512,7 @@
     .table-mahocphan tr:hover td:nth-child(1) {
         font-weight: bold;
     }
+
+.cttk input{
+    border: 1px solid var(--rgb-grey);
+}

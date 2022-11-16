@@ -1,0 +1,132 @@
+﻿@model modelTaiKhoan
+@{
+    var user = User.FindFirst(System.Security.Claims.ClaimTypes.Role).Value;
+    Layout = (user == "admin") ? "~/Views/Shared/_MainLayout.cshtml" : "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Chi tiết tài khoản</h4>
+    </div>
+    <div class="card-body cttk">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <!-- Account -->
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                        <img src="@Model.avatar"
+                             alt="user-avatar"
+                             class="d-block rounded"
+                             height="100"
+                             width="100"
+                             id="uploadedAvatar" />
+                        <div class="button-wrapper">
+                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                <span class="d-none d-sm-block">Thay đổi ảnh đại diện</span>
+                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                <input type="file"
+                                       id="upload"
+                                       class="account-file-input"
+                                       hidden
+                                       accept="image/png, image/jpeg" />
+                            </label>
+                            <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                                <i class="bx bx-reset d-block d-sm-none"></i>
+                                <span class="d-none d-sm-block"><i class='bx bx-reset'></i></span>
+                            </button>
+                            <p class="text-muted mb-0">Cho phép JPG, GIF hoặc PNG. Tối đa 800K</p>
+                        </div>
+                    </div>
+                </div>
+                <hr class="my-0" />
+                <div class="card-body">
+                    <form id="formAccountSettings" method="POST" onsubmit="return false">
+                        <span class="alert-danger" id="spanThongTin"></span>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="firstName" class="form-label">Tên đăng nhập</label>
+                                <input class="form-control"
+                                       type="text"
+                                       id="TK_DN"
+                                       name="firstName"
+                                       value="@Model.dn"
+                                       autofocus />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="lastName" class="form-label">Họ và tên</label>
+                                <input class="form-control" type="text" name="lastName" id="TK_HT" value="@Model.hoTen" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label for="email" class="form-label">E-mail</label>
+                                <input class="form-control"
+                                       type="text"
+                                       id="TK_Email"
+                                       name="email"
+                                       value="@Model.email"
+                                       placeholder="exa.doe@example.com" />
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button id="btnThongTin" class="btn btn-primary me-2" onclick="XNDoiThongTin()">Lưu thay đổi</button>
+                            <button type="reset" class="btn btn-outline-secondary">Hủy</button>
+                        </div>
+                    </form>
+                    <!-- /Account -->
+                </div>
+                <h5 class="card-header">Đổi mật khẩu</h5>
+                <div class="card-body">
+                    <form onsubmit="return false; XNDoiMK();">
+                        <span class="alert-danger" id="spanMK"></span>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Mật khẩu cũ</label>
+                                <input class="form-control"
+                                       type="password"
+                                       id="oldPass"
+                                       value=""
+                                       placeholder="*****************" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Mật khẩu mới</label>
+                                <input class="form-control"
+                                       type="password"
+                                       id="newPass"
+                                       value="" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label">Xác nhận mật khẩu mới</label>
+                                <input class="form-control"
+                                       type="password"
+                                       id="cNewPass"
+                                       value="" />
+                            </div>
+                        </div>
+                        <div class="mt-2">
+                            <button id="btnMK" class="btn btn-warning me-2" onclick="XNDoiMK()">Lưu thay đổi</button>
+                            <button type="reset" class="btn btn-outline-secondary">Hủy</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script asp-append-version="true">
+    if ('@user' == 'admin') {
+        Active(99, 99);
+    }
+    else {
+        Active(99, 'TK');
+    }
+</script>
+<script src="~/js/ChiTietTaiKhoan.js" asp-append-version="true"></script>
+
+<script src="/template/assets/js/pages-account-settings-account.js"></script>

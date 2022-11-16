@@ -135,6 +135,7 @@
 <div class="col-xxl">
     <div class="card mb-4">
         <h5 class="card-header">Chi tiết điểm của nhóm</h5>
+
         <div class="card-body" id="divChiTietDiem">
             <table class="table table-sm table-edit" id="tableDiemThi">
                 <thead>
@@ -148,25 +149,7 @@
                     </tr>
                 </thead>
                 <tbody class="">
-                    @if (Model.diem.Count > 0)
-                    {
-                        @foreach (var item in Model.diem)
-                        {
-                            <tr>
-                                <td style="width: 50px; text-align: center" class="count">
-                                </td>
-                                <td class="editabletd" style="width: 200px;text-align: left">
-                                    @item.mssv
-                                </td>
-                                @foreach (var i in item.diem)
-                                {
-                                    <td class="editabletd editDiem">
-                                        @i
-                                    </td>
-                                }
-                            </tr>
-                        }
-                    }
+                    
                 </tbody>
             </table>
         </div>

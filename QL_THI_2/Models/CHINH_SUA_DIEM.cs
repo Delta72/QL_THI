@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace QL_THI_2.Models
 {
-    public partial class CHI_TIET_DIEM
+    public partial class CHINH_SUA_DIEM
     {
         public string ID_N { get; set; }
-        public string MSSV_CTBT { get; set; }
-        public int SOCHINHSUA_CTBT { get; set; }
-        public string DIEM_CTBT { get; set; }
+        public int LANCHINHSUA_V { get; set; }
+        public DateTime? THOIGIAN_V { get; set; }
+        public string LYDO_V { get; set; }
 
         public virtual NHOM_THI ID_NNavigation { get; set; }
     }

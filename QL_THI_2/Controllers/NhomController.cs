@@ -94,7 +94,7 @@ namespace QL_THI_2.Controllers
             modelNhom m = new modelNhom();
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             m = LayThongTinNhom(N);
-            m.diem = new List<modelDiem>();
+            m.diem = new List<DanhSachDiem>();
             m.diem = LayThongTinDiem(N.ID_N);
             m.doThi = VeDoThi(m.diem);
             return View(m);
@@ -144,54 +144,82 @@ namespace QL_THI_2.Controllers
         }
 
         [NoDirectAccess]
-        public List<modelDiem> LayThongTinDiem(string idN)
+        public List<DanhSachDiem> LayThongTinDiem(string idN)
         {
-            List<modelDiem> L = new List<modelDiem>();
-            foreach(var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == idN).OrderBy(a => a.MSSV_CTBT))
+            List<DanhSachDiem> L = new List<DanhSachDiem>();
+            CHINH_SUA_DIEM csd = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == idN).OrderBy(a => a.LANCHINHSUA_V).LastOrDefault();
+            if (csd != null)
             {
-                modelDiem m = new modelDiem();
-                m.mssv = i.MSSV_CTBT;
-                m.diem = new List<double>();
-                string[] str = i.DIEM_CTBT.Split(" ");
-                foreach(var s in str)
+                int max = (csd == null) ? 0 : (int)csd.LANCHINHSUA_V;
+                for (int i = 0; i <= max; i++)
                 {
-                    double d = 0;
-                    if (double.TryParse(s, out d)) m.diem.Add(d);
+                    List<CHINH_SUA_DIEM> Lcsd = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == idN && a.LANCHINHSUA_V == i).ToList();
+                    foreach (var item in Lcsd)
+                    {
+                        List<CHI_TIET_DIEM> Lctd = db.CHI_TIET_DIEMs.Where(a => a.ID_N == idN & a.SOCHINHSUA_CTBT == item.LANCHINHSUA_V).ToList();
+                        DanhSachDiem D = new DanhSachDiem();
+                        D.ds = new List<modelDiem>();
+                        if(item.LYDO_V != "Xóa file excel")
+                        {
+                            foreach (var val in Lctd)
+                            {
+                                modelDiem m = new modelDiem();
+                                m.mssv = val.MSSV_CTBT;
+                                m.diem = new List<double>();
+                                string[] str = val.DIEM_CTBT.Split(" ");
+                                foreach (var s in str)
+                                {
+                                    double d = 0;
+                                    if (double.TryParse(s, out d)) m.diem.Add(d);
+                                }
+                                D.ds.Add(m);
+                            }
+                        }
+                        D.lanChinhSua = (int)item.LANCHINHSUA_V;
+                        D.lyDo = item.LYDO_V;
+                        D.ngaySua = ((DateTime)item.THOIGIAN_V).ToString("dd/MM/yyyy");
+                        L.Add(D);
+                    }
                 }
-                L.Add(m);
             }
             return L;
         }
 
         [NoDirectAccess]
-        public DoThi VeDoThi(List<modelDiem> m)
+        public List<DoThi> VeDoThi(List<DanhSachDiem> m)
         {
-            DoThi D = new DoThi();
-            D.soLuong = new List<int>();
-            D.chiTietDiem = new List<double>();
-
-            List<double> d = new List<double>();
-            foreach(var i in m)
+            List<DoThi> DT = new List<DoThi>();
+            foreach(var val in m)
             {
-                double a = 0;
-                foreach(var x in i.diem) { a = x; }
-                d.Add(a);
-            }
+                DoThi D = new DoThi();
+                D.soLuong = new List<int>();
+                D.chiTietDiem = new List<double>();
 
-            foreach(var i in d.OrderBy(a => a).Distinct())
-            {
-                int c = 0;
-                foreach(var x in d)
+                List<double> d = new List<double>();
+                foreach (var i in val.ds)
                 {
-                    if(x == i)
-                    {
-                        c++;
-                    }
+                    double a = 0;
+                    foreach (var x in i.diem) { a = x; }
+                    d.Add(a);
                 }
-                D.soLuong.Add(c);
-                D.chiTietDiem.Add(i);
+
+                foreach (var i in d.OrderBy(a => a).Distinct())
+                {
+                    int c = 0;
+                    foreach (var x in d)
+                    {
+                        if (x == i)
+                        {
+                            c++;
+                        }
+                    }
+                    D.soLuong.Add(c);
+                    D.chiTietDiem.Add(i);
+                }
+                DT.Add(D);
             }
-            return D;
+            
+            return DT;
         }
 
         [Authorize]
@@ -254,9 +282,10 @@ namespace QL_THI_2.Controllers
         {
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             modelNhom m = LayThongTinNhom(N);
-            m.diem = new List<modelDiem>();
+            m.diem = new List<DanhSachDiem>();
             m.diem = LayThongTinDiem(N.ID_N);
             m.doThi = VeDoThi(m.diem);
+            ViewData["Diem"] = (m.diem.Count > 0) ? m.diem.Last().lanChinhSua : 0;
             return View(m);
         }
 
@@ -266,7 +295,7 @@ namespace QL_THI_2.Controllers
         {
             NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == id).FirstOrDefault();
             modelNhom m = LayThongTinNhom(N);
-            m.diem = new List<modelDiem>();
+            m.diem = new List<DanhSachDiem>();
             m.diem = LayThongTinDiem(N.ID_N);
             m.doThi = VeDoThi(m.diem);
             List<string> h = new List<string>();
@@ -333,18 +362,33 @@ namespace QL_THI_2.Controllers
                     try
                     {
                         List<modelChiTietDiem> L = LayDiem(m, idTK, currentDir, thanhPhan.Length);
-                        // Xoa thong tin cu
-                        using (var dbtemp = new QL_THIContext())
-                        {
-                            foreach (var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == m.id))
-                            {
-                                dbtemp.CHI_TIET_DIEMs.Remove(i);
-                            }
-                            dbtemp.SaveChanges();
-                        }
+                        var m2 = L.First(); var idN = m2.idNhom;
                         // Luu thong tin moi
                         using (var dbtemp = new QL_THIContext())
                         {
+                            CHINH_SUA_DIEM CS = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == idN).OrderBy(a => a.LANCHINHSUA_V).LastOrDefault();
+                            int scs = 0;
+                            if(CS == null)
+                            {
+                                CS = new CHINH_SUA_DIEM();
+                                CS.ID_N = idN;
+                                CS.LANCHINHSUA_V = 0;
+                                CS.LYDO_V = "Thêm file excel";
+                                CS.THOIGIAN_V = DateTime.Now;
+                                dbtemp.CHINH_SUA_DIEMs.Add(CS);
+                            }
+                            else
+                            {
+                                CHINH_SUA_DIEM CS2 = new CHINH_SUA_DIEM()
+                                {
+                                    ID_N = CS.ID_N,
+                                    LANCHINHSUA_V = CS.LANCHINHSUA_V + 1,
+                                    THOIGIAN_V = DateTime.Now,
+                                    LYDO_V = "Cập nhật file excel",
+                                };
+                                dbtemp.CHINH_SUA_DIEMs.Add(CS2);
+                                scs = CS2.LANCHINHSUA_V;
+                            }
                             foreach (var i in L)
                             {
                                 CHI_TIET_DIEM C = new CHI_TIET_DIEM()
@@ -352,12 +396,16 @@ namespace QL_THI_2.Controllers
                                     ID_N = i.idNhom,
                                     MSSV_CTBT = i.mssv,
                                     DIEM_CTBT = i.diem,
+                                    SOCHINHSUA_CTBT = scs,
                                 };
                                 dbtemp.CHI_TIET_DIEMs.Add(C);
                             }
                             dbtemp.SaveChanges();
                         }
-                        UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
+                        if(N.LINKEXCELDIEM_N != null)
+                        {
+                            UploadController.DeleteFile(N.LINKEXCELDIEM_N, currentDir);
+                        }
                         N.LINKEXCELDIEM_N = UploadController.UploadFile(m.fileExcel, m.id, idTK, currentDir);
                     }
                     catch (Exception)
@@ -382,8 +430,6 @@ namespace QL_THI_2.Controllers
                 : true;
             if (N.LINKELEARNING_N != null) daNop = true;
             N.DANOP_N = daNop;
-
-            
 
             db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             db.SaveChanges();
@@ -577,12 +623,17 @@ namespace QL_THI_2.Controllers
                 if (type == "excel")
                 {
                     UploadController.DeleteFile(N.LINKEXCELDIEM_N, Directory.GetCurrentDirectory());
-                    using(var dtb = new QL_THIContext())
+                    using (var dtb = new QL_THIContext())
                     {
-                        foreach(var i in dtb.CHI_TIET_DIEMs.Where(a => a.ID_N == N.ID_N))
+                        CHINH_SUA_DIEM C = dtb.CHINH_SUA_DIEMs.Where(a => a.ID_N == N.ID_N).OrderBy(a => a.LANCHINHSUA_V).Last();
+                        CHINH_SUA_DIEM C2 = new CHINH_SUA_DIEM()
                         {
-                            dtb.Remove(i);
-                        }
+                            ID_N = C.ID_N,
+                            LANCHINHSUA_V = C.LANCHINHSUA_V + 1,
+                            THOIGIAN_V = DateTime.Now,
+                            LYDO_V = "Xóa file excel"
+                        };
+                        dtb.CHINH_SUA_DIEMs.Add(C2);
                         dtb.SaveChanges();
                     }
                     N.LINKEXCELDIEM_N = null;

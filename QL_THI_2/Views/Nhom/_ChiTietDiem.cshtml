@@ -11,6 +11,28 @@
             </button>
         </h5>
         <div class="card-body" id="bodyCard">
+            <h4>Lịch sử chỉnh sửa</h4>
+            <table class="table table-sm table-hover" style="width: 50%">
+                <thead>
+                    <tr>
+                        <td><strong>STT</strong></td>
+                        <td><strong>Lý do</strong></td>
+                        <td><strong>Thời gian</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model.diem)
+                    {
+                        <tr class="cursor-pointer">
+                            <td>@i.lanChinhSua</td>
+                            <td>@i.lyDo</td>
+                            <td>@i.ngaySua</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <br />
+            <h4>Chi tiết</h4>
             <table class="table table-sm table-edit" id="tableDiemThi">
                 <thead>
                     <tr>
@@ -23,32 +45,31 @@
                     </tr>
                 </thead>
                 <tbody class="">
+                    @{ var stt = ViewData["Diem"]; }
                     @if (Model.diem.Count > 0)
                     {
-                        @foreach (var item in Model.diem)
+                        @foreach (var i in (Model.diem.Where(a => a.lanChinhSua == (int)stt)).FirstOrDefault().ds)
                         {
                             <tr>
-                                <td style="width: 50px; text-align: center" class="count">
+                                <td class="count" style="text-align: center"></td>
+                                <td>
+                                    @i.mssv
                                 </td>
-                                <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left">
-                                    @item.mssv
-                                </td>
-                                @foreach (var i in item.diem)
+                                @foreach (var d in i.diem)
                                 {
-                                    <td class="editabletd editDiem" contenteditable="true">
-                                        @i
+                                    <td>
+                                        @d
                                     </td>
                                 }
-                                <td class="cursorPointer">
-                                    <i class="fa fa-times" onclick="XoaHang(this)"></i>
-                                </td>
                             </tr>
                         }
                     }
+
                     <tr onclick="ThemHangDiem(@Model.thanhPhan.Count(), this)">
                         <td style="width: 50px; text-align: center" class="count">
                         </td>
                         <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left" placeholder="...">
+                            ...
                         </td>
                         @foreach (var i in Model.thanhPhan)
                         {
@@ -83,28 +104,7 @@
             </tr>
         </thead>
         <tbody class="">
-            @if (Model.diem.Count > 0)
-            {
-                @foreach (var item in Model.diem)
-                {
-                    <tr>
-                        <td style="width: 50px; text-align: center" class="count">
-                        </td>
-                        <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left">
-                            @item.mssv
-                        </td>
-                        @foreach (var i in item.diem)
-                        {
-                            <td class="editabletd editDiem" contenteditable="true">
-                                @i
-                            </td>
-                        }
-                        <td class="cursorPointer">
-                            <i class="fa fa-times" onclick="XoaHang(this)"></i>
-                        </td>
-                    </tr>
-                }
-            }
+            
             <tr onclick="ThemHangDiem(@Model.thanhPhan.Count(), this)">
                 <td style="width: 50px; text-align: center" class="count">
                 </td>
@@ -135,6 +135,7 @@
             <div class="modal-body">
                 <h4>Xác nhận chỉnh sửa?</h4>
                 <small style="color: red">*Tập tin Excel sẽ được thay đổi theo thông tin trong bảng này</small>
+                <input class="form-control" id="txtLyDo" placeholder="Nhập lý do chỉnh sửa..."/>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">

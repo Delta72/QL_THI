@@ -17,6 +17,7 @@ namespace QL_THI_2.Models
         {
         }
 
+        public virtual DbSet<CHINH_SUA_DIEM> CHINH_SUA_DIEMs { get; set; }
         public virtual DbSet<CHI_TIET_DIEM> CHI_TIET_DIEMs { get; set; }
         public virtual DbSet<HINH_THUC_THI> HINH_THUC_THIs { get; set; }
         public virtual DbSet<HOC_PHAN_THI> HOC_PHAN_THIs { get; set; }
@@ -38,9 +39,28 @@ namespace QL_THI_2.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "SQL_Latin1_General_CP1_CI_AS");
 
+            modelBuilder.Entity<CHINH_SUA_DIEM>(entity =>
+            {
+                entity.HasKey(e => new { e.ID_N, e.LANCHINHSUA_V });
+
+                entity.ToTable("CHINH_SUA_DIEM");
+
+                entity.Property(e => e.ID_N)
+                    .HasMaxLength(36)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.THOIGIAN_V).HasColumnType("datetime");
+
+                entity.HasOne(d => d.ID_NNavigation)
+                    .WithMany(p => p.CHINH_SUA_DIEMs)
+                    .HasForeignKey(d => d.ID_N)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CHINH_SUA_DIEM_NHOM_THI");
+            });
+
             modelBuilder.Entity<CHI_TIET_DIEM>(entity =>
             {
-                entity.HasKey(e => new { e.ID_N, e.MSSV_CTBT })
+                entity.HasKey(e => new { e.ID_N, e.MSSV_CTBT, e.SOCHINHSUA_CTBT })
                     .HasName("PK_CHI_TIET_BAI_THI")
                     .IsClustered(false);
 
@@ -103,7 +123,8 @@ namespace QL_THI_2.Models
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
                     .HasMaxLength(36)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.NAMHOCB_HP)
                     .HasMaxLength(4)
@@ -168,7 +189,8 @@ namespace QL_THI_2.Models
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
                     .HasMaxLength(36)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.LINKELEARNING_N)
                     .HasMaxLength(4000)
@@ -220,7 +242,8 @@ namespace QL_THI_2.Models
 
                 entity.Property(e => e.ID_TK)
                     .HasMaxLength(36)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.ANHDAIDIEN_TK)
                     .HasMaxLength(500)
@@ -258,7 +281,8 @@ namespace QL_THI_2.Models
                 entity.Property(e => e.ID_TK)
                     .IsRequired()
                     .HasMaxLength(36)
-                    .IsUnicode(false);
+                    .IsUnicode(false)
+                    .IsFixedLength(true);
 
                 entity.Property(e => e.THOIGIAN_TB).HasColumnType("datetime");
 
