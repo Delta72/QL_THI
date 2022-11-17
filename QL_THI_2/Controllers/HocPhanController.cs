@@ -204,6 +204,7 @@ namespace QL_THI_2.Controllers
                 m.namHocK = H.NAMHOCK_HP;
                 m.soNhom = (int)H.SONHOM_HP;
                 m.hanNop = ((DateTime)H.HANNOP_HP).ToString("dd/MM/yyyy");
+                m.dateHanNop = (DateTime)H.HANNOP_HP;
                 m.diemThanhPhan = new List<string>();
                 m.diemThanhPhan = (H.DIEMTHANHPHAN_HP.Split(" |").Where(a => a != "").ToList());
                 m.daNop = 0;

@@ -97,6 +97,19 @@ namespace QL_THI_2.Controllers
             m.diem = new List<DanhSachDiem>();
             m.diem = LayThongTinDiem(N.ID_N);
             m.doThi = VeDoThi(m.diem);
+            ViewData["lichSu"] = (m.diem.Count() - 1);
+            return View(m);
+        }
+
+        [NoDirectAccess]
+        public IActionResult HienLichSuNhom(string stt, string idN)
+        {
+            NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == idN).FirstOrDefault();
+            modelNhom m = LayThongTinNhom(N);
+            m.diem = new List<DanhSachDiem>();
+            m.diem = LayThongTinDiem(N.ID_N);
+            m.doThi = VeDoThi(m.diem);
+            ViewData["lichSu"] = int.Parse(stt);
             return View(m);
         }
 
@@ -118,6 +131,7 @@ namespace QL_THI_2.Controllers
                 m.taiKhoan.avatar = db.TAI_KHOANs.Where(a => a.ID_TK == N.ID_TK).Select(a => a.ANHDAIDIEN_TK).FirstOrDefault();
                 m.daNop = (bool)N.DANOP_N;
                 m.ngayThi = (N.NGAYTHI_N != null) ? ((DateTime)N.NGAYTHI_N).ToString("dd/MM/yyyy") : "---";
+                m.dateNgayThi = (N.NGAYTHI_N != null) ? (DateTime)N.NGAYTHI_N : DateTime.Now;
                 m.siSo = (N.SISO_N != null) ? (N.SISO_N.ToString().PadLeft(2, '0')) : "---";
                 m.thamDu = (N.SOLUONGTHI_N != null) ? (N.SOLUONGTHI_N.ToString().PadLeft(2, '0')) : "---";
                 m.zipBaiThi = (N.LINKZIPBAI_N != null) ? (N.LINKZIPBAI_N) : null;
@@ -252,7 +266,8 @@ namespace QL_THI_2.Controllers
                         {
                             modelNhom n = new modelNhom();
                             n.id = x.ID_N;
-                            n.stt = i.ID_MHP + "." + x.STT_N.ToString().PadLeft(2, '0');
+                            MA_HOC_PHAN M = db.MA_HOC_PHANs.Where(a => a.ID_MHP == i.ID_MHP).FirstOrDefault();
+                            n.stt = M.MA_MHP + " - " + M.TEN_MHP + " - " + x.STT_N.ToString().PadLeft(2, '0');
                             n.hanNop = ((DateTime)i.HANNOP_HP).ToString("dd/MM/yyyy");
 
                             n.slNop = 0;
@@ -651,6 +666,52 @@ namespace QL_THI_2.Controllers
             {
                 return Json("error");
             }
+        }
+
+        [NoDirectAccess]
+        public IActionResult HienLichSu(string stt, string idN)
+        {
+            NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == idN).FirstOrDefault();
+            modelNhom m = LayThongTinNhom(N);
+            m.diem = new List<DanhSachDiem>();
+            m.diem = LayThongTinDiem(N.ID_N);
+            m.doThi = VeDoThi(m.diem);
+            ViewData["Diem"] = int.Parse(stt);
+            return View(m);
+        }
+
+        [NoDirectAccess]
+        public IActionResult DoThiLichSu(string stt, string idN)
+        {
+            NHOM_THI N = db.NHOM_THIs.Where(a => a.ID_N == idN).FirstOrDefault();
+            modelNhom m = new modelNhom();
+            DoThi D = new DoThi();
+            D.soLuong = new List<int>();
+            D.chiTietDiem = new List<double>();
+
+            int s = int.Parse(stt);
+            List<double> ld = new List<double>();
+            foreach(var i in db.CHI_TIET_DIEMs.Where(a => a.ID_N == idN && a.SOCHINHSUA_CTBT == s))
+            {
+                double d = 0;
+                string[] str = (i.DIEM_CTBT).Split(" ").Where(a => a != "").ToArray();
+                d = double.Parse(str[str.Count() - 1]);
+                ld.Add(d);
+            }
+            D.chiTietDiem = ld.OrderBy(a => a).Distinct().ToList();
+            foreach(var i in D.chiTietDiem)
+            {
+                int c = 0;
+                foreach(var x in ld)
+                {
+                    if(x == i)
+                    {
+                        c++;
+                    }
+                }
+                D.soLuong.Add(c);
+            }
+            return Json(D);
         }
     }
 }

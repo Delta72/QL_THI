@@ -17,7 +17,7 @@
         <h5 class="card-header">@Model.duongDan</h5>
         <div class="card-body">
 
-            <table class="table table-borderless">
+            <table class="table table-borderless" id="tableChiTietNhom">
                 <tbody>
                     <tr>
                         <td>Giáo viên giảng dạy:</td>
@@ -35,7 +35,16 @@
                         <td>Ngày thi:</td>
                         <td>@Model.ngayThi</td>
                         <td>Sĩ số:</td>
-                        <td><span class="badge bg-dark">@Model.thamDu / @Model.siSo</span></td>
+                        <td>
+                            @if (Model.thamDu == Model.siSo)
+                            {
+                                <span class="badge bg-primary">@Model.thamDu / @Model.siSo</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-warning">@Model.thamDu / @Model.siSo</span>
+                            }
+                        </td>
                     </tr>
                     <tr>
                         <td>Số đề:</td>
@@ -126,46 +135,119 @@
 <div class="col-xxl">
     <div class="card mb-4">
         <h5 class="card-header">Bảng phân bố điểm của nhóm</h5>
-        <div class="card-body" id="divDoThi">
-            <canvas id="myChart" style="width:100%;"></canvas>
-        </div>
+        @if (Model.diem.Count() > 0)
+        {
+            <div class="card-body" id="divDoThi">
+                <canvas id="myChart" style="width:100%;"></canvas>
+            </div>
+        }
+            else
+            {
+                <h4 class="alert-danger" style="text-align: center;">Chưa có thông tin</h4>
+            }
     </div>
 </div>
 
-<div class="col-xxl">
+<div class="col-xxl" id="divLichSuChinhSua">
     <div class="card mb-4">
         <h5 class="card-header">Chi tiết điểm của nhóm</h5>
-
-        <div class="card-body" id="divChiTietDiem">
-            <table class="table table-sm table-edit" id="tableDiemThi">
-                <thead>
-                    <tr>
-                        <th>STT</th>
-                        <th>MSSV</th>
-                        @foreach (var i in Model.thanhPhan)
+        @if (Model.diem.Count() > 0)
+        {
+    <div class="card-body" id="bodyCard">
+        <h4>Lịch sử chỉnh sửa</h4>
+        <table class="table table-sm table-hover" style="width: 50%">
+            <thead>
+                <tr>
+                    <td><strong>STT</strong></td>
+                    <td><strong>Lý do</strong></td>
+                    <td><strong>Thời gian</strong></td>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int max = (Model.diem.OrderBy(a => a.lanChinhSua).Last()).lanChinhSua;
+                }
+                @foreach (var i in Model.diem)
+                {
+                    if (i.lanChinhSua == max)
+                    {
+                        <tr class="cursor-pointer" style="color: #696cff; font-weight: bold;">
+                            <td>@i.lanChinhSua</td>
+                            <td>@i.lyDo</td>
+                            <td>@i.ngaySua</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        if (i.lyDo == "Xóa file excel")
                         {
-                            <th>@i</th>
+                            <tr class="cursor-pointer" style="color: #ff3e1d; font-weight: bold;">
+                                <td>@i.lanChinhSua</td>
+                                <td>@i.lyDo</td>
+                                <td>@i.ngaySua</td>
+                            </tr>
                         }
-                    </tr>
-                </thead>
-                <tbody class="">
-                    
-                </tbody>
-            </table>
-        </div>
+                        else
+                        {
+                            <tr class="cursor-pointer" onclick="HienLichSu('@i.lanChinhSua','@Model.id')">
+                                <td>@i.lanChinhSua</td>
+                                <td>@i.lyDo</td>
+                                <td>@i.ngaySua</td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+        <br />
+        <h4>Chi tiết</h4>
+        <table class="table table-sm table-edit" id="tableDiemThi">
+            <thead>
+                <tr>
+                    <th style="width: 50px;text-align: center">STT</th>
+                    <th style="width: 200px;text-align: left" onclick="sortTable(1, 'tableDiemThi')" class="cursor-pointer">MSSV</th>
+                    @foreach (var i in Model.thanhPhan)
+                    {
+                        <th style="text-align: left;">@i</th>
+                    }
+                </tr>
+            </thead>
+            <tbody class="">
+                @if (Model.diem.Count > 0)
+                {
+                    @foreach (var i in (Model.diem.Where(a => a.lanChinhSua == max).FirstOrDefault()).ds)
+                    {
+                        <tr>
+                            <td class="count" style="text-align: center"></td>
+                            <td>
+                                @i.mssv
+                            </td>
+                            @foreach (var d in i.diem)
+                            {
+                                <td>
+                                    @d
+                                </td>
+                            }
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+        }
+        else
+        {
+            <h4 class="alert-danger" style="text-align: center;">Chưa có thông tin</h4>
+        }
+        
     </div>
 </div>
 
 <script src="~/js/ChiTietNhom.js" asp-append-version="true"></script>
 <script asp-append-version="true">
     var json = @Html.Raw(Json.Serialize(@Model.doThi));
-    if (json.soLuong.length > 0) {
-        VeDoThi(json)
-    }
-    else {
-        document.getElementById('divDoThi').style.textAlign = 'center'
-        document.getElementById('divChiTietDiem').style.textAlign = 'center'
-        document.getElementById('divDoThi').innerHTML = '<h3>Chưa có thông tin điểm</h3>'
-        document.getElementById('divChiTietDiem').innerHTML = '<h3>Chưa có thông tin điểm</h3>'
-    }
+    // console.log(json[json.length - 1])
+    VeDoThi(json[json.length - 1])
+    // var diem = @Html.Raw(Json.Serialize(@Model.diem));
+    // console.log(diem)
 </script>

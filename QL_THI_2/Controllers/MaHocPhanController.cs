@@ -21,6 +21,7 @@ namespace QL_THI_2.Controllers
                 modelMaHocPhan m = new modelMaHocPhan()
                 {
                     id = i.ID_MHP,
+                    ma = i.MA_MHP,
                     tenHocPhan = i.TEN_MHP,
                     soTinChi = (short)i.TINCHI_MHP
                 };
@@ -52,25 +53,24 @@ namespace QL_THI_2.Controllers
         }
 
         [NoDirectAccess]
-        public IActionResult KiemTraChinhSua(string id)
-        {
-            MA_HOC_PHAN m = db.MA_HOC_PHANs.Where(a => a.ID_MHP == int.Parse(id)).First();
-            if(db.HOC_PHAN_THIs.Where(a => a.ID_MHP == m.ID_MHP).Count() != 0)
-            {
-                return Json(false);
-            }
-            else
-            {
-                return Json(true);
-            }
-        }
-
-        [NoDirectAccess]
         [Authorize(Roles = "admin")]
-        public IActionResult ChinhSuaMHP(string ma, string ten, string tc)
+        public IActionResult ChinhSuaMHP(string id, string ma, string ten, string tc)
         {
-            short stc = short.Parse(tc);
-            return View();
+            try
+            {
+                MA_HOC_PHAN M = db.MA_HOC_PHANs.Where(a => a.ID_MHP == int.Parse(id)).FirstOrDefault();
+                db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                M.MA_MHP = ma;
+                M.TEN_MHP = ten;
+                M.TINCHI_MHP = short.Parse(tc);
+                db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                db.SaveChanges();
+                return Json("success");
+            }
+            catch (Exception)
+            {
+                return Json("error");
+            }
         }
     }
 }

@@ -18,15 +18,16 @@
         <table class="table table-sm table-hover table-mahocphan" id="table-mahocphan">
             <thead>
                 <tr>
-                    <th onclick="sortTable(0, 'table-mahocphan')">Mã<i class="bx bx-sort-alt-2"></i></th>
-                    <th onclick="sortTable(1, 'table-mahocphan')">Tên học phần<i class="bx bx-sort-alt-2"></i></th>
-                    <th onclick="sortTable(2, 'table-mahocphan')">Tín chỉ<i class="bx bx-sort-alt-2"></i></th>
+                    <th onclick="sortTable(1, 'table-mahocphan')">Mã<i class="bx bx-sort-alt-2"></i></th>
+                    <th onclick="sortTable(2, 'table-mahocphan')">Tên học phần<i class="bx bx-sort-alt-2"></i></th>
+                    <th onclick="sortTable(3, 'table-mahocphan')">Tín chỉ<i class="bx bx-sort-alt-2"></i></th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var i in Model.OrderBy(a => a.id))
                 {
                     <tr>
+                        <td style="display: none">@i.id</td>
                         <td>
                             @i.ma
                         </td>
@@ -149,6 +150,7 @@
                                        class="form-control"
                                        autocomplete="off" min="0"
                                        placeholder="Nhập số tín chỉ..." />
+                                <input type="text" style="display: none" id="textEditID"/>
                             </td>
                         </tr>
                     </table>
@@ -173,10 +175,9 @@
         var ma = $('#textMHP').val()
         var ten = $('#textTHP').val()
         var tc = $('#textTC').val()
-
         var existed = false;
         for (var i in data) {
-            if (data[i].id.toLowerCase() == ma.toLowerCase()) {
+            if (data[i].ma == ma.toUpperCase()) {
                 existed = true;
             }
         }
@@ -188,12 +189,12 @@
         }
 
         if (existed == false) {
-            if (ma != null && ten != null && tc != null) {
+            if (ma != "" && ten != '' && tc != '' ) {
                 $.ajax({
                     url: '/MaHocPhan/ThemMaHocPhan',
                     type: 'post',
                     data: {
-                        ma: ma,
+                        ma: ma.toUpperCase(),
                         ten: ten,
                         tc: tc,
                     },
@@ -223,38 +224,27 @@
     // chinh sua mhp
     function ChinhSuaMHP(i) {
         var row = i.closest('tr')
-        var id = row.cells[0].innerText
-        var ten = row.cells[1].innerText
-        var tc = row.cells[2].innerText
-        $('#textEditMHP').val(id)
+        var id = row.cells[0].innerHTML
+        console.log(id)
+        var ma = row.cells[1].innerText
+        var ten = row.cells[2].innerText
+        var tc = row.cells[3].innerText
+        $('#textEditMHP').val(ma)
         $('#textEditTHP').val(ten)
         $('#textEditTC').val(tc)
-
-        $.ajax({
-            url: '/MaHocPhan/KiemTraChinhSua',
-            type: 'post',
-            data: {
-                id: id,
-            },
-            success: function (data) {
-                if (data != true) {
-                    document.getElementById('textEditMHP').disabled = true;
-                }
-                else {
-                    document.getElementById('textEditMHP').disabled = false;
-                }
-            }
-        })
+        $('#textEditID').val(id)
     }
 
     // luu chinh sua
     function LuuChinhSua() {
-        var ma = $('#textMHP').val()
-        var ten = $('#textTHP').val()
-        var tc = $('#textTC').val()
+        var ma = $('#textEditMHP').val()
+        var ten = $('#textEditTHP').val()
+        var tc = $('#textEditTC').val()
+        var id = $('#textEditID').val()
+        console.log(data)
         var existed = false;
         for (var i in data) {
-            if (data[i].id.toLowerCase() == ma.toLowerCase()) {
+            if (data[i].id == ma.toUpperCase()) {
                 existed = true;
             }
         }
@@ -266,11 +256,12 @@
         }
 
         if (existed == false) {
-            if (ma != null && ten != null && tc != null) {
+            if (ma != null && ten != null && tc != null && id != null) {
                 $.ajax({
                     url: '/MaHocPhan/ChinhSuaMHP',
                     type: 'post',
                     data: {
+                        id: id,
                         ma: ma,
                         ten: ten,
                         tc: tc,

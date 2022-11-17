@@ -323,16 +323,20 @@ namespace QL_THI_2.Controllers
 
             foreach(var i in db.CHI_TIET_DIEMs.OrderBy(a => a.MSSV_CTBT).Skip(skip).Take(soSV))
             {
-                modelSinhVien m = new modelSinhVien();
-                m.id = i.MSSV_CTBT;
-                m.diem = new List<string>();
-                foreach(var s in i.DIEM_CTBT.Split(" ").Where(a => a != ""))
+                int max = (db.CHINH_SUA_DIEMs.Where(a => a.ID_N == i.ID_N).OrderBy(a => a.LANCHINHSUA_V).LastOrDefault()).LANCHINHSUA_V;
+                if(i.SOCHINHSUA_CTBT == max)
                 {
-                    m.diem.Add(s);
+                    modelSinhVien m = new modelSinhVien();
+                    m.id = i.MSSV_CTBT;
+                    m.diem = new List<string>();
+                    foreach (var s in i.DIEM_CTBT.Split(" ").Where(a => a != ""))
+                    {
+                        m.diem.Add(s);
+                    }
+                    m.nhom = new modelNhom();
+                    m.nhom = NhomController.LayThongTinNhom(db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First());
+                    L.Add(m);
                 }
-                m.nhom = new modelNhom();
-                m.nhom = NhomController.LayThongTinNhom(db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First());
-                L.Add(m);
             }
             D.sinhVien = new List<modelSinhVien>();
             D.sinhVien = L;

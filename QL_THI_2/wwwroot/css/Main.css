@@ -516,3 +516,12 @@
 .cttk input{
     border: 1px solid var(--rgb-grey);
 }
+
+#tableChiTietNhom tr td:nth-child(2n+1){
+    font-weight: bold;
+    color: var(--blue);
+}
+
+#tableChiTietNhom tr td:nth-child(2n) button {
+    width: 100%;
+}

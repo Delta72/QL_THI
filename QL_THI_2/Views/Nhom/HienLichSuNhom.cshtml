@@ -1,0 +1,94 @@
+﻿@model modelNhom
+@{ 
+    Layout = null;
+} 
+
+<div class="card mb-4">
+    <h5 class="card-header">Chi tiết điểm của nhóm</h5>
+    @if (Model.diem.Count() > 0)
+    {
+        <div class="card-body" id="bodyCard">
+            <h4>Lịch sử chỉnh sửa</h4>
+            <table class="table table-sm table-hover" style="width: 50%">
+                <thead>
+                    <tr>
+                        <td><strong>STT</strong></td>
+                        <td><strong>Lý do</strong></td>
+                        <td><strong>Thời gian</strong></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var i in Model.diem)
+                    {
+                        if (i.lanChinhSua == (int)(ViewData["lichSu"]))
+                        {
+                            <tr class="cursor-pointer" style="color: #696cff; font-weight: bold;">
+                                <td>@i.lanChinhSua</td>
+                                <td>@i.lyDo</td>
+                                <td>@i.ngaySua</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            if (i.lyDo == "Xóa file excel")
+                            {
+                                <tr class="cursor-pointer" style="color: #ff3e1d; font-weight: bold;">
+                                    <td>@i.lanChinhSua</td>
+                                    <td>@i.lyDo</td>
+                                    <td>@i.ngaySua</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr class="cursor-pointer" onclick="HienLichSu('@i.lanChinhSua','@Model.id')">
+                                    <td>@i.lanChinhSua</td>
+                                    <td>@i.lyDo</td>
+                                    <td>@i.ngaySua</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+            <br />
+            <h4>Chi tiết</h4>
+            <table class="table table-sm table-edit" id="tableDiemThi">
+                <thead>
+                    <tr>
+                        <th style="width: 50px;text-align: center">STT</th>
+                        <th style="width: 200px;text-align: left" onclick="sortTable(1, 'tableDiemThi')" class="cursor-pointer">MSSV</th>
+                        @foreach (var i in Model.thanhPhan)
+                        {
+                            <th style="text-align: left;">@i</th>
+                        }
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @if (Model.diem.Count > 0)
+                    {
+                        @foreach (var i in (Model.diem.Where(a => a.lanChinhSua == (int)(ViewData["lichSu"])).FirstOrDefault()).ds)
+                        {
+                            <tr>
+                                <td class="count" style="text-align: center"></td>
+                                <td>
+                                    @i.mssv
+                                </td>
+                                @foreach (var d in i.diem)
+                                {
+                                    <td>
+                                        @d
+                                    </td>
+                                }
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <h4 class="alert-danger" style="text-align: center;">Chưa có thông tin</h4>
+    }
+
+</div>

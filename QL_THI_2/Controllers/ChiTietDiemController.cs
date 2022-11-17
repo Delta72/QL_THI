@@ -27,7 +27,7 @@ namespace QL_THI_2.Controllers
 
                 foreach(var i in j) { id = i.id; }
 
-                CHINH_SUA_DIEM CS = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == id).FirstOrDefault();
+                CHINH_SUA_DIEM CS = db.CHINH_SUA_DIEMs.Where(a => a.ID_N == id).OrderBy(a => a.LANCHINHSUA_V).LastOrDefault();
                 int scs = 0;
                 if(CS == null)
                 {
@@ -36,6 +36,8 @@ namespace QL_THI_2.Controllers
                     CS.LANCHINHSUA_V = 0;
                     CS.LYDO_V = lydo;
                     CS.THOIGIAN_V = DateTime.Now;
+                    db.CHINH_SUA_DIEMs.Add(CS);
+                    db.SaveChanges();
                 }
                 else
                 {

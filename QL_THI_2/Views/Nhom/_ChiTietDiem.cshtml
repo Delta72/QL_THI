@@ -23,11 +23,33 @@
                 <tbody>
                     @foreach (var i in Model.diem)
                     {
-                        <tr class="cursor-pointer">
-                            <td>@i.lanChinhSua</td>
-                            <td>@i.lyDo</td>
-                            <td>@i.ngaySua</td>
-                        </tr>
+                        if (i.lanChinhSua == (int)ViewData["Diem"])
+                        {
+                            <tr class="cursor-pointer" style="color: #696cff; font-weight: bold;">
+                                <td>@i.lanChinhSua</td>
+                                <td>@i.lyDo</td>
+                                <td>@i.ngaySua</td>
+                            </tr>
+                        }
+                        else
+                        {
+                            if (i.lyDo == "Xóa file excel")
+                            {
+                                <tr class="cursor-pointer" style="color: #ff3e1d; font-weight: bold;">
+                                    <td>@i.lanChinhSua</td>
+                                    <td>@i.lyDo</td>
+                                    <td>@i.ngaySua</td>
+                                </tr>
+                            }
+                            else
+                            {
+                                <tr class="cursor-pointer" onclick="HienLichSu('@i.lanChinhSua','@Model.id')">
+                                    <td>@i.lanChinhSua</td>
+                                    <td>@i.lyDo</td>
+                                    <td>@i.ngaySua</td>
+                                </tr>
+                            }
+                        }
                     }
                 </tbody>
             </table>
@@ -52,12 +74,12 @@
                         {
                             <tr>
                                 <td class="count" style="text-align: center"></td>
-                                <td>
+                                <td contenteditable="true">
                                     @i.mssv
                                 </td>
                                 @foreach (var d in i.diem)
                                 {
-                                    <td>
+                                    <td contenteditable="true">
                                         @d
                                     </td>
                                 }
@@ -79,19 +101,78 @@
                     </tr>
                 </tbody>
             </table>
-        </div>
-        <div class="card-footer">
-            <div class="row" style="text-align: right">
-                <div class="col-sm-12" id="divBtn">
-                    <button onclick="LuuDiem('@Model.id','@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value')" class="btn btn-primary" id="btnLuuDiem" style="display: unset">
-                        Lưu
-                    </button>
+            @if (Model.dateNgayThi <= Model.hocPhan.dateHanNop)
+            {
+                <div class="card-footer">
+                    <div class="row" style="text-align: right">
+                        <div class="col-sm-12" id="divBtn">
+                            <button onclick="LuuDiem('@Model.id','@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value')" class="btn btn-primary" id="btnLuuDiem" style="display: unset">
+                                Lưu
+                            </button>
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
+            else
+            {
+                <div class="card-footer">
+                    <div class="row" style="text-align: right">
+                        <div class="col-sm-12" id="divBtn">
+                            <button class="btn btn-secondary" disabled>
+                                Đã hết hạn chỉnh sửa
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </div>
 <div class="card-body" id="bodyCardTemp" style="display: none">
+    <h4>Lịch sử chỉnh sửa</h4>
+    <table class="table table-sm table-hover" style="width: 50%">
+        <thead>
+            <tr>
+                <td><strong>STT</strong></td>
+                <td><strong>Lý do</strong></td>
+                <td><strong>Thời gian</strong></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var i in Model.diem)
+            {
+                if (i.lanChinhSua == (int)ViewData["Diem"])
+                {
+                    <tr class="cursor-pointer" style="color: #696cff; font-weight: bold;">
+                        <td>@i.lanChinhSua</td>
+                        <td>@i.lyDo</td>
+                        <td>@i.ngaySua</td>
+                    </tr>
+                }
+                else
+                {
+                    if (i.lyDo == "Xóa file excel")
+                    {
+                        <tr class="cursor-pointer" style="color: #ff3e1d; font-weight: bold;">
+                            <td>@i.lanChinhSua</td>
+                            <td>@i.lyDo</td>
+                            <td>@i.ngaySua</td>
+                        </tr>
+                    }
+                    else
+                    {
+                        <tr class="cursor-pointer" onclick="HienLichSu('@i.lanChinhSua','@Model.id')">
+                            <td>@i.lanChinhSua</td>
+                            <td>@i.lyDo</td>
+                            <td>@i.ngaySua</td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+    <br />
+    <h4>Chi tiết</h4>
     <table class="table table-sm table-edit" id="tableDiemThi">
         <thead>
             <tr>
@@ -104,11 +185,30 @@
             </tr>
         </thead>
         <tbody class="">
-            
+            @if (Model.diem.Count > 0)
+            {
+                @foreach (var i in (Model.diem.Where(a => a.lanChinhSua == (int)stt)).FirstOrDefault().ds)
+                {
+                    <tr>
+                        <td class="count" style="text-align: center"></td>
+                        <td contenteditable="true">
+                            @i.mssv
+                        </td>
+                        @foreach (var d in i.diem)
+                        {
+                            <td contenteditable="true">
+                                @d
+                            </td>
+                        }
+                    </tr>
+                }
+            }
+
             <tr onclick="ThemHangDiem(@Model.thanhPhan.Count(), this)">
                 <td style="width: 50px; text-align: center" class="count">
                 </td>
                 <td class="editabletd" contenteditable="true" style="width: 200px;text-align: left" placeholder="...">
+                    ...
                 </td>
                 @foreach (var i in Model.thanhPhan)
                 {
@@ -118,6 +218,30 @@
             </tr>
         </tbody>
     </table>
+    @if (Model.dateNgayThi <= Model.hocPhan.dateHanNop)
+    {
+        <div class="card-footer">
+            <div class="row" style="text-align: right">
+                <div class="col-sm-12" id="divBtn">
+                    <button onclick="LuuDiem('@Model.id','@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value')" class="btn btn-primary" id="btnLuuDiem" style="display: unset">
+                        Lưu
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="card-footer">
+            <div class="row" style="text-align: right">
+                <div class="col-sm-12" id="divBtn">
+                    <button class="btn btn-secondary" disabled>
+                        Đã hết hạn chỉnh sửa
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 <!-- xac nhan modal -->
@@ -135,7 +259,7 @@
             <div class="modal-body">
                 <h4>Xác nhận chỉnh sửa?</h4>
                 <small style="color: red">*Tập tin Excel sẽ được thay đổi theo thông tin trong bảng này</small>
-                <input class="form-control" id="txtLyDo" placeholder="Nhập lý do chỉnh sửa..."/>
+                <input class="form-control" id="txtLyDo" placeholder="Nhập lý do chỉnh sửa..." />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
@@ -149,4 +273,7 @@
 <!-- xac nhan modal -->
 
 <script src="~/js/_ChiTietDiem.js" asp-append-version="true"></script>
+<script asp-append-version="true">
+    DoThiLichSu('@ViewData["Diem"]', '@Model.id');
+</script>
 

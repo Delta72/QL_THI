@@ -1,6 +1,5 @@
 ﻿document.getElementById('_showN').innerHTML = document.getElementById('_mainN').innerHTML;
 
-
 // Ve do thi
 function VeDoThi(data) {
     var xValues = [];
@@ -139,6 +138,9 @@ function Luu(id) {
         processData: false,
         contentType: false,
         data: frm,
+        beforeSend: function () {
+            LoadingButton('btnXacNhanChinhSuaNhom');
+        },
         success: function (data) {
             if (data == "error") {
                 HienLoi("Có lỗi xảy ra, vui lòng thử lại")

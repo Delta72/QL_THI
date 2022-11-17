@@ -92,12 +92,9 @@ function LuuChiTietDiem(id) {
             var diem = ''
             var row = table.rows[i];
             var cCount = row.cells.length;
-            for (x = 2; x < cCount - 1; x++) {
+            for (x = 2; x < cCount; x++) {
                 var cell = row.cells[x].innerText;
                 diem += cell + ' '
-            }
-            for (x = 1; x < cCount - 1; x++) {
-                var cell = row.cells[x].innerText;
             }
             diem = diem.slice(0, -1)
             data.push({ "id": id, "mssv": row.cells[1].innerText, diem })
@@ -195,4 +192,37 @@ ChiNhapSo()
 
 function ReloadChiTiet() {
     document.getElementById('bodyCard').innerHTML = document.getElementById('bodyCardTemp').innerHTML;
+}
+
+function HienLichSu(stt, idN) {
+    // console.log(stt, idN)
+
+    $.ajax({
+        url: '/Nhom/HienLichSu',
+        type: 'post',
+        data: {
+            stt: stt,
+            idN: idN,
+        },
+        success: function (data) {
+            // console.log(data)
+            document.getElementById('bodyCard').innerHTML = data
+        }
+    })
+}
+
+// Ve do thi theo lich su
+function DoThiLichSu(stt, idN) {
+    $.ajax({
+        url: '/Nhom/DoThiLichSu',
+        type: 'post',
+        data: {
+            stt: stt,
+            idN: idN,
+        },
+        success: function (data) {
+            console.log(data)
+            VeDoThi(data)
+        }
+    })
 }

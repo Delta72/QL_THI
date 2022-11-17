@@ -5,7 +5,7 @@ function VeDoThi(data) {
     var xValues = [];
     var yValues = [];
     var barColors = [];
-    console.log(data)
+    // console.log(data)
     for (var i in data.chiTietDiem) {
         xValues.push(data.chiTietDiem[i])
         barColors.push("#007bff")
@@ -29,8 +29,18 @@ function VeDoThi(data) {
                     ticks: {
                         min: 0,
                         stepSize: 1
+                    },
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Số lượng'
                     }
-                }]
+                }],
+                xAxes: [{
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Điểm'
+                    }
+                }],
             },
             legend: { display: false },
             title: {
@@ -51,3 +61,18 @@ function ThemDuongDan() {
 $(document).ready(function () {
     ThemDuongDan()
 })
+
+function HienLichSu(stt, idN) {
+    $.ajax({
+        url: '/Nhom/HienLichSuNhom',
+        type: 'post',
+        data: {
+            stt: stt,
+            idN: idN,
+        },
+        success: function (data) {
+            // console.log(data)
+            document.getElementById('divLichSuChinhSua').innerHTML = data;
+        }
+    })
+}

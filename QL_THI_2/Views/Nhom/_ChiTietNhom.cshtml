@@ -165,15 +165,31 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer">
-            <div class="row" style="text-align: right">
-                <div class="col-sm-12" id="divBtn">
-                    <button onclick="ChinhSua('@Model.id', '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value')" class="btn btn-primary">
-                        Chỉnh sửa
-                    </button>
+        @if (Model.dateNgayThi <= Model.hocPhan.dateHanNop)
+        {
+            <div class="card-footer">
+                <div class="row" style="text-align: right">
+                    <div class="col-sm-12" id="divBtn">
+                        <button onclick="ChinhSua('@Model.id', '@User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier).Value')" class="btn btn-primary">
+                            Chỉnh sửa
+                        </button>
+                    </div>
                 </div>
             </div>
-        </div>
+        }
+        else
+        {
+            <div class="card-footer">
+                <div class="row" style="text-align: right">
+                    <div class="col-sm-12" id="divBtn">
+                        <button class="btn btn-secondary" disabled>
+                            Đã hết hạn chỉnh sửa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+
     </div>
 </div>
 
@@ -405,7 +421,7 @@
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
                     Đóng
                 </button>
-                <button type="button" class="btn btn-primary" onclick="Luu('@Model.id')">Xác nhận</button>
+                <button type="button" class="btn btn-primary" onclick="Luu('@Model.id')" id="btnXacNhanChinhSuaNhom">Xác nhận</button>
             </div>
         </div>
     </div>
