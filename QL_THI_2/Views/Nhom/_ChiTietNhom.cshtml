@@ -454,3 +454,11 @@
 <!-- xac nhan modal -->
 
 <script src="~/js/_ChiTietNhom.js" asp-append-version="true"></script>
+<script>
+
+    // huy bo
+    function HuyBo(id) {
+        document.getElementById('_showN').innerHTML = document.getElementById('_mainN').innerHTML;
+        DoThiLichSu('@ViewData["Diem"]', '@Model.id');
+    }
+</script>

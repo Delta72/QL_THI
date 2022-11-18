@@ -72,18 +72,21 @@
                     {
                         @foreach (var i in (Model.diem.Where(a => a.lanChinhSua == (int)stt)).FirstOrDefault().ds)
                         {
-                            <tr>
-                                <td class="count" style="text-align: center"></td>
-                                <td contenteditable="true">
-                                    @i.mssv
-                                </td>
-                                @foreach (var d in i.diem)
-                                {
-                                    <td contenteditable="true">
-                                        @d
-                                    </td>
-                                }
-                            </tr>
+                    <tr>
+                        <td class="count" style="text-align: center"></td>
+                        <td contenteditable="true">
+                            @i.mssv
+                        </td>
+                        @foreach (var d in i.diem)
+                        {
+                            <td contenteditable="true">
+                                @d
+                            </td>
+                        }
+                        <td class="cursorPointer">
+                            <i class="fa fa-times" onclick="XoaHang(this)"></i>
+                        </td>
+                    </tr>
                         }
                     }
 
@@ -200,6 +203,9 @@
                                 @d
                             </td>
                         }
+                    <td>
+                        <i class="fa fa-times cursorPointer" onclick="XoaHang(this)"></i>
+                    </td>
                     </tr>
                 }
             }

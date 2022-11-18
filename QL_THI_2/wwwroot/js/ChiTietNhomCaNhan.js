@@ -156,10 +156,6 @@ function Luu(id) {
     })
 }
 
-// huy bo
-function HuyBo(id) {
-    document.getElementById('_showN').innerHTML = document.getElementById('_mainN').innerHTML;
-}
 
 // Ready
 $(document).ready(function () {

@@ -1,4 +1,6 @@
 ﻿
+
+
 function HienXoaFile(type) {
     document.getElementById('fileType').innerHTML = type;
 }

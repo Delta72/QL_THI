@@ -225,7 +225,7 @@ function ThemHocPhanMoi() {
         "namHocB": namHocB,
         "namHocK": namHocK,
         "hanNop": hanNop,
-        "diemTP": diemTP,
+        "diemTP": diemTP.toUpperCase(),
     })
 
     for (i = 1; i < rowLength; i++) {
@@ -277,4 +277,8 @@ $(document).ready(function () {
         e.preventDefault();
     });
     ThemDuongDan()
+})
+
+$('#selectMHP').on('change', function () {
+    console.log($(this).val())
 })

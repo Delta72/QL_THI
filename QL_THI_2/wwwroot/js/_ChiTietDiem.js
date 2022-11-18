@@ -221,7 +221,7 @@ function DoThiLichSu(stt, idN) {
             idN: idN,
         },
         success: function (data) {
-            console.log(data)
+            // console.log(data)
             VeDoThi(data)
         }
     })

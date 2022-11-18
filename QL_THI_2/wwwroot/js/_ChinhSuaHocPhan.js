@@ -77,14 +77,14 @@ function LayDanhSachHocPhan(id) {
         url: '/HocPhan/LayMaHocPhan',
         type: 'get',
         success: function (data) {
-            // console.log(data)
+            var select = document.getElementById('selectMHP')
             for (var i in data) {
-                var select = document.getElementById('selectMHP')
                 var opt = document.createElement('option');
                 opt.value = data[i].id;
                 opt.innerHTML = data[i].ma + ' - ' + data[i].tenHocPhan;
-                if (data[i].id == id) {
-                    opt.selected = 'selected'
+                if (data[i].id == parseInt(id)) {
+                    // console.log(opt.selected)
+                    opt.selected = true;
                 }
                 select.appendChild(opt);
             }
