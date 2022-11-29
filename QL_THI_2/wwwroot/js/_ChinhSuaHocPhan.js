@@ -137,3 +137,23 @@ function TaskLuu(id) {
         }
     })
 }
+
+function XNGuiMail() {
+    $('#btnModalMail').click();
+}
+
+function GuiMail(id) {
+    $.ajax({
+        url: '/Mail/GuiMailThongBao',
+        type: 'post',
+        data: {
+            id: id,
+        },
+        beforeSend: function () {
+            LoadingButton('btnGuiMail')
+        },
+        success: function () {
+            window.location.reload()
+        }
+    })
+}

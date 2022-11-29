@@ -82,6 +82,7 @@ namespace QL_THI_2.Controllers
                     H.HANNOP_HP = DateTime.Parse(hanNop);
                     H.SONHOM_HP = so_nhom;
                     H.DIEMTHANHPHAN_HP = diemTP + "TỔNG |";
+                    H.DAGUIMAIL_HP = false;
                     db.HOC_PHAN_THIs.Add(H);
                     db.SaveChanges();
 

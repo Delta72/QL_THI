@@ -21,6 +21,7 @@ namespace QL_THI_2.Models
         public DateTime? HANNOP_HP { get; set; }
         public short? SONHOM_HP { get; set; }
         public string DIEMTHANHPHAN_HP { get; set; }
+        public bool? DAGUIMAIL_HP { get; set; }
 
         public virtual MA_HOC_PHAN ID_MHPNavigation { get; set; }
         public virtual TAI_KHOAN ID_TKNavigation { get; set; }

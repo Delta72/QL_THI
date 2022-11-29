@@ -44,6 +44,15 @@
                     @Model.chiTietHP.hanNop
                 </td>
                 <td>
+                    <button class="btn btn-danger btn-sm"
+                            data-bs-toggle="tooltip"
+                            data-bs-offset="0,4"
+                            data-bs-placement="bottom"
+                            data-bs-html="true"
+                            title="<span>Gửi mail thông báo cho các nhóm</span>"
+                            onclick="XNGuiMail()">
+                        <i class='fa fa-envelope'></i>
+                    </button>
                 </td>
                 <td>
                 </td>
@@ -223,7 +232,32 @@
     </div>
 </div>
 <!-- xac nhan modal -->
-
+<!-- xac nhan mail modal -->
+<button id="btnModalMail" style="display: none" data-bs-toggle="modal" data-bs-target="#modalMail">
+</button>
+<div class="modal fade" id="modalMail" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalCenterTitle">Xác nhận</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h4>Gửi mail thông báo cho các nhóm trong học phần?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" id="modalDong">
+                    Đóng
+                </button>
+                <button type="button" class="btn btn-success" onclick="GuiMail('@Model.chiTietHP.id')" id="btnGuiMail">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- xac nhan mail modal -->
 
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
