@@ -27,7 +27,7 @@
                     Mã học phần:
                 </td>
                 <td>
-                    @Model.chiTietHP.maHocPhan.ma
+                    @Model.chiTietHP.maHocPhan.ma (@Model.chiTietHP.maHocPhan.soTinChi Tín chỉ)
                 </td>
                 <td>
                     Tên học phần:
@@ -77,7 +77,7 @@
         </tbody>
     </table>
     <div class="card-footer right-align">
-        <button type="button" class="btn btn-primary" onclick="HienChinhSua('@Model.chiTietHP.id')">Chỉnh sửa học phần</button>
+        <button type="button" class="btn btn-primary" onclick="HienChinhSua('@Model.chiTietHP.id', '@Model.chiTietHP.maHocPhan.id')">Chỉnh sửa học phần</button>
     </div>
 </div>
 <!-- main -->
@@ -264,5 +264,5 @@
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="~/js/_ChinhSuaHocPhan.js" asp-append-version="true"></script>
 <script asp-append-version="true">
-    LayDanhSachHocPhan('@Model.chiTietHP.maHocPhan.id')
+    // LayDanhSachHocPhan('@Model.chiTietHP.maHocPhan.id')
 </script>

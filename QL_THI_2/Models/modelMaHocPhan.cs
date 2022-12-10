@@ -11,5 +11,6 @@ namespace QL_THI_2.Models
         public string ma { get; set; }
         public string tenHocPhan { get; set; }
         public short soTinChi { get; set; }
+        public int chinhSua { get; set; }
     }
 }

@@ -658,6 +658,7 @@ namespace QL_THI_2.Controllers
                     UploadController.DeleteFile(N.LINKPDFDIEM_N, Directory.GetCurrentDirectory());
                     N.LINKPDFDIEM_N = null;
                 }
+                N.DANOP_N = false;
                 db.Entry(N).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 db.SaveChanges();
                 return Json(true);

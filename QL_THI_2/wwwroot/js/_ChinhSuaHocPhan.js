@@ -38,7 +38,7 @@ function ThemThanhPhan() {
 }
 
 // chinh sua CS
-function HienChinhSua(id) {
+function HienChinhSua(id, mhp) {
     $.ajax({
         url: '/HocPhan/KiemTraChinhSua',
         type: 'post',
@@ -46,18 +46,27 @@ function HienChinhSua(id) {
             id: id,
         },
         success: function (data) {
+            LayDanhSachHocPhan(mhp)
             if (data == "outdated") {
                 document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
                 document.getElementById('txtTP').disabled = true;
-                document.getElementById('txtTPHPedit').innerHTML = '<span class="alert alert-danger">Đã hết thời hạn chỉnh sửa điểm thành phần</span>'
-                document.getElementById('divThanhPhanDiem').innerHTML = 'samee'
+                document.getElementById('txtTPHPedit').innerHTML = '<span class="alert alert-danger">Không thể chỉnh sửa điểm thành phần (Quá hạn)</span>'
+                document.getElementById('divThanhPhanDiem').innerHTML = 'same'
                 document.getElementById('divThanhPhanDiem').style.display = 'none'
             }
             else if (data == "error") {
                 HienLoi()
             }
             else if (data == "submitted") {
-                HienLoi("Đã có nhóm nộp điểm, không thể chỉnh sửa học phần!")
+                document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
+                document.getElementById('txtTP').disabled = true;
+                document.getElementById('txtTPHPedit').innerHTML = '<span class="alert alert-danger">Không thể chỉnh sửa điểm thành phần (Đã có nhóm nộp)</span>'
+                document.getElementById('divThanhPhanDiem').innerHTML = 'same'
+                document.getElementById('divThanhPhanDiem').style.display = 'none'
+                document.getElementById('selectHocKy').disabled = true;
+                document.getElementById('slB').disabled = true;
+                document.getElementById('selectMHP').disabled = true;
+                
             }
             else {
                 document.getElementById('showCS').innerHTML = document.getElementById('ChinhSuaCS').innerHTML
@@ -83,7 +92,6 @@ function LayDanhSachHocPhan(id) {
                 opt.value = data[i].id;
                 opt.innerHTML = data[i].ma + ' - ' + data[i].tenHocPhan;
                 if (data[i].id == parseInt(id)) {
-                    // console.log(opt.selected)
                     opt.selected = true;
                 }
                 select.appendChild(opt);
@@ -109,7 +117,7 @@ function TaskLuu(id) {
     var nHoc = document.getElementById('slB').value
     var mHP = document.getElementById('selectMHP').value
     var hNop = document.getElementById('dateHanNop').value
-    var tPhan = document.getElementById('divThanhPhanDiem').innerText.replaceAll('\n', "").replaceAll("  ", "").slice(0, -1)
+    var tPhan = document.getElementById('divThanhPhanDiem').innerText.replaceAll('\n', "").replaceAll("  ", "")
     $.ajax({
         url: '/HocPhan/ChinhSuaHocPhan',
         type: 'post',
@@ -130,6 +138,9 @@ function TaskLuu(id) {
         success: function (data) {
             if (data == "error") {
                 HienLoi("Có lỗi xảy ra, vui lòng thử lại sau!")
+            }
+            else if (data == 'exists') {
+                HienLoi("Mã học phần đã tồn tại!")
             }
             else {
                 window.location.reload()

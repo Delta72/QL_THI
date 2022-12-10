@@ -195,6 +195,7 @@ namespace QL_THI_2.Controllers
                 m.maHocPhan.id = H.ID_MHP;
                 m.maHocPhan.ma = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.MA_MHP).First();
                 m.maHocPhan.tenHocPhan = db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TEN_MHP).First();
+                m.maHocPhan.soTinChi = (short)db.MA_HOC_PHANs.Where(a => a.ID_MHP == H.ID_MHP).Select(a => a.TINCHI_MHP).First();
                 m.hocKy = (H.HOCKY_HP == 1) ? "Học kỳ I" : (H.HOCKY_HP == 2) ? "Học kỳ II" : "Học kỳ hè";
                 m.mHocKy = new modelHocKy()
                 {
@@ -225,21 +226,29 @@ namespace QL_THI_2.Controllers
             try
             {
                 HOC_PHAN_THI H = db.HOC_PHAN_THIs.Where(a => a.ID_HP == id).FirstOrDefault();
-                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-                H.HOCKY_HP = short.Parse(hocKy);
-                H.NAMHOCB_HP = namHoc;
-                int n = int.Parse(namHoc); n = n + 1;
-                H.NAMHOCK_HP = n.ToString();
-                H.ID_MHP = int.Parse(maHocPhan);
-                DateTime d = DateTime.Parse(hanNop);
-                H.HANNOP_HP = d;
-                if(thanhPhan != "same")
+                if(db.HOC_PHAN_THIs.Where(a => a.HOCKY_HP == H.HOCKY_HP && a.NAMHOCB_HP == H.NAMHOCB_HP 
+                    && a.ID_MHP == int.Parse(maHocPhan) && a.ID_HP != H.ID_HP).FirstOrDefault() != null)
                 {
-                    H.DIEMTHANHPHAN_HP = thanhPhan + "TỔNG |";
+                    return Json("exists");
                 }
-                db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                db.SaveChanges();
-                return Json(true);
+                else
+                {
+                    db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    H.HOCKY_HP = short.Parse(hocKy);
+                    H.NAMHOCB_HP = namHoc;
+                    int n = int.Parse(namHoc); n = n + 1;
+                    H.NAMHOCK_HP = n.ToString();
+                    H.ID_MHP = int.Parse(maHocPhan);
+                    DateTime d = DateTime.Parse(hanNop);
+                    H.HANNOP_HP = d;
+                    if (thanhPhan != "same")
+                    {
+                        H.DIEMTHANHPHAN_HP = thanhPhan + "TỔNG |";
+                    }
+                    db.Entry(H).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json(true);
+                }
             }
             catch (Exception)
             {

@@ -112,7 +112,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modalCenterTitle">Thêm mã học phần</h5>
+                <h5 class="modal-title" id="modalCenterTitle">Chỉnh sửa mã học phần</h5>
                 <button type="button"
                         class="btn-close"
                         data-bs-dismiss="modal"
@@ -150,7 +150,7 @@
                                        class="form-control"
                                        autocomplete="off" min="0"
                                        placeholder="Nhập số tín chỉ..." />
-                                <input type="text" style="display: none" id="textEditID"/>
+                                <input type="text" style="display: none" id="textEditID" />
                             </td>
                         </tr>
                     </table>
@@ -225,7 +225,7 @@
     function ChinhSuaMHP(i) {
         var row = i.closest('tr')
         var id = row.cells[0].innerHTML
-        console.log(id)
+        // console.log(data)
         var ma = row.cells[1].innerText
         var ten = row.cells[2].innerText
         var tc = row.cells[3].innerText
@@ -233,6 +233,18 @@
         $('#textEditTHP').val(ten)
         $('#textEditTC').val(tc)
         $('#textEditID').val(id)
+        for (var i in data) {
+            if (data[i].id == id) {
+                // console.log(data[i].id)
+                if (data[i].chinhSua == 0) {
+                    document.getElementById('textEditMHP').disabled = true;
+                }
+                else {
+                    document.getElementById('textEditMHP').disabled = false;
+                }
+                // document.getElementById('textEditMHP').disabled = true;
+            }
+        }
     }
 
     // luu chinh sua
@@ -272,6 +284,9 @@
                     success: function (data) {
                         if (data == 'error') {
                             HienLoi()
+                        }
+                        else if (data == 'exists') {
+                            HienLoi("Không thể chỉnh sửa mã học phần")
                         }
                         else {
                             window.location.reload()

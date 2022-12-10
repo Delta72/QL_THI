@@ -23,8 +23,10 @@ namespace QL_THI_2.Controllers
                     id = i.ID_MHP,
                     ma = i.MA_MHP,
                     tenHocPhan = i.TEN_MHP,
-                    soTinChi = (short)i.TINCHI_MHP
+                    soTinChi = (short)i.TINCHI_MHP,
+                    
                 };
+                m.chinhSua = (db.HOC_PHAN_THIs.Where(a => a.ID_MHP == m.id).Count() > 0) ? 0 : 1;
                 L.Add(m);
             }
             return View(L);
@@ -59,13 +61,25 @@ namespace QL_THI_2.Controllers
             try
             {
                 MA_HOC_PHAN M = db.MA_HOC_PHANs.Where(a => a.ID_MHP == int.Parse(id)).FirstOrDefault();
-                db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
-                M.MA_MHP = ma;
-                M.TEN_MHP = ten;
-                M.TINCHI_MHP = short.Parse(tc);
-                db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                db.SaveChanges();
-                return Json("success");
+                if (db.HOC_PHAN_THIs.Where(a => a.ID_MHP == M.ID_MHP).Count() > 0)
+                {
+                    db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    M.TEN_MHP = ten;
+                    M.TINCHI_MHP = short.Parse(tc);
+                    db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json("exists");
+                }
+                else
+                {
+                    db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+                    M.MA_MHP = ma;
+                    M.TEN_MHP = ten;
+                    M.TINCHI_MHP = short.Parse(tc);
+                    db.Entry(M).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    db.SaveChanges();
+                    return Json("success");
+                }
             }
             catch (Exception)
             {
