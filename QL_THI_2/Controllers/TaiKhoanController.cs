@@ -160,7 +160,7 @@ namespace QL_THI_2.Controllers
         public IActionResult KiemTraID(string id)
         {
             bool data = false;
-            if(db.TAI_KHOANs.Where(a => a.ID_TK == id).FirstOrDefault() != null)
+            if(db.TAI_KHOANs.Where(a => a.DN_TK == id).FirstOrDefault() != null)
             {
                 data = true;
             }

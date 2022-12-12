@@ -31,7 +31,7 @@ namespace QL_THI_2.Controllers
             var filepath = currentDir + "\\wwwroot\\user\\" + idTK + "\\" + idN + "\\"+ filename;
             using (Stream fileStream = new FileStream(filepath, FileMode.Create))
             {
-                file.CopyToAsync(fileStream);
+                file.CopyTo(fileStream);
             }
             string report = "/user/" + idTK + "/" + idN + "/"+ filename;
             return report;

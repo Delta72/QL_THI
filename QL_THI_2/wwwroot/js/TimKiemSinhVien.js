@@ -81,7 +81,7 @@ function HienBoLoc() {
             for (var i in data.mhp) {
                 var opt = document.createElement('option')
                 opt.value = data.mhp[i].id
-                opt.innerHTML = data.mhp[i].id + ' - ' + data.mhp[i].tenHocPhan
+                opt.innerHTML = data.mhp[i].ma + ' - ' + data.mhp[i].tenHocPhan
                 selectMHP.appendChild(opt)
             }
 

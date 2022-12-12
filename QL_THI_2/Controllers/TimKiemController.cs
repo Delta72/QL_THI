@@ -526,6 +526,7 @@ namespace QL_THI_2.Controllers
                 m.nhom = NhomController.LayThongTinNhom(db.NHOM_THIs.Where(a => a.ID_N == i.ID_N).First());
                 L.Add(m);
             }
+            L = L.GroupBy(a => a.nhom.id).Select(a => a.First()).ToList();
             DanhSachSinhVien Ds = new DanhSachSinhVien();
             Ds.sinhVien = new List<modelSinhVien>();
             Ds.sinhVien = L.Skip(skip).Take(soSV).ToList();
